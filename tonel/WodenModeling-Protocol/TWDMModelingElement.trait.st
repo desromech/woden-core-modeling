@@ -58,6 +58,27 @@ TWDMModelingElement >> children [
 ]
 
 { #category : #accessing }
+TWDMModelingElement >> editionViewColor [
+	^ Color white
+]
+
+{ #category : #accessing }
+TWDMModelingElement >> editionViewColor: aColor [
+]
+
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest [
+	| result |
+	result := OrderedCollection new.
+	self findVolumeElementsThatIntersectElements: volumesToTest into: result.
+	^ result
+]
+
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
+]
+
+{ #category : #accessing }
 TWDMModelingElement >> globalTransform [
 	^ self parent
 		ifNil: [ self transform ]
@@ -161,7 +182,7 @@ TWDMModelingElement >> remove: anElement [
 
 { #category : #adding }
 TWDMModelingElement >> removeFromParent [
-	^ self parent remove: self
+	^ self parent ifNotNil: [:p | p remove: self ]
 ]
 
 { #category : #'scene presentation' }

@@ -17,15 +17,6 @@ TWDMModelingSceneObject >> canBeDuplicatedAndPlaced [
 ]
 
 { #category : #accessing }
-TWDMModelingSceneObject >> editionViewColor [
-	^ Color white
-]
-
-{ #category : #accessing }
-TWDMModelingSceneObject >> editionViewColor: aColor [
-]
-
-{ #category : #accessing }
 TWDMModelingSceneObject >> globalBoundingBox [
 	^ self localBoundingBox transformedWith: self globalTransform
 ]

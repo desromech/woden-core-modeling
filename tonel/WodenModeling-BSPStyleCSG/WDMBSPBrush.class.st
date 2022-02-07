@@ -42,8 +42,81 @@ WDMBSPBrush class >> withFaces: aCollectionOfFaces [
 	^ self new faces: aCollectionOfFaces; yourself
 ]
 
+{ #category : #testing }
+WDMBSPBrush >> canBeSubtracted [
+	^ true
+]
+
 { #category : #accessing }
 WDMBSPBrush >> children [
+	^ faces
+]
+
+{ #category : #'constructive solid geometry' }
+WDMBSPBrush >> clipAgainstPlane: plane [
+	| classification frontFaces backFaces planeInFront planeInBack frontPolyhedron backPolyhedron |
+	self validateTopology.
+	classification := plane classifyVertices: vertices epsilon: Epsilon.
+	self assert: classification ~~ #inside.
+	classification == #front ifTrue: [ ^ { self . nil } ].
+	classification == #back ifTrue: [ ^ { nil . self } ].
+	self assert: classification == #frontAndBack.
+	
+	frontFaces := OrderedCollection new.
+	backFaces := OrderedCollection new.
+	
+	planeInFront := false.
+	planeInBack := false.
+	faces do: [ :eachFace |
+		| faceClassification |
+		faceClassification := plane classifyVertices: eachFace vertices epsilon: Epsilon.
+		faceClassification == #inside ifTrue: [
+			| normalDirection |
+			normalDirection := eachFace plane normal dot: plane normal.
+			normalDirection > 0 ifTrue: [
+				self assert: (eachFace plane normal normalized closeTo: plane normal normalized).
+				backFaces add: eachFace copy.
+				planeInBack := true.
+			] ifFalse: [ 
+				self assert: (eachFace plane normal normalized closeTo: plane normal normalized).
+				frontFaces add: (eachFace copy plane: eachFace plane negated).
+				planeInFront := true.
+			].
+		].
+		faceClassification == #front ifTrue: [ 
+			frontFaces add: eachFace copy		
+		].
+		faceClassification == #back ifTrue: [ 
+			backFaces add: eachFace copy
+		].
+		faceClassification == #frontAndBack ifTrue: [ 
+			frontFaces add: eachFace copy.
+			backFaces add: eachFace copy.
+		].
+	].
+
+	planeInBack ifFalse: [
+		backFaces add: (WDMBSPBrushFace plane: plane)
+	].
+	planeInFront ifFalse: [
+		frontFaces add: (WDMBSPBrushFace plane: plane negated)
+	].
+
+	frontPolyhedron := self class new
+		setupForNewInstance;
+		faces: frontFaces;
+		transform: transform;
+		yourself.
+	backPolyhedron := self class new
+		setupForNewInstance;
+		faces: backFaces;
+		transform: transform;
+		yourself.
+	^ { frontPolyhedron . backPolyhedron }
+]
+
+{ #category : #accessing }
+WDMBSPBrush >> faces [
 	^ faces
 ]
 
@@ -52,6 +125,43 @@ WDMBSPBrush >> faces: aListOfFaces [
 	faces := aListOfFaces.
 	faces do: [ :each | each parent: self ].
 	self invalidateTopology
+]
+
+{ #category : #'as yet unclassified' }
+WDMBSPBrush >> findVolumeElementsThatIntersectElements: elementsToTest into: result [
+	(elementsToTest includes: self) ifFalse: [
+		(elementsToTest anySatisfy: [ :testElement | self hasIntersectionWithVolume: testElement ]) ifTrue: [ 
+			result add: self
+		]
+	]
+]
+
+{ #category : #'intersection testing' }
+WDMBSPBrush >> hasIntersectionWithBrush: otherElement withTransform: otherElementTransform [
+	| otherSupportFunction |
+	self class == otherElement class ifFalse: [ ^ false ].
+	
+	"Test the bounding to quickly discard."
+	(self localBoundingBox hasIntersectionWithBox: (otherElement localBoundingBox transformedWith: otherElementTransform)) ifFalse: [ ^ false ].
+	
+	"Test using GJK."
+	otherSupportFunction := GeometricFunctions transformSupportFunction: (otherElement localSupportFunction) with: otherElementTransform.
+	
+	^ GeometricFunctions gjkIntersectionTest: self localSupportFunction with: otherSupportFunction
+]
+
+{ #category : #'intersection testing' }
+WDMBSPBrush >> hasIntersectionWithConvexSupportFunction: otherSupportFunction [
+	^ GeometricFunctions gjkIntersectionTest: self supportFunction with: otherSupportFunction
+]
+
+{ #category : #'intersection testing' }
+WDMBSPBrush >> hasIntersectionWithVolume: volumeToTest [
+	volumeToTest class == self class ifTrue: [
+		^ self hasIntersectionWithBrush: volumeToTest withTransform: (self globalTransform inverseTransformTransform: volumeToTest globalTransform)
+	].
+
+	^ volumeToTest hasIntersectionWithConvexSupportFunction: self supportFunction
 ]
 
 { #category : #initialization }
@@ -112,6 +222,26 @@ WDMBSPBrush >> localRayPick: picker [
 	picker addResult: self withDistance: bestDistance
 ]
 
+{ #category : #'intersection testing' }
+WDMBSPBrush >> localSupportFunction [
+	self validateTopology.
+	^ [ :d |
+		| best bestDot |
+		best := nil.
+		bestDot := Float negativeInfinity.
+		vertices do: [ :v |
+			| dot |
+			dot := v dot: d.
+			dot > bestDot ifTrue: [
+				best := v.
+				bestDot := dot
+			]
+		].
+	
+		best
+	]
+]
+
 { #category : #accessing }
 WDMBSPBrush >> objectTypeName [
 	^ 'BSP Brush'
@@ -134,6 +264,66 @@ WDMBSPBrush >> rayPickElements: picker [
 	picker withTransform: transform do: [
 		self localRayPick: picker
 	]
+]
+
+{ #category : #'constructive solid geometry' }
+WDMBSPBrush >> subtract: otherBrush [
+	| otherBrushTransform myTransform |
+	otherBrush class == self class ifFalse: [ ^ { self } ].
+	
+	otherBrushTransform := otherBrush globalTransform.
+	myTransform := self globalTransform.
+	^ self subtract: otherBrush withTransform: (myTransform inverseTransformTransform: otherBrushTransform)
+]
+
+{ #category : #'constructive solid geometry' }
+WDMBSPBrush >> subtract: otherBrush withTransform: otherBrushTransform [
+	| otherPlanes otherPlaneClassifications clippingPlanes result remaining |
+	self validateTopology.
+	(self hasIntersectionWithBrush: otherBrush withTransform: otherBrushTransform) ifFalse: [ 
+		^ super subtract: otherBrush withTransform: otherBrushTransform
+	].
+	otherPlanes := otherBrush faces collect: [ :face | face plane transformedWith: otherBrushTransform ].
+	otherPlanes ifEmpty: [ ^ { self } ].
+
+	otherPlaneClassifications := otherPlanes collect: [ :eachPlane | eachPlane classifyVertices: vertices epsilon: Epsilon ].
+	
+	"Am I fully contained in the other polytope?"
+	(otherPlaneClassifications allSatisfy: [:each | #(back inside) includes: each ]) ifTrue: [ ^ #() ].
+
+	"Am I fully outside the other polytope?"
+	(otherPlaneClassifications anySatisfy: [:each | #(front inside) includes: each ]) ifTrue: [ ^ { self } ].
+
+	"We only clip against front and back planes."
+	clippingPlanes := OrderedCollection new.
+	otherPlaneClassifications doWithIndex: [ :classification :index |
+		classification == #frontAndBack ifTrue: [ 
+			clippingPlanes add: (otherPlanes at: index)
+		].
+	].
+
+	self assert: clippingPlanes isNotEmpty.
+	result := OrderedCollection new. 
+	remaining := self.
+	clippingPlanes do: [ :plane |
+		| frontAndBack front back |
+		frontAndBack := remaining clipAgainstPlane: plane.
+		front := frontAndBack first.
+		back := frontAndBack second.
+		front ifNotNil: [
+			result add: front
+		].
+
+		self assert: back isNotNil.
+		remaining := back
+	].
+	
+	^ result
+]
+
+{ #category : #'intersection testing' }
+WDMBSPBrush >> supportFunction [
+	^ GeometricFunctions transformSupportFunction: self localSupportFunction with: self globalTransform
 ]
 
 { #category : #'scene presentation' }

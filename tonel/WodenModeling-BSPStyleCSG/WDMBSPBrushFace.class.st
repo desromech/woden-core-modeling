@@ -247,3 +247,12 @@ WDMBSPBrushFace >> textureScale: anObject [
 
 	textureScale := anObject
 ]
+
+{ #category : #accessing }
+WDMBSPBrushFace >> vertices [
+	^ vertices ifNil: [
+		| brushVertices |
+		brushVertices := parent vertices.
+		vertices := indices collect: [ :i | brushVertices at: i + 1 ]
+	]
+]

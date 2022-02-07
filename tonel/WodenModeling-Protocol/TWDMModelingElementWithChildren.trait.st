@@ -27,6 +27,13 @@ TWDMModelingElementWithChildren >> children [
 	^ children ifNil: [ children := OrderedCollection new ]
 ]
 
+{ #category : #'as yet unclassified' }
+TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
+	self children do: [ :each |
+		each findVolumeElementsThatIntersectElements: volumesToTest into: result
+	]
+]
+
 { #category : #initialization }
 TWDMModelingElementWithChildren >> initializeScenePresentationHandle: aPresentationHandle [
 	self addChildrenOntoScenePresentationHandle: aPresentationHandle
