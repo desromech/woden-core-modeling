@@ -31,6 +31,29 @@ TWDMModelingElement >> children [
 	^ #()
 ]
 
+{ #category : #accessing }
+TWDMModelingElement >> globalTransform [
+	^ TRSTransform3D identity
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> initializeScenePresentationHandle: presentationHandle [
+]
+
+{ #category : #inspector }
+TWDMModelingElement >> inspectionScene [
+	<inspectorPresentationOrder: 20 title: 'Scene'>
+
+	| scene |
+	scene := WDScene new.
+	self presentInScene: scene.
+	
+	^ WDSpInteractiveScenePresenter new 
+		scene: scene;
+		camera: (WDCamera new asSceneNode position: (Vector3 x: 0 y: 0 z: 3));
+		yourself
+]
+
 { #category : #inspector }
 TWDMModelingElement >> inspectionTree [
 	<inspectorPresentationOrder: 10 title: 'Tree'>
@@ -42,9 +65,24 @@ TWDMModelingElement >> inspectionTree [
 		yourself
 ]
 
+{ #category : #testing }
+TWDMModelingElement >> isSceneSelectableObject [
+	^ false
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> makeScenePresentationHandleFor: aScene [
+	^ self explicitRequirement 
+]
+
 { #category : #memento }
 TWDMModelingElement >> materialStateMemento [
 	^ nil
+]
+
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> modelingTreeRoot [
+	^ self parent ifNil: [ self ] ifNotNil: [ :p | p modelingTreeRoot ]
 ]
 
 { #category : #accessing }
@@ -62,14 +100,44 @@ TWDMModelingElement >> objectTypeName [
 	self explicitRequirement
 ]
 
+{ #category : #accessing }
+TWDMModelingElement >> parent [
+	^ nil
+]
+
+{ #category : #accessing }
+TWDMModelingElement >> parent: aParent [
+
+]
+
 { #category : #memento }
 TWDMModelingElement >> positionStateMemento [
 	^ nil
 ]
 
+{ #category : #'scene presentation' }
+TWDMModelingElement >> presentInScene: aScene [
+	^ (self makeScenePresentationHandleFor: aScene)
+		addOntoScene;
+		yourself
+]
+
+{ #category : #selection }
+TWDMModelingElement >> rayPickElements: picker [
+]
+
 { #category : #adding }
 TWDMModelingElement >> remove: anElement [
 	self error: 'Children cannot be removed from me'
+]
+
+{ #category : #adding }
+TWDMModelingElement >> removeFromParent [
+	^ self parent remove: self
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> removedFromScene [
 ]
 
 { #category : #memento }
@@ -84,6 +152,16 @@ TWDMModelingElement >> restorePositionStateMemento: aMemento [
 TWDMModelingElement >> restoreTransformStateMemento: aMemento [
 ]
 
+{ #category : #'scene presentation' }
+TWDMModelingElement >> scenePresentationHandles [
+	^ #()
+]
+
+{ #category : #accessing }
+TWDMModelingElement >> transform [
+	^ TRSTransform3D identity
+]
+
 { #category : #memento }
 TWDMModelingElement >> transformStateMemento [
 	^ nil
@@ -96,4 +174,22 @@ TWDMModelingElement >> treeDisplayName [
 			nextPut: $[; nextPutAll: self objectTypeName; nextPut: $];
 			space; nextPutAll: self name
 	]
+]
+
+{ #category : #enumerating }
+TWDMModelingElement >> treeTopologyChanged [
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> updateScenePresentationHandle: presentationHandle [
+]
+
+{ #category : #accessing }
+TWDMModelingElement >> visible [
+	^ true
+]
+
+{ #category : #accessing }
+TWDMModelingElement >> visible: aBoolean [
+	
 ]

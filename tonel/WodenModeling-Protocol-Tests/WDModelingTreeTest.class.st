@@ -16,10 +16,12 @@ WDModelingTreeTest >> testAddLayer [
 	tree add: firstLayer.
 	self assert: tree children size equals: 1.
 	self assert: (tree children includes: firstLayer).
+	self assert: firstLayer parent equals: tree.
 	
 	tree add: secondLayer.
 	self assert: tree children size equals: 2.
 	self assert: (tree children includes: secondLayer).
+	self assert: secondLayer parent equals: tree.
 ]
 
 { #category : #tests }

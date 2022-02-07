@@ -20,13 +20,19 @@ BaselineOfWodenCoreModeling >> baseline: spec [
 				spec requires: #( #'WodenModeling-Protocol').
 			];
 			package: #'WodenModeling-Mesh-Tests' with: [
-				spec requires: #( #'WodenModeling-Protocol').
+				spec requires: #( #'WodenModeling-Protocol' #'WodenModeling-Mesh').
 			];
 			package: #'WodenModeling-BSPStyleCSG' with: [
-				spec requires: #( #'WodenModeling-Protocol').
+				spec requires: #( #'WodenModeling-Protocol' #'WodenModeling-BSPStyleCSG').
 			];
 			package: #'WodenModeling-BSPStyleCSG-Tests' with: [
 				spec requires: #( #'WodenModeling-Protocol').
+			];
+			package: #'WodenModeling-Terrain' with: [
+				spec requires: #( #'WodenModeling-Protocol').
+			];
+			package: #'WodenModeling-Terrain-Tests' with: [
+				spec requires: #( #'WodenModeling-Protocol' #'WodenModeling-Terrain').
 			]
 	].
 

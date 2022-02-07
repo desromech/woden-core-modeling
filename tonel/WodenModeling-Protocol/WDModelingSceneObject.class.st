@@ -3,16 +3,40 @@ I am a generic modeling scene object that can be selected and has a transform th
 "
 Class {
 	#name : #WDModelingSceneObject,
-	#superclass : #Object,
+	#superclass : #WDModelingElement,
 	#traits : 'TWDMModelingSceneObject',
 	#classTraits : 'TWDMModelingSceneObject classTrait',
 	#instVars : [
-		'name',
 		'transform',
-		'editionViewColor'
+		'editionViewColor',
+		'editionViewColorMaterial',
+		'localBoundingBox'
+	],
+	#classVars : [
+		'EditionColorPalette',
+		'EditionColorPaletteLastGeneratedColor',
+		'EditionColorPaletteRandomGenerator',
+		'Epsilon'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
+
+{ #category : #initialization }
+WDModelingSceneObject class >> generateEditionViewColor [
+	| newColor |
+	[
+		newColor := EditionColorPalette atRandom: EditionColorPaletteRandomGenerator
+	] doWhileTrue: [ EditionColorPaletteLastGeneratedColor = newColor ].
+	^ (EditionColorPaletteLastGeneratedColor := newColor) asVector4
+]
+
+{ #category : #initialization }
+WDModelingSceneObject class >> initialize [
+	Epsilon := 0.00001.
+	EditionColorPalette := Color wheel: 13.
+	EditionColorPaletteRandomGenerator := Random seed: 1.
+	EditionColorPaletteLastGeneratedColor := nil.
+]
 
 { #category : #accessing }
 WDModelingSceneObject >> editionViewColor [
@@ -24,27 +48,55 @@ WDModelingSceneObject >> editionViewColor: aColor [
 	editionViewColor := aColor
 ]
 
-{ #category : #memento }
+{ #category : #accessing }
+WDModelingSceneObject >> editionViewColorMaterial [
+	^ editionViewColorMaterial ifNil: [
+		editionViewColorMaterial := WDMetallicRoughnessMaterial default copy
+			baseColorFactor: self editionViewColor;
+			yourself
+	]
+]
+
+{ #category : #'as yet unclassified' }
+WDModelingSceneObject >> generateEditionViewColor [
+	self editionViewColor: self class generateEditionViewColor
+]
+
+{ #category : #initialization }
 WDModelingSceneObject >> initialize [
 	super initialize.
-	name := ''.
-	transform := TRSTransform3D identity.
 	editionViewColor := Color white.
+	transform := TRSTransform3D identity.
+	localBoundingBox := AABox new.
+]
+
+{ #category : #'as yet unclassified' }
+WDModelingSceneObject >> instantiateForPlacingIn: owner box: placementBox [
+	| instance |
+	instance := self copy setupForNewInstance.
+	instance transformWith: (placementBox trsTransformToConvertToMe: instance boundingBox).
+	owner add: instance.
+	^ instance
 ]
 
 { #category : #accessing }
-WDModelingSceneObject >> name [
-	^ name
+WDModelingSceneObject >> localBoundingBox [
+	^ localBoundingBox
 ]
 
-{ #category : #accessing }
-WDModelingSceneObject >> name: aString [
-	name := aString
+{ #category : #copying }
+WDModelingSceneObject >> postCopy [
+	super postCopy.
+	
+	parent := nil.
+	transform := transform copy.
+	localBoundingBox := localBoundingBox copy.
+	editionViewColorMaterial := nil.
 ]
 
-{ #category : #accessing }
-WDModelingSceneObject >> objectTypeName [
-	^ 'Generic Object'
+{ #category : #'as yet unclassified' }
+WDModelingSceneObject >> setupForNewInstance [
+	self generateEditionViewColor
 ]
 
 { #category : #accessing }
@@ -60,5 +112,11 @@ WDModelingSceneObject >> transform: aTransform [
 
 { #category : #accessing }
 WDModelingSceneObject >> transformChanged [
-	"Event notification for the transform change."
+	self invalidateScenePresentations
+]
+
+{ #category : #'scene presentation' }
+WDModelingSceneObject >> updateScenePresentationHandle: aHandle [
+	super updateScenePresentationHandle: aHandle.
+	aHandle sceneNode transform: transform.
 ]
