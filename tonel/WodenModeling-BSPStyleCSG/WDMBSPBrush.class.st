@@ -88,7 +88,7 @@ WDMBSPBrush >> localBoundingBox [
 	^ localBoundingBox
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 WDMBSPBrush >> localRayPick: picker [
 	| bestDistance localRay |
 	bestDistance := nil.
@@ -129,7 +129,7 @@ WDMBSPBrush >> postCopy [
 	texturedMesh := nil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 WDMBSPBrush >> rayPickElements: picker [
 	picker withTransform: transform do: [
 		self localRayPick: picker

@@ -4,68 +4,18 @@ I am a generic modeling scene object that can be selected and has a transform th
 Class {
 	#name : #WDModelingSceneObject,
 	#superclass : #WDModelingElement,
-	#traits : 'TWDMModelingSceneObject',
-	#classTraits : 'TWDMModelingSceneObject classTrait',
+	#traits : 'TWDMModelingSceneObject + TWDMModelingElementWithEditionViewColor',
+	#classTraits : 'TWDMModelingSceneObject classTrait + TWDMModelingElementWithEditionViewColor classTrait',
 	#instVars : [
 		'transform',
-		'editionViewColor',
-		'editionViewColorMaterial',
 		'localBoundingBox'
-	],
-	#classVars : [
-		'EditionColorPalette',
-		'EditionColorPaletteLastGeneratedColor',
-		'EditionColorPaletteRandomGenerator',
-		'Epsilon'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
 
 { #category : #initialization }
-WDModelingSceneObject class >> generateEditionViewColor [
-	| newColor |
-	[
-		newColor := EditionColorPalette atRandom: EditionColorPaletteRandomGenerator
-	] doWhileTrue: [ EditionColorPaletteLastGeneratedColor = newColor ].
-	^ (EditionColorPaletteLastGeneratedColor := newColor) asVector4
-]
-
-{ #category : #initialization }
-WDModelingSceneObject class >> initialize [
-	Epsilon := 0.00001.
-	EditionColorPalette := Color wheel: 13.
-	EditionColorPaletteRandomGenerator := Random seed: 1.
-	EditionColorPaletteLastGeneratedColor := nil.
-]
-
-{ #category : #accessing }
-WDModelingSceneObject >> editionViewColor [
-	^ editionViewColor
-]
-
-{ #category : #accessing }
-WDModelingSceneObject >> editionViewColor: aColor [
-	editionViewColor := aColor
-]
-
-{ #category : #accessing }
-WDModelingSceneObject >> editionViewColorMaterial [
-	^ editionViewColorMaterial ifNil: [
-		editionViewColorMaterial := WDMetallicRoughnessMaterial default copy
-			baseColorFactor: self editionViewColor;
-			yourself
-	]
-]
-
-{ #category : #'as yet unclassified' }
-WDModelingSceneObject >> generateEditionViewColor [
-	self editionViewColor: self class generateEditionViewColor
-]
-
-{ #category : #initialization }
 WDModelingSceneObject >> initialize [
 	super initialize.
-	editionViewColor := Color white.
 	transform := TRSTransform3D identity.
 	localBoundingBox := AABox new.
 ]
@@ -99,7 +49,7 @@ WDModelingSceneObject >> setupForNewInstance [
 	self generateEditionViewColor
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 WDModelingSceneObject >> transform [
 	^ transform
 ]

@@ -11,6 +11,32 @@ TWDMModelingElement >> add: anElement [
 	self error: 'Children cannot be added to me'
 ]
 
+{ #category : #'scene presentation' }
+TWDMModelingElement >> addChildOntoScenePresentations: aChild [
+	self scenePresentationHandles do: [ :eachHandle |
+		| childHandle |
+		childHandle := aChild makeScenePresentationHandleFor: eachHandle scene.
+		childHandle addOntoSceneNode: eachHandle sceneNode.
+		eachHandle addChild: childHandle.
+	].
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> addChildrenOntoScenePresentationHandle: aPresentationHandle [
+	self children do: [ :each |
+		| childHandle |
+		childHandle := each makeScenePresentationHandleFor: aPresentationHandle scene.
+		childHandle addOntoSceneNode: aPresentationHandle sceneNode.
+		aPresentationHandle addChild: childHandle.
+	].
+
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> addChildrenOntoScenePresentations [
+	self scenePresentationHandles do: [ :each | self addChildrenOntoScenePresentationHandle: each ]
+]
+
 { #category : #testing }
 TWDMModelingElement >> canAddOrRemoveChildren [
 	^ false
@@ -33,7 +59,9 @@ TWDMModelingElement >> children [
 
 { #category : #accessing }
 TWDMModelingElement >> globalTransform [
-	^ TRSTransform3D identity
+	^ self parent
+		ifNil: [ self transform ]
+		ifNotNil: [ :p | p globalTransform transformTransform: self transform ]
 ]
 
 { #category : #'scene presentation' }
@@ -137,7 +165,7 @@ TWDMModelingElement >> removeFromParent [
 ]
 
 { #category : #'scene presentation' }
-TWDMModelingElement >> removedFromScene [
+TWDMModelingElement >> removedFromModelTree [
 ]
 
 { #category : #memento }

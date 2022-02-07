@@ -13,12 +13,7 @@ Trait {
 TWDMModelingElementWithChildren >> add: aChild [
 	self children add: aChild.
 	aChild parent: self.
-	self scenePresentationHandles do: [ :eachHandle |
-		| childHandle |
-		childHandle := aChild makeScenePresentationHandleFor: eachHandle scene.
-		childHandle addOntoSceneNode: eachHandle sceneNode.
-		eachHandle addChild: childHandle.
-	].
+	self addChildOntoScenePresentations: aChild.
 	self modelingTreeRoot treeTopologyChanged.
 ]
 
@@ -34,12 +29,7 @@ TWDMModelingElementWithChildren >> children [
 
 { #category : #initialization }
 TWDMModelingElementWithChildren >> initializeScenePresentationHandle: aPresentationHandle [
-	self children do: [ :each |
-		| childHandle |
-		childHandle := each makeScenePresentationHandleFor: aPresentationHandle scene.
-		childHandle addOntoSceneNode: aPresentationHandle sceneNode.
-		aPresentationHandle addChild: childHandle.
-	].
+	self addChildrenOntoScenePresentationHandle: aPresentationHandle
 
 ]
 
@@ -55,5 +45,5 @@ TWDMModelingElementWithChildren >> rayPickElements: picker [
 TWDMModelingElementWithChildren >> remove: aChild [
 	self children remove: aChild.
 	self modelingTreeRoot treeTopologyChanged.
-	aChild removedFromScene.
+	aChild removedFromModelTree.
 ]

@@ -68,7 +68,7 @@ WDModelingScenePresentationHandle >> removeChild: aChild [
 ]
 
 { #category : #'scene presentation' }
-WDModelingScenePresentationHandle >> removedFromScene [
+WDModelingScenePresentationHandle >> removedFromModelTree [
 	parent ifNotNil: [ parent removeChild: self ].
 	scene := nil.
 	parent := nil.

@@ -11,6 +11,11 @@ TWDMModelingSceneObject >> boundingBox [
 	^ self localBoundingBox transformedWith: self transform
 ]
 
+{ #category : #testing }
+TWDMModelingSceneObject >> canBeDuplicatedAndPlaced [
+	^ true
+]
+
 { #category : #accessing }
 TWDMModelingSceneObject >> editionViewColor [
 	^ Color white
@@ -23,13 +28,6 @@ TWDMModelingSceneObject >> editionViewColor: aColor [
 { #category : #accessing }
 TWDMModelingSceneObject >> globalBoundingBox [
 	^ self localBoundingBox transformedWith: self globalTransform
-]
-
-{ #category : #accessing }
-TWDMModelingSceneObject >> globalTransform [
-	^ self parent
-		ifNil: [ self transform ]
-		ifNotNil: [ :p | p globalTransform transformTransform: self transform ]
 ]
 
 { #category : #testing }
@@ -84,11 +82,6 @@ TWDMModelingSceneObject >> selectableGlobalBoundingBox [
 { #category : #'constructive solid geometry' }
 TWDMModelingSceneObject >> subtract: otherElement withTransform: otherElementTransform [
 	^ { self }
-]
-
-{ #category : #accessing }
-TWDMModelingSceneObject >> transform [
-	^ TRSTransform3D identity
 ]
 
 { #category : #accessing }

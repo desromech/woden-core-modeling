@@ -12,8 +12,31 @@ Class {
 		'visible',
 		'scenePresentationHandles'
 	],
+	#classVars : [
+		'EditionColorPalette',
+		'EditionColorPaletteLastGeneratedColor',
+		'EditionColorPaletteRandomGenerator',
+		'Epsilon'
+	],
 	#category : #'WodenModeling-Protocol-Model'
 }
+
+{ #category : #initialization }
+WDModelingElement class >> generateEditionViewColor [
+	| newColor |
+	[
+		newColor := EditionColorPalette atRandom: EditionColorPaletteRandomGenerator
+	] doWhileTrue: [ EditionColorPaletteLastGeneratedColor = newColor ].
+	^ (EditionColorPaletteLastGeneratedColor := newColor) asVector4
+]
+
+{ #category : #initialization }
+WDModelingElement class >> initialize [
+	Epsilon := 0.00001.
+	EditionColorPalette := Color wheel: 13.
+	EditionColorPaletteRandomGenerator := Random seed: 1.
+	EditionColorPaletteLastGeneratedColor := nil.
+]
 
 { #category : #'instance creation' }
 WDModelingElement class >> named: aName [
@@ -80,8 +103,9 @@ WDModelingElement >> postCopy [
 ]
 
 { #category : #'scene presentation' }
-WDModelingElement >> removedFromScene [
-	scenePresentationHandles do: [ :each | each removedFromScene ].
+WDModelingElement >> removedFromModelTree [
+	parent := nil.
+	scenePresentationHandles do: [ :each | each removedFromModelTree ].
 	scenePresentationHandles := WeakSet new.
 ]
 

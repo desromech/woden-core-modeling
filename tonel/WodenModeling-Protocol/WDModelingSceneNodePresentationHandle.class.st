@@ -22,9 +22,9 @@ WDModelingSceneNodePresentationHandle >> initializeWithModel: aModel scene: aSce
 ]
 
 { #category : #'scene presentation' }
-WDModelingSceneNodePresentationHandle >> removedFromScene [
+WDModelingSceneNodePresentationHandle >> removedFromModelTree [
 	sceneNode removeFromScene.
-	super removedFromScene.
+	super removedFromModelTree.
 ]
 
 { #category : #accessing }

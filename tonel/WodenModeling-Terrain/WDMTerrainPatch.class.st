@@ -1,0 +1,426 @@
+Class {
+	#name : #WDMTerrainPatch,
+	#superclass : #WDModelingElement,
+	#traits : 'TWDMModelingElementWithEditionViewColor',
+	#classTraits : 'TWDMModelingElementWithEditionViewColor classTrait',
+	#instVars : [
+		'patchSize',
+		'row',
+		'column',
+		'heights',
+		'textureScale',
+		'textureOffset',
+		'textureRotation',
+		'localBoundingBox',
+		'meshWithAlternatives',
+		'wireframeMesh',
+		'texturedMesh',
+		'solidMesh',
+		'material'
+	],
+	#category : #'WodenModeling-Terrain'
+}
+
+{ #category : #accessing }
+WDMTerrainPatch >> boundingBox [
+	^ self localBoundingBox translatedBy: self position
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> buildPatchSolidWith: builder [
+	| vx sourceIndex vz |
+	builder
+		beginTriangles.
+	sourceIndex := 1.
+	0 to: patchSize - 1 do: [ :y |
+		vz := (y / (patchSize - 1)).
+		0 to: patchSize - 1 do: [ :x |
+			|b t l r c|
+			vx := (x / (patchSize - 1)).
+			t := b := l := r := c := heights at: sourceIndex.
+			y > 0 ifTrue: [ b := heights at: sourceIndex - patchSize ].
+			y + 1 < patchSize ifTrue: [ t := heights at: sourceIndex + patchSize ].
+			x > 0 ifTrue: [ l := heights at: sourceIndex - 1 ].
+			x + 1 < patchSize ifTrue: [ r := heights at: sourceIndex + 1 ].
+			
+			builder
+				addPx: vx y: c z: vz;
+				addN: (self computeNormalWithDx: r - l dz: t - b).
+			sourceIndex := sourceIndex + 1.
+		]
+	].
+
+	0 to: patchSize - 2 do: [ :y |
+		| rowStart |
+		rowStart := patchSize * y.
+		0 to: patchSize - 2 do: [ :x |
+			builder
+				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + 1 i2: rowStart + x;
+				addTriangleI0: rowStart + x i1: rowStart + x + patchSize i2: rowStart + x + patchSize + 1.
+			sourceIndex := sourceIndex + 1.
+		].
+	].
+	
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> buildPatchTexturedWith: builder [
+	| vx sourceIndex vz textureMatrix terrainScale |
+	builder
+		currentMaterial: ((material ifNotNil: [ material validMaterial ])
+			ifNil: [WDMetallicRoughnessMaterial default]);
+		beginTriangles.
+	terrainScale := parent ifNotNil: [parent transform scale] ifNil: [Vector3 withAll: 1].
+	sourceIndex := 1.
+	textureMatrix := self computeTextureMatrix.
+	0 to: patchSize - 1 do: [ :y |
+		vz := (y / (patchSize - 1)).
+		0 to: patchSize - 1 do: [ :x |
+			| t b l r c tc |
+			vx := (x / (patchSize - 1)).
+			t := b := l := r := c := heights at: sourceIndex.
+			y > 0 ifTrue: [ b := heights at: sourceIndex - patchSize ].
+			y + 1 < patchSize ifTrue: [ t := heights at: sourceIndex + patchSize ].
+			x > 0 ifTrue: [ l := heights at: sourceIndex - 1 ].
+			x + 1 < patchSize ifTrue: [ r := heights at: sourceIndex + 1 ].
+			tc := textureMatrix transformVector2: (Vector2 x: vx * terrainScale x y: vz * terrainScale z).
+			
+			builder
+				addPx: vx y: c z: vz;
+				addT0: tc;
+				addN: (self computeNormalWithDx: r - l dz: t - b).
+			sourceIndex := sourceIndex + 1.
+		]
+	].
+
+	0 to: patchSize - 2 do: [ :y |
+		| rowStart |
+		rowStart := patchSize * y.
+		0 to: patchSize - 2 do: [ :x |
+			builder
+				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + 1 i2: rowStart + x;
+				addTriangleI0: rowStart + x i1: rowStart + x + patchSize i2: rowStart + x + patchSize + 1.
+			sourceIndex := sourceIndex + 1.
+		].
+	].
+	
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> buildPatchWireframeWith: builder [
+	| vx sourceIndex vz |
+	builder
+		beginLines.
+	sourceIndex := 1.
+	0 to: patchSize - 1 do: [ :y |
+		vz := (y / (patchSize - 1)).
+		0 to: patchSize - 1 do: [ :x |
+			vx := (x / (patchSize - 1)).
+			builder addPx: vx y: (heights at: sourceIndex) z: vz.
+			sourceIndex := sourceIndex + 1.
+		]
+	].
+
+	0 to: patchSize - 1 do: [ :y |
+		| rowStart |
+		rowStart := patchSize * y.
+		0 to: patchSize - 1 do: [ :x |
+			x + 1 < patchSize ifTrue: [ 
+				builder addLineI0: rowStart + x i1: rowStart + x + 1.
+			].
+			y + 1 < patchSize  ifTrue: [ 
+				builder addLineI0: rowStart + x i1: rowStart + x + patchSize.
+			].
+			sourceIndex := sourceIndex + 1.
+		].
+	].
+	
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> column [
+
+	^ column
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> column: anObject [
+
+	column := anObject
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> columns [
+	^ parent ifNil: [ 1 ] ifNotNil: [ parent columns ]
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> computeNormalWithDx: dx dz: dz [
+	| tangent bitangent |
+	tangent := Vector3 x: 1 y: dx z: 0.
+	bitangent := Vector3 x: 0 y: dz z: -1.
+	^ (tangent cross: bitangent) normalized
+]
+
+{ #category : #initialization }
+WDMTerrainPatch >> computeTextureMatrix [
+	^ Matrix3x3 texScale: textureScale offset: textureOffset
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> generateLocalHeightWith: aBlock [
+	| newHeights destIndex columnOffset rowOffset |
+	newHeights := FloatArray new: patchSize * patchSize.
+	destIndex := 1.
+	columnOffset := column.
+	rowOffset := row.
+	
+	0 to: patchSize - 1 do: [ :y |
+		0 to: patchSize - 1 do: [ :x |
+			newHeights at: destIndex put: (aBlock value: x / (patchSize - 1) + columnOffset value: y / (patchSize - 1) + rowOffset).
+			destIndex := destIndex + 1
+		]
+	].
+	self heights: newHeights
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> heights [
+
+	^ heights
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> heights: newHeight [
+	heights := newHeight.
+	self heightsChanged
+	
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> heightsChanged [
+	self invalidateMeshes.
+	localBoundingBox := nil.
+	parent ifNotNil: [ parent invalidateLocalBoundingBox ]
+	
+]
+
+{ #category : #initialization }
+WDMTerrainPatch >> initialize [
+	super initialize.
+	patchSize := 32.
+	row := 0.
+	column := 0.
+	heights := FloatArray new: patchSize*patchSize.
+	textureScale := Vector2 withAll: 1.0.
+	textureOffset := Vector2 withAll: 0.0.
+	textureRotation := 0.0
+]
+
+{ #category : #'scene presentation' }
+WDMTerrainPatch >> initializeScenePresentationHandle: aHandle [
+	super initializeScenePresentationHandle: aHandle.
+	aHandle sceneNode transform: self transform
+]
+
+{ #category : #caching }
+WDMTerrainPatch >> invalidateMeshes [
+	wireframeMesh := nil.
+	solidMesh := nil.
+	self invalidateTexturedMeshes
+]
+
+{ #category : #caching }
+WDMTerrainPatch >> invalidateTexturedMeshes [
+	texturedMesh := nil.
+	meshWithAlternatives := nil.
+	self invalidateScenePresentations
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> localBoundingBox [
+	localBoundingBox ifNil: [ 
+		localBoundingBox := AABox min: (Vector3 x: 0 y: heights min z: 0) max: (Vector3 x: 1 y: heights max z: 1)
+	].
+	^ localBoundingBox
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> objectTypeName [
+	^ 'Terrain Patch'
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> patchSize: newPatchSize [
+	patchSize := newPatchSize.
+	heights := FloatArray new: patchSize*patchSize
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> position [
+	^ Vector3 x: column - (self columns / 2) y: 0 z: row - (self rows / 2)
+]
+
+{ #category : #copying }
+WDMTerrainPatch >> postCopy [
+	super postCopy.
+	meshWithAlternatives := nil.
+	wireframeMesh := nil.
+	solidMesh := nil.
+	texturedMesh := nil.
+	editionViewColorMaterial := nil.
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> rayCast: ray [
+	| position bbox boxHit entryPoint exitPoint previousPointHeight previousHeightSample |
+	position := self position.
+	bbox := self boundingBox.
+	boxHit := bbox intersectionsWithRay: ray.
+	boxHit ifNil: [ ^ nil ].
+	
+	entryPoint := (ray pointAtDistance: boxHit first) - position.
+	exitPoint := (ray pointAtDistance: boxHit second) - position.
+
+	previousPointHeight := entryPoint y.
+	previousHeightSample := self sampleHeightAtX: entryPoint x z: entryPoint z.
+	0 to: 1 by: (1 / patchSize) do: [ :alpha |
+		| testPoint heightSample testPointHeight minHeightSample maxHeightSample minPointHeight maxPointHeight |
+		testPoint := entryPoint interpolateTo: exitPoint at: alpha.
+		heightSample := self sampleHeightAtX: testPoint x z: testPoint z.
+		testPointHeight := testPoint y.
+		
+		minHeightSample := previousHeightSample min: heightSample.
+		maxHeightSample := previousHeightSample max: heightSample.
+
+		minPointHeight := previousPointHeight min: testPointHeight.
+		maxPointHeight := previousPointHeight max: testPointHeight.
+		
+		(maxPointHeight < minHeightSample or: [ maxHeightSample < minPointHeight ]) ifFalse: [
+			^ boxHit first interpolateTo: boxHit second at: alpha
+		].
+		
+		previousPointHeight := testPointHeight.
+		previousHeightSample := heightSample.
+	].
+	
+	^ nil
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> row [
+
+	^ row
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> row: anObject [
+
+	row := anObject
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> rows [
+	^ parent ifNil: [ 1 ] ifNotNil: [ parent rows ]
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> sampleHeightAtX: x z: z [
+	| sampleColumn sampleRow |
+	sampleColumn := (x * patchSize) floor min: patchSize - 1 max: 0.
+	sampleRow := (z * patchSize) floor min: patchSize - 1 max: 0.
+	^ heights at: sampleRow*patchSize + sampleColumn + 1
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> textureOffset [
+
+	^ textureOffset
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> textureOffset: anObject [
+
+	textureOffset := anObject
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> textureRotation [
+
+	^ textureRotation
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> textureRotation: anObject [
+
+	textureRotation := anObject
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> textureScale [
+
+	^ textureScale
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> textureScale: anObject [
+
+	textureScale := anObject
+]
+
+{ #category : #transforming }
+WDMTerrainPatch >> transform [
+	^ TRSTransform3D translation: self position
+]
+
+{ #category : #'scene presentation' }
+WDMTerrainPatch >> updateScenePresentationHandle: aHandle [
+	super updateScenePresentationHandle: aHandle.
+	aHandle sceneNode renderables: { self validMeshWithAlternatives }
+]
+
+{ #category : #caching }
+WDMTerrainPatch >> validMeshWithAlternatives [
+	^ meshWithAlternatives ifNil: [ meshWithAlternatives := WDRenderableWithViewModeAlternatives new
+		wireframe: self validWireframeMesh;
+		flatColor: self validSolidMesh;
+		flatColorShaded: self validSolidMesh;
+		flatTextured: self validTexturedMesh;
+		fullShaded: self validTexturedMesh;
+		yourself
+	]
+]
+
+{ #category : #caching }
+WDMTerrainPatch >> validSolidMesh [
+	| builder |
+	solidMesh ifNotNil: [ ^ solidMesh ].
+	builder := WDMeshBuilder new.
+	builder
+		currentMaterial: self editionViewColorMaterial.
+	self buildPatchSolidWith: builder.
+
+	^ solidMesh := builder mesh
+]
+
+{ #category : #caching }
+WDMTerrainPatch >> validTexturedMesh [
+	| builder |
+	texturedMesh ifNotNil: [ ^ texturedMesh ].
+	builder := WDMeshBuilder new.
+	builder
+		currentMaterial: WDMetallicRoughnessMaterial default.
+	self buildPatchTexturedWith: builder.
+
+	^ texturedMesh := builder mesh
+]
+
+{ #category : #caching }
+WDMTerrainPatch >> validWireframeMesh [
+	| builder |
+	wireframeMesh ifNotNil: [ ^ wireframeMesh ].
+	builder := WDMeshBuilder new.
+	builder currentMaterial: self editionViewColorMaterial.
+	self buildPatchWireframeWith: builder.
+	^ wireframeMesh := builder mesh
+]
