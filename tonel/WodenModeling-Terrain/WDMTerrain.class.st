@@ -1,3 +1,6 @@
+"
+I am terrain composed by a grid of equally sized height field patches.
+"
 Class {
 	#name : #WDMTerrain,
 	#superclass : #WDModelingSceneObject,
@@ -9,6 +12,11 @@ Class {
 	],
 	#category : #'WodenModeling-Terrain'
 }
+
+{ #category : #serialization }
+WDMTerrain class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDM'
+]
 
 { #category : #initialization }
 WDMTerrain class >> patchSize: patchSize gridExtent: gridExtent [
@@ -23,6 +31,16 @@ WDMTerrain >> children [
 { #category : #accessing }
 WDMTerrain >> columns [
 	^ columns
+]
+
+{ #category : #serialization }
+WDMTerrain >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#patchSize . patchSize.
+		#rows . rows.
+		#columns . columns.
+		#patches . patches collect: [:each | each encodeForJSONWithContext: serializationContext ]
+	}
 ]
 
 { #category : #'as yet unclassified' }
@@ -46,6 +64,23 @@ WDMTerrain >> initializeScenePresentationHandle: aPresentationHandle [
 { #category : #'as yet unclassified' }
 WDMTerrain >> invalidateLocalBoundingBox [
 	localBoundingBox := nil.
+]
+
+{ #category : #serialization }
+WDMTerrain >> loadFromJson: jsonData withContext: deserializationContext [
+	super loadFromJson: jsonData withContext: deserializationContext.
+	patchSize := (jsonData at: #patchSize ifAbsent: [ nil ]) ifNil: [ patchSize ].
+	rows := (jsonData at: #rows ifAbsent: [ nil ]) ifNil: [ rows ].
+	columns := (jsonData at: #columns ifAbsent: [ nil ]) ifNil: [ columns ].
+	patches := ((jsonData at: #patches ifAbsent: [ nil ]) ifNil: [ #() ]) collectWithIndex: [ :each :index |
+		WDMTerrainPatch new
+			patchSize: patchSize;
+			row: (index - 1) // columns;
+			column: (index - 1) % columns;
+			loadFromJson: each withContext: deserializationContext;
+			parent: self;
+			yourself
+	]
 ]
 
 { #category : #accessing }
@@ -116,6 +151,12 @@ WDMTerrain >> postCopy [
 	oldPatches := patches.
 	patches := #().
 	self privateSetPatches: (oldPatches collect: [ :each | each copy ]).
+]
+
+{ #category : #serialization }
+WDMTerrain >> prepareForSerializationWithContext: serializationContext [
+	super prepareForSerializationWithContext: serializationContext.
+	patches do: [ :each | each prepareForSerializationWithContext: serializationContext ]
 ]
 
 { #category : #accessing }

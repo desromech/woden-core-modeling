@@ -66,7 +66,12 @@ TWDMModelingElement >> editionViewColor [
 TWDMModelingElement >> editionViewColor: aColor [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'scene presentation' }
+TWDMModelingElement >> findMaterialResolver [
+	^ self modelingTreeRoot ifNotNil: [ :root | root materialResolver ]
+]
+
+{ #category : #queries }
 TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest [
 	| result |
 	result := OrderedCollection new.
@@ -74,7 +79,7 @@ TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest [
 	^ result
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #queries }
 TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
 ]
 
@@ -124,12 +129,17 @@ TWDMModelingElement >> makeScenePresentationHandleFor: aScene [
 	^ self explicitRequirement 
 ]
 
+{ #category : #'scene presentation' }
+TWDMModelingElement >> materialResolver [
+	^ nil
+]
+
 { #category : #memento }
 TWDMModelingElement >> materialStateMemento [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TWDMModelingElement >> modelingTreeRoot [
 	^ self parent ifNil: [ self ] ifNotNil: [ :p | p modelingTreeRoot ]
 ]

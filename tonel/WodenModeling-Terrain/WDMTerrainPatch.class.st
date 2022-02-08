@@ -1,3 +1,6 @@
+"
+I am a patch in a height field based terrains.
+"
 Class {
 	#name : #WDMTerrainPatch,
 	#superclass : #WDModelingElement,
@@ -20,6 +23,11 @@ Class {
 	],
 	#category : #'WodenModeling-Terrain'
 }
+
+{ #category : #serialization }
+WDMTerrainPatch class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDM'
+]
 
 { #category : #accessing }
 WDMTerrainPatch >> boundingBox [
@@ -67,7 +75,7 @@ WDMTerrainPatch >> buildPatchSolidWith: builder [
 WDMTerrainPatch >> buildPatchTexturedWith: builder [
 	| vx sourceIndex vz textureMatrix terrainScale |
 	builder
-		currentMaterial: ((material ifNotNil: [ material validMaterial ])
+		currentMaterial: ((material ifNotNil: [ material validMaterialWithResolver: self findMaterialResolver ])
 			ifNil: [WDMetallicRoughnessMaterial default]);
 		beginTriangles.
 	terrainScale := parent ifNotNil: [parent transform scale] ifNil: [Vector3 withAll: 1].
@@ -167,6 +175,22 @@ WDMTerrainPatch >> computeTextureMatrix [
 	^ Matrix3x3 texScale: textureScale offset: textureOffset
 ]
 
+{ #category : #serialization }
+WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
+	| heightBytes encodedHeights |
+	heightBytes := heights shallowCopy.
+	ByteArray adoptInstance: heightBytes.
+	encodedHeights := heightBytes base64Encoded.
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#editionViewColor . self editionViewColor asVector4 encodeForJSON.
+		#heights . encodedHeights.
+		#material . serializationContext materialInfoIndexFor: material.
+		#textureScale . textureScale encodeForJSON .
+		#textureOffset . textureScale encodeForJSON .
+		#textureRotation . textureScale encodeForJSON .
+	}
+]
+
 { #category : #'as yet unclassified' }
 WDMTerrainPatch >> generateLocalHeightWith: aBlock [
 	| newHeights destIndex columnOffset rowOffset |
@@ -237,6 +261,31 @@ WDMTerrainPatch >> invalidateTexturedMeshes [
 	self invalidateScenePresentations
 ]
 
+{ #category : #serialization }
+WDMTerrainPatch >> loadFromJson: jsonData withContext: deserializationContext [
+	| encodedHeights |
+	super loadFromJson: jsonData withContext: deserializationContext.
+	encodedHeights := jsonData at: #heights.
+	(jsonData at: #editionViewColor ifAbsent: [ nil ]) ifNotNil: [ :c |
+		self editionViewColor: (Vector4 loadFromJson: c) asColor
+	].
+	heights := encodedHeights base64Decoded shallowCopy.
+	FloatArray adoptInstance: heights.
+
+	(jsonData at: #material ifAbsent: [nil]) ifNotNil: [ :materialIndex |
+		material := deserializationContext getMaterialInfoWithIndex: materialIndex
+	].
+
+	(jsonData at: #textureScale ifAbsent: [ nil ]) ifNotNil: [ :d |
+		textureScale := Vector2 loadFromJson: d
+	].
+	(jsonData at: #textureOffset ifAbsent: [ nil ]) ifNotNil: [ :d |
+		textureOffset := Vector2 loadFromJson: d
+	].
+
+	textureRotation := (jsonData at: #textureRotation ifAbsent: [nil]) ifNil: [textureRotation].
+]
+
 { #category : #accessing }
 WDMTerrainPatch >> localBoundingBox [
 	localBoundingBox ifNil: [ 
@@ -269,6 +318,12 @@ WDMTerrainPatch >> postCopy [
 	solidMesh := nil.
 	texturedMesh := nil.
 	editionViewColorMaterial := nil.
+]
+
+{ #category : #serialization }
+WDMTerrainPatch >> prepareForSerializationWithContext: serializationContext [
+	super prepareForSerializationWithContext: serializationContext.
+	serializationContext recordMaterialInfo: material
 ]
 
 { #category : #accessing }

@@ -4,12 +4,12 @@ I am a modeling element.
 Class {
 	#name : #WDModelingElement,
 	#superclass : #Object,
-	#traits : 'TWDMModelingElement',
-	#classTraits : 'TWDMModelingElement classTrait',
+	#traits : 'TWDMModelingElement + TWDMJsonSerializableModelingElement',
+	#classTraits : 'TWDMModelingElement classTrait + TWDMJsonSerializableModelingElement classTrait',
 	#instVars : [
 		'name',
-		'parent',
 		'visible',
+		'parent',
 		'scenePresentationHandles'
 	],
 	#classVars : [
@@ -38,9 +38,23 @@ WDModelingElement class >> initialize [
 	EditionColorPaletteLastGeneratedColor := nil.
 ]
 
+{ #category : #serialization }
+WDModelingElement class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WD'
+]
+
 { #category : #'instance creation' }
 WDModelingElement class >> named: aName [
 	^ self new name: aName; yourself
+]
+
+{ #category : #serialization }
+WDModelingElement >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ {
+		#__type__ . self jsonObjectTypeName.
+		#name . self name.
+		#visible . self visible.
+	}
 ]
 
 { #category : #initialization }
@@ -58,6 +72,13 @@ WDModelingElement >> initializeScenePresentationHandle: aHandle [
 { #category : #'scene presentation' }
 WDModelingElement >> invalidateScenePresentations [
 	scenePresentationHandles do: [ :each | each invalidate ]
+]
+
+{ #category : #serialization }
+WDModelingElement >> loadFromJson: jsonData withContext: deserializationContext [
+	name := (jsonData at: #name ifAbsent: [ nil ]) ifNil: [ name].
+	visible := (jsonData at: #visible ifAbsent: [ nil ]) ifNil: [visible].
+
 ]
 
 { #category : #'scene presentation' }

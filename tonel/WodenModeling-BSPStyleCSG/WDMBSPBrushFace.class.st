@@ -78,6 +78,11 @@ WDMBSPBrushFace class >> initialize [
 	}.
 ]
 
+{ #category : #serialization }
+WDMBSPBrushFace class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDM'
+]
+
 { #category : #accessing }
 WDMBSPBrushFace class >> plane: aPlane [
 	^ self new plane: aPlane; yourself
@@ -110,7 +115,7 @@ WDMBSPBrushFace >> buildSolidFaceMeshWith: builder [
 WDMBSPBrushFace >> buildTexturedFaceMeshWith: builder transform: globalTransform [
 	| normal brushVertices textureMatrix normalAxis tangent bitangent |
 	builder
-		currentMaterial: ((material ifNotNil: [ material validMaterialForRendering ])
+		currentMaterial: ((material ifNotNil: [ material validMaterialWithResolver: self findMaterialResolver ])
 			ifNil: [WDELevelEditorMeshes uniqueInstance defaultMaterial]);
 		beginTriangles.
 	textureMatrix := self computeTextureMatrix.
@@ -163,6 +168,17 @@ WDMBSPBrushFace >> computeTextureMatrix [
 	^ Matrix3x3 texScale: textureScale offset: textureOffset
 ]
 
+{ #category : #serialization }
+WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#plane . plane encodeForJSON.
+		#material . serializationContext materialInfoIndexFor: material.
+		#textureScale . textureScale encodeForJSON.
+		#textureOffset . textureOffset encodeForJSON.
+		#textureRotation . textureRotation.
+	}
+]
+
 { #category : #accessing }
 WDMBSPBrushFace >> indices [
 	^ indices
@@ -174,6 +190,19 @@ WDMBSPBrushFace >> initialize [
 	textureScale := Vector2 withAll: 0.25.
 	textureOffset := Vector2 zeros.
 	textureRotation := 0.
+]
+
+{ #category : #serialization }
+WDMBSPBrushFace >> loadFromJson: jsonData withContext: deserializationContext [
+	super loadFromJson: jsonData withContext: deserializationContext.
+	plane := Plane loadFromJson: (jsonData at: #plane).
+	(jsonData at: #material ifAbsent: [nil]) ifNotNil: [ :materialIndex |
+		material := deserializationContext getMaterialInfoWithIndex: materialIndex
+	].
+	textureScale := Vector2 loadFromJson: (jsonData at: #textureScale).
+	textureOffset := Vector2 loadFromJson: (jsonData at: #textureOffset).
+	textureRotation := jsonData at: #textureRotation.
+
 ]
 
 { #category : #accessing }
@@ -191,6 +220,12 @@ WDMBSPBrushFace >> plane [
 WDMBSPBrushFace >> plane: anObject [
 
 	plane := anObject
+]
+
+{ #category : #serialization }
+WDMBSPBrushFace >> prepareForSerializationWithContext: serializationContext [
+	super prepareForSerializationWithContext: serializationContext.
+	serializationContext recordMaterialInfo: material
 ]
 
 { #category : #'mesh building' }

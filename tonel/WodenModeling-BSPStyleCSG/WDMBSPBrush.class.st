@@ -32,6 +32,11 @@ WDMBSPBrush class >> forBox: aBox [
 	}
 ]
 
+{ #category : #serialization }
+WDMBSPBrush class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDM'
+]
+
 { #category : #accessing }
 WDMBSPBrush class >> unitBox [
 	^ self forBox: AABox unit
@@ -192,6 +197,15 @@ WDMBSPBrush >> invalidateTopology [
 	self invalidateMeshes
 ]
 
+{ #category : #serialization }
+WDMBSPBrush >> loadFromJson: jsonData withContext: deserializationContext [
+	super loadFromJson: jsonData withContext: deserializationContext.
+	self faces: ((jsonData at: #faces ifAbsent: [ #() ]) collect: [ :each |
+		WDMBSPBrushFace new
+			loadFromJson: each withContext: deserializationContext
+	])
+]
+
 { #category : #accessing }
 WDMBSPBrush >> localBoundingBox [
 	self validateTopology.
@@ -257,6 +271,12 @@ WDMBSPBrush >> postCopy [
 	wireframeMesh := nil.
 	solidMesh := nil.
 	texturedMesh := nil.
+]
+
+{ #category : #serialization }
+WDMBSPBrush >> prepareForSerializationWithContext: serializationContext [
+	super prepareForSerializationWithContext: serializationContext.
+	faces do: [ :each | each prepareForSerializationWithContext: serializationContext ]
 ]
 
 { #category : #selection }

@@ -13,6 +13,14 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #serialization }
+WDModelingSceneObject >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#transform . self transform encodeForJSON.
+		#editionViewColor . self editionViewColor asVector4 encodeForJSON.
+	}
+]
+
 { #category : #initialization }
 WDModelingSceneObject >> initialize [
 	super initialize.
@@ -27,6 +35,17 @@ WDModelingSceneObject >> instantiateForPlacingIn: owner box: placementBox [
 	instance transformWith: (placementBox trsTransformToConvertToMe: instance boundingBox).
 	owner add: instance.
 	^ instance
+]
+
+{ #category : #serialization }
+WDModelingSceneObject >> loadFromJson: jsonData withContext: deserializationContext [
+	super loadFromJson: jsonData withContext: deserializationContext.
+	(jsonData at: #transform ifAbsent: [ nil ]) ifNotNil: [ :t |
+		self transform: (TRSTransform3D loadFromJson: t)
+	].
+	(jsonData at: #editionViewColor ifAbsent: [ nil ]) ifNotNil: [ :c |
+		self editionViewColor: (Vector4 loadFromJson: c) asColor
+	].
 ]
 
 { #category : #accessing }

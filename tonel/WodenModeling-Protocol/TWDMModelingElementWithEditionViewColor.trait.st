@@ -27,7 +27,22 @@ TWDMModelingElementWithEditionViewColor >> editionViewColorMaterial [
 	]
 ]
 
+{ #category : #serialization }
+TWDMModelingElementWithEditionViewColor >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#editionViewColor . self editionViewColor asVector4 encodeForJSON
+	}
+]
+
 { #category : #'as yet unclassified' }
 TWDMModelingElementWithEditionViewColor >> generateEditionViewColor [
 	self editionViewColor: WDModelingElement generateEditionViewColor
+]
+
+{ #category : #serialization }
+TWDMModelingElementWithEditionViewColor >> loadFromJson: jsonData withContext: deserializationContext [
+	super loadFromJson: jsonData withContext: deserializationContext.
+	(jsonData at: #editionViewColor ifAbsent: [ nil ]) ifNotNil: [ :c |
+		self editionViewColor: (Vector4 loadFromJson: c) asColor
+	]
 ]

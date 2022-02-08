@@ -27,6 +27,13 @@ TWDMModelingElementWithChildren >> children [
 	^ children ifNil: [ children := OrderedCollection new ]
 ]
 
+{ #category : #serialization }
+TWDMModelingElementWithChildren >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ]
+	}
+]
+
 { #category : #'as yet unclassified' }
 TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
 	self children do: [ :each |
@@ -38,6 +45,21 @@ TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volu
 TWDMModelingElementWithChildren >> initializeScenePresentationHandle: aPresentationHandle [
 	self addChildrenOntoScenePresentationHandle: aPresentationHandle
 
+]
+
+{ #category : #serialization }
+TWDMModelingElementWithChildren >> loadFromJson: jsonData withContext: deserializationContext [
+	super loadFromJson: jsonData withContext: deserializationContext.
+	(jsonData at: #children ifAbsent: [ nil ]) ifNotNil: [ :childrenData |
+		childrenData do: [ :childData |
+			self add: (deserializationContext materializeObject: childData)
+		]
+	].
+]
+
+{ #category : #'as yet unclassified' }
+TWDMModelingElementWithChildren >> prepareForSerializationWithContext: serializationContext [
+	self children do: [ :each | each prepareForSerializationWithContext: serializationContext ]
 ]
 
 { #category : #selection }
