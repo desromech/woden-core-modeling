@@ -120,6 +120,13 @@ WDMBSPBrush >> clipAgainstPlane: plane [
 	^ { frontPolyhedron . backPolyhedron }
 ]
 
+{ #category : #serialization }
+WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#faces . faces collect: [ :each | each encodeForJSONWithContext: serializationContext ]
+	}
+]
+
 { #category : #accessing }
 WDMBSPBrush >> faces [
 	^ faces
