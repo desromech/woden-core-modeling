@@ -8,7 +8,8 @@ Class {
 		'scene',
 		'parent',
 		'children',
-		'model'
+		'model',
+		'presentationInvalidationBlock'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
@@ -33,6 +34,12 @@ WDModelingScenePresentationHandle >> addOntoScene [
 WDModelingScenePresentationHandle >> addOntoSceneNode: aSceneNode [
 ]
 
+{ #category : #'as yet unclassified' }
+WDModelingScenePresentationHandle >> childInvalidated [
+	parent ifNotNil: [ parent childInvalidated ].
+	presentationInvalidationBlock ifNotNil: [ presentationInvalidationBlock cull: self ]
+]
+
 { #category : #adding }
 WDModelingScenePresentationHandle >> children [
 	^ children ifNil: [ children := Set new ]
@@ -46,8 +53,8 @@ WDModelingScenePresentationHandle >> initializeWithModel: aModel scene: aScene [
 
 { #category : #scrolling }
 WDModelingScenePresentationHandle >> invalidate [
-	self flag: 'TODO: Attempt to defer this onto rendering time'.
-	model ifNotNil: [ model updateScenePresentationHandle: self ]
+	model ifNotNil: [ model updateScenePresentationHandle: self ].
+	self childInvalidated.
 ]
 
 { #category : #accessing }
@@ -77,4 +84,9 @@ WDModelingScenePresentationHandle >> removedFromModelTree [
 { #category : #accessing }
 WDModelingScenePresentationHandle >> scene [
 	^ scene
+]
+
+{ #category : #enumerating }
+WDModelingScenePresentationHandle >> whenPresentationIsInvalidatedDo: aBlock [
+	presentationInvalidationBlock := aBlock
 ]

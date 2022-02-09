@@ -206,6 +206,20 @@ WDMBSPBrushFace >> loadFromJson: jsonData withContext: deserializationContext [
 ]
 
 { #category : #accessing }
+WDMBSPBrushFace >> material [
+	^ material
+]
+
+{ #category : #accessing }
+WDMBSPBrushFace >> material: aMaterial [
+	| changed newMaterial |
+	newMaterial := aMaterial asWDModelingMaterialInfo.
+	changed := material ~~ newMaterial.
+	material := newMaterial.
+	(changed and: [parent isNotNil]) ifTrue: [ parent faceTexturesChanged ].
+]
+
+{ #category : #accessing }
 WDMBSPBrushFace >> objectTypeName [
 	^ 'Face'
 ]
@@ -226,6 +240,11 @@ WDMBSPBrushFace >> plane: anObject [
 WDMBSPBrushFace >> prepareForSerializationWithContext: serializationContext [
 	super prepareForSerializationWithContext: serializationContext.
 	serializationContext recordMaterialInfo: material
+]
+
+{ #category : #initialization }
+WDMBSPBrushFace >> setMaterialInfoRecursively: newMaterial [
+	self material: newMaterial
 ]
 
 { #category : #'mesh building' }

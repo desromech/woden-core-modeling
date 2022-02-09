@@ -23,6 +23,11 @@ WDModelingEditionMode >> asModelingEditionMode [
 ]
 
 { #category : #testing }
+WDModelingEditionMode >> isFaceTexturingMode [
+	^ false
+]
+
+{ #category : #testing }
 WDModelingEditionMode >> isObjectEditionMode [
 	^ false
 ]

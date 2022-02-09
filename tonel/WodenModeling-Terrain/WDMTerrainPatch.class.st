@@ -295,6 +295,20 @@ WDMTerrainPatch >> localBoundingBox [
 ]
 
 { #category : #accessing }
+WDMTerrainPatch >> material [
+	^ material
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> material: aMaterial [
+	| changed newMaterial |
+	newMaterial := aMaterial asWDModelingMaterialInfo.
+	changed := material ~~ newMaterial.
+	material := newMaterial.
+	changed ifTrue: [ self texturingChanged ].
+]
+
+{ #category : #accessing }
 WDMTerrainPatch >> objectTypeName [
 	^ 'Terrain Patch'
 ]
@@ -387,6 +401,11 @@ WDMTerrainPatch >> sampleHeightAtX: x z: z [
 	^ heights at: sampleRow*patchSize + sampleColumn + 1
 ]
 
+{ #category : #initialization }
+WDMTerrainPatch >> setMaterialInfoRecursively: newMaterial [
+	self material: newMaterial
+]
+
 { #category : #accessing }
 WDMTerrainPatch >> textureOffset [
 
@@ -421,6 +440,11 @@ WDMTerrainPatch >> textureScale [
 WDMTerrainPatch >> textureScale: anObject [
 
 	textureScale := anObject
+]
+
+{ #category : #accessing }
+WDMTerrainPatch >> texturingChanged [
+	self invalidateTexturedMeshes
 ]
 
 { #category : #transforming }

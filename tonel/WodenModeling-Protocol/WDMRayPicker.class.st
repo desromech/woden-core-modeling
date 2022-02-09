@@ -3,52 +3,22 @@ I am an utility that is used for picking elements by using a ray.
 "
 Class {
 	#name : #WDMRayPicker,
-	#superclass : #Object,
+	#superclass : #WDMAbstractRayPicker,
 	#instVars : [
-		'ray',
-		'editionMode',
 		'results'
 	],
 	#category : #'WodenModeling-Protocol-Selection'
 }
-
-{ #category : #'as yet unclassified' }
-WDMRayPicker class >> ray: aRay [
-	^ self new ray: aRay; yourself
-]
 
 { #category : #adding }
 WDMRayPicker >> addResult: result withDistance: distance [
 	results add: distance -> result
 ]
 
-{ #category : #accessing }
-WDMRayPicker >> editionMode [
-
-	^ editionMode
-]
-
-{ #category : #accessing }
-WDMRayPicker >> editionMode: anEditionMode [
-	editionMode := anEditionMode asModelingEditionMode
-]
-
-{ #category : #initialize }
+{ #category : #initialization }
 WDMRayPicker >> initialize [
+	super initialize.
 	results := OrderedCollection new.
-	self editionMode: WDObjectEditionMode.
-]
-
-{ #category : #accessing }
-WDMRayPicker >> ray [
-
-	^ ray
-]
-
-{ #category : #accessing }
-WDMRayPicker >> ray: anObject [
-
-	ray := anObject
 ]
 
 { #category : #accessing }

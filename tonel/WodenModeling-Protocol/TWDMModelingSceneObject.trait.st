@@ -62,6 +62,7 @@ TWDMModelingSceneObject >> positionStateMemento [
 { #category : #selection }
 TWDMModelingSceneObject >> rayPickElements: picker [
 	| distance |
+	picker editionMode isObjectEditionMode ifFalse: [ ^ self ].
 	distance := self boundingBox intersectionWithRay: picker ray.
 	distance ifNotNil: [ 
 		picker addResult: self withDistance: distance

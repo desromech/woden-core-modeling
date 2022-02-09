@@ -228,6 +228,10 @@ TWDMModelingElement >> scenePresentationHandles [
 	^ #()
 ]
 
+{ #category : #initialization }
+TWDMModelingElement >> setMaterialInfoRecursively: newMaterial [
+]
+
 { #category : #accessing }
 TWDMModelingElement >> transform [
 	^ TRSTransform3D identity

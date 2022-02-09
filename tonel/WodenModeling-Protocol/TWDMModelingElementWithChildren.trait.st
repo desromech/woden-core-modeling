@@ -83,3 +83,8 @@ TWDMModelingElementWithChildren >> remove: aChild [
 	self modelingTreeRoot treeTopologyChanged.
 	aChild removedFromModelTree.
 ]
+
+{ #category : #initialization }
+TWDMModelingElementWithChildren >> setMaterialInfoRecursively: newMaterial [
+	self children do: [ :each | each setMaterialInfoRecursively: newMaterial ].
+]

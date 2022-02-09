@@ -172,6 +172,7 @@ WDMTerrain >> privateSetPatches: newPatches [
 
 { #category : #selection }
 WDMTerrain >> rayPickElements: picker [
+	picker editionMode isObjectEditionMode ifFalse: [ ^ self ].
 	picker withTransform: transform do: [
 		self localRayPick: picker
 	]
@@ -180,4 +181,9 @@ WDMTerrain >> rayPickElements: picker [
 { #category : #accessing }
 WDMTerrain >> rows [
 	^ rows
+]
+
+{ #category : #initialization }
+WDMTerrain >> setMaterialInfoRecursively: newMaterial [
+	self patches do: [ :each | each setMaterialInfoRecursively: newMaterial ].
 ]

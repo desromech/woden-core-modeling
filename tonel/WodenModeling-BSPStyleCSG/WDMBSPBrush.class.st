@@ -127,6 +127,11 @@ WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : #'as yet unclassified' }
+WDMBSPBrush >> faceTexturesChanged [
+	self invalidateTexturedMeshes
+]
+
 { #category : #accessing }
 WDMBSPBrush >> faces [
 	^ faces
@@ -226,23 +231,30 @@ WDMBSPBrush >> localBoundingBox [
 
 { #category : #selection }
 WDMBSPBrush >> localRayPick: picker [
-	| bestDistance localRay |
+	| bestDistance localRay isFaceTexturingMode |
 	bestDistance := nil.
 	localRay := picker ray.
+	isFaceTexturingMode := picker editionMode isFaceTexturingMode.
+		
 	faces do: [ :face |
 		| intersectionDistance  |
 		intersectionDistance := face plane intersectionWithRay: localRay.
 		intersectionDistance ifNotNil: [
 			| intersectionPoint |
 			intersectionPoint := localRay pointAtDistance: intersectionDistance.
-			(faces allSatisfy: [ :otherFace | otherFace == face or: [ otherFace plane isPointInsideOrBehind: intersectionPoint ] ]) ifTrue: [ 
-				(bestDistance isNil or: [ intersectionDistance < bestDistance ]) ifTrue: [ 
-					bestDistance := intersectionDistance
-				]
+			(faces allSatisfy: [ :otherFace | otherFace == face or: [ otherFace plane isPointInsideOrBehind: intersectionPoint ] ]) ifTrue: [
+				isFaceTexturingMode ifTrue: [
+					picker addResult: face withDistance: intersectionDistance
+				] ifFalse: [ 
+					(bestDistance isNil or: [ intersectionDistance < bestDistance ]) ifTrue: [ 
+						bestDistance := intersectionDistance
+					]
+				].
 			]
 		].
 	].
 
+	isFaceTexturingMode ifTrue: [ ^ self ].
 	bestDistance ifNil: [ ^ nil ].
 
 	picker addResult: self withDistance: bestDistance
@@ -293,9 +305,17 @@ WDMBSPBrush >> prepareForSerializationWithContext: serializationContext [
 
 { #category : #selection }
 WDMBSPBrush >> rayPickElements: picker [
+	(picker editionMode isObjectEditionMode or:
+	[ picker editionMode isFaceTexturingMode ]) ifFalse: [ ^ self ].
+
 	picker withTransform: transform do: [
 		self localRayPick: picker
 	]
+]
+
+{ #category : #initialization }
+WDMBSPBrush >> setMaterialInfoRecursively: newMaterial [
+	self faces do: [ :each | each setMaterialInfoRecursively: newMaterial ].
 ]
 
 { #category : #'constructive solid geometry' }
