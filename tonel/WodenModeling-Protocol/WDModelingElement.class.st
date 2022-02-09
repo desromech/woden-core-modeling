@@ -9,6 +9,8 @@ Class {
 	#instVars : [
 		'name',
 		'visible',
+		'highlighted',
+		'selected',
 		'parent',
 		'scenePresentationHandles'
 	],
@@ -57,11 +59,24 @@ WDModelingElement >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : #accessing }
+WDModelingElement >> highlighted [
+	^ highlighted
+]
+
+{ #category : #accessing }
+WDModelingElement >> highlighted: aBoolean [
+	highlighted := aBoolean.
+	self highlightingOrSelectionStatusChanged.
+]
+
 { #category : #initialization }
 WDModelingElement >> initialize [
 	super initialize.
 	name := ''.
 	visible := true.
+	selected := false.
+	highlighted := false.
 	scenePresentationHandles := WeakSet new.
 ]
 
@@ -138,6 +153,18 @@ WDModelingElement >> scenePresentationHandleClass [
 { #category : #accessing }
 WDModelingElement >> scenePresentationHandles [
 	^ scenePresentationHandles
+]
+
+{ #category : #accessing }
+WDModelingElement >> selected [
+
+	^ selected
+]
+
+{ #category : #accessing }
+WDModelingElement >> selected: aBoolean [
+	selected := aBoolean.
+	self highlightingOrSelectionStatusChanged.
 ]
 
 { #category : #'scene presentation' }

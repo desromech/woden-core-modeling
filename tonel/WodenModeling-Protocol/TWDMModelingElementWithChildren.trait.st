@@ -48,6 +48,11 @@ TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectFrustum: frust
 	]
 ]
 
+{ #category : #'as yet unclassified' }
+TWDMModelingElementWithChildren >> highlightingOrSelectionStatusChanged [
+	self children do: [ :each | each highlightingOrSelectionStatusChanged ]
+]
+
 { #category : #initialization }
 TWDMModelingElementWithChildren >> initializeScenePresentationHandle: aPresentationHandle [
 	self addChildrenOntoScenePresentationHandle: aPresentationHandle

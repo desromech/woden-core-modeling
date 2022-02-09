@@ -98,6 +98,7 @@ WDMBSPBrushFace >> addIndex: index [
 WDMBSPBrushFace >> buildSolidFaceMeshWith: builder [
 	| normal brushVertices |
 	builder
+		currentMaterial: (parent editionViewColorMaterial withHighlightedStatus: self highlightedStatus selectedStatus: self selectedStatus );
 		beginTriangles.
 	normal := plane normal.
 	brushVertices := parent vertices.
@@ -113,10 +114,12 @@ WDMBSPBrushFace >> buildSolidFaceMeshWith: builder [
 
 { #category : #'mesh building' }
 WDMBSPBrushFace >> buildTexturedFaceMeshWith: builder transform: globalTransform [
-	| normal brushVertices textureMatrix normalAxis tangent bitangent |
+	| normal brushVertices textureMatrix normalAxis tangent bitangent solvedMaterial |
+	solvedMaterial := (material ifNotNil: [ material validMaterialWithResolver: self findMaterialResolver ])
+			ifNil: [WDMetallicRoughnessMaterial default].
+			
 	builder
-		currentMaterial: ((material ifNotNil: [ material validMaterialWithResolver: self findMaterialResolver ])
-			ifNil: [WDELevelEditorMeshes uniqueInstance defaultMaterial]);
+		currentMaterial: (solvedMaterial withHighlightedStatus: self highlightedStatus selectedStatus: self selectedStatus );
 		beginTriangles.
 	textureMatrix := self computeTextureMatrix.
 		
@@ -177,6 +180,12 @@ WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
 		#textureOffset . textureOffset encodeForJSON.
 		#textureRotation . textureRotation.
 	}
+]
+
+{ #category : #'as yet unclassified' }
+WDMBSPBrushFace >> highlightingOrSelectionStatusChanged [
+	super highlightingOrSelectionStatusChanged.
+	parent ifNotNil: [ :p | p invalidateMeshes ]
 ]
 
 { #category : #accessing }

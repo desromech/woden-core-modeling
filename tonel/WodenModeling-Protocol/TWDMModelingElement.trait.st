@@ -102,6 +102,24 @@ TWDMModelingElement >> globalTransform [
 		ifNotNil: [ :p | p globalTransform transformTransform: self transform ]
 ]
 
+{ #category : #highlighting }
+TWDMModelingElement >> highlighted [
+	^ false
+]
+
+{ #category : #highlighting }
+TWDMModelingElement >> highlighted: aBoolean [
+]
+
+{ #category : #highlighting }
+TWDMModelingElement >> highlightedStatus [
+	^ self highlighted or: [ self parent ifNil: [ false ] ifNotNil: [ :p | p highlightedStatus ] ]
+]
+
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> highlightingOrSelectionStatusChanged [
+]
+
 { #category : #'scene presentation' }
 TWDMModelingElement >> initializeScenePresentationHandle: presentationHandle [
 ]
@@ -226,6 +244,20 @@ TWDMModelingElement >> restoreTransformStateMemento: aMemento [
 { #category : #'scene presentation' }
 TWDMModelingElement >> scenePresentationHandles [
 	^ #()
+]
+
+{ #category : #selection }
+TWDMModelingElement >> selected [
+	^ false
+]
+
+{ #category : #selection }
+TWDMModelingElement >> selected: aBoolean [
+]
+
+{ #category : #selection }
+TWDMModelingElement >> selectedStatus [
+	^ self selected or: [ self parent ifNil: [ false ] ifNotNil: [ :p | p selectedStatus ] ]
 ]
 
 { #category : #initialization }

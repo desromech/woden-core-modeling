@@ -186,11 +186,16 @@ WDMBSPBrush >> hasIntersectionWithVolume: volumeToTest [
 	^ volumeToTest hasIntersectionWithConvexSupportFunction: self supportFunction
 ]
 
+{ #category : #'as yet unclassified' }
+WDMBSPBrush >> highlightingOrSelectionStatusChanged [
+	super highlightingOrSelectionStatusChanged.
+	self invalidateMeshes
+]
+
 { #category : #initialization }
 WDMBSPBrush >> initialize [
 	super initialize.
 	hasValidTopology := false.
-	faces := #()
 	
 ]
 
