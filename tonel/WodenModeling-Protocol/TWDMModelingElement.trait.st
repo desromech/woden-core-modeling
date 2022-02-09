@@ -83,6 +83,18 @@ TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest [
 TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
 ]
 
+{ #category : #queries }
+TWDMModelingElement >> findVolumeElementsThatIntersectFrustum: volumesToTest [
+	| result |
+	result := OrderedCollection new.
+	self findVolumeElementsThatIntersectFrustum: volumesToTest into: result.
+	^ result
+]
+
+{ #category : #queries }
+TWDMModelingElement >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
+]
+
 { #category : #accessing }
 TWDMModelingElement >> globalTransform [
 	^ self parent

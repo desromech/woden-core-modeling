@@ -168,6 +168,11 @@ WDMBSPBrush >> hasIntersectionWithConvexSupportFunction: otherSupportFunction [
 ]
 
 { #category : #'intersection testing' }
+WDMBSPBrush >> hasIntersectionWithFrustum: frustumToTest [
+	^ GeometricFunctions gjkIntersectionTest: self supportFunction with: frustumToTest supportFunction
+]
+
+{ #category : #'intersection testing' }
 WDMBSPBrush >> hasIntersectionWithVolume: volumeToTest [
 	volumeToTest class == self class ifTrue: [
 		^ self hasIntersectionWithBrush: volumeToTest withTransform: (self globalTransform inverseTransformTransform: volumeToTest globalTransform)

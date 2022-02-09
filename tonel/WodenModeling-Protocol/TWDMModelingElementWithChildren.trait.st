@@ -41,6 +41,13 @@ TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volu
 	]
 ]
 
+{ #category : #'as yet unclassified' }
+TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
+	self children do: [ :each |
+		each findVolumeElementsThatIntersectFrustum: frustumToTest into: result
+	]
+]
+
 { #category : #initialization }
 TWDMModelingElementWithChildren >> initializeScenePresentationHandle: aPresentationHandle [
 	self addChildrenOntoScenePresentationHandle: aPresentationHandle

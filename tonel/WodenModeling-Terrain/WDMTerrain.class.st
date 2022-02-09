@@ -80,7 +80,8 @@ WDMTerrain >> loadFromJson: jsonData withContext: deserializationContext [
 			loadFromJson: each withContext: deserializationContext;
 			parent: self;
 			yourself
-	]
+	].
+	localBoundingBox := nil.
 ]
 
 { #category : #accessing }

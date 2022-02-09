@@ -16,9 +16,22 @@ TWDMModelingSceneObject >> canBeDuplicatedAndPlaced [
 	^ true
 ]
 
+{ #category : #queries }
+TWDMModelingSceneObject >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
+	(self isSceneSelectableObject and: [ self hasIntersectionWithFrustum: frustumToTest ])
+	 ifTrue: [
+		result add: self
+	].
+]
+
 { #category : #accessing }
 TWDMModelingSceneObject >> globalBoundingBox [
 	^ self localBoundingBox transformedWith: self globalTransform
+]
+
+{ #category : #queries }
+TWDMModelingSceneObject >> hasIntersectionWithFrustum: frustumToTest [
+	^ frustumToTest intersectsOrContainsBox: self globalBoundingBox
 ]
 
 { #category : #testing }
