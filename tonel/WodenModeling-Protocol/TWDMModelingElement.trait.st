@@ -256,6 +256,10 @@ TWDMModelingElement >> scenePresentationHandles [
 	^ #()
 ]
 
+{ #category : #'topology edition mode' }
+TWDMModelingElement >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius [
+]
+
 { #category : #selection }
 TWDMModelingElement >> selected [
 	^ false

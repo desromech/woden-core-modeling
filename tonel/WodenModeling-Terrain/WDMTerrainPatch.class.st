@@ -162,6 +162,11 @@ WDMTerrainPatch >> columns [
 	^ parent ifNil: [ 1 ] ifNotNil: [ parent columns ]
 ]
 
+{ #category : #'topology edition mode' }
+WDMTerrainPatch >> commitSculptingChanges [
+	self invalidateMeshes
+]
+
 { #category : #'as yet unclassified' }
 WDMTerrainPatch >> computeNormalWithDx: dx dz: dz [
 	| tangent bitangent |
@@ -401,6 +406,51 @@ WDMTerrainPatch >> sampleHeightAtX: x z: z [
 	^ heights at: sampleRow*patchSize + sampleColumn + 1
 ]
 
+{ #category : #'topology edition mode' }
+WDMTerrainPatch >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius [
+	| hitDistance hitPoint hu hv affectedIndices |
+	hitDistance := self rayCast: ray.
+	hitDistance ifNil: [ ^ nil ].
+	
+	hitPoint := (ray pointAtDistance: hitDistance) - self position.
+	hu := hitPoint x * patchSize + 0.5.
+	hv := hitPoint z * patchSize + 0.5.
+
+	affectedIndices := OrderedCollection new.
+	drawRadius negated to: drawRadius by: 1 do: [:cv |
+		| v dv |
+		v := hv + cv.
+		dv := v - hv floor.
+		v := v floor.
+		
+		(0 <= v and: [v < patchSize]) ifTrue: [
+			drawRadius negated to: drawRadius by: 1 do: [:cu |
+				| u du heightIndex|
+				u := hu + cv.
+				du := u - hu floor.
+				u := u floor.
+
+				(0 <= u and: [u < patchSize]) ifTrue: [
+					| r falloff |
+					r := ((du*du) + (dv*dv)) sqrt.
+					falloff := 1.0 - (r / (drawRadius max: 1)) max: 0.0.
+					falloff > 0 ifTrue: [ 
+						heightIndex := v*patchSize + u.
+						heights at: heightIndex put: (heights at: heightIndex) + (drawIntensity*falloff).
+						affectedIndices add: heightIndex.
+					].
+				].
+			]
+		].
+	].
+
+	affectedIndices ifNotEmpty: [ 
+		self updateMeshesHeightIndices: affectedIndices.
+		self invalidateScenePresentations.
+	].
+
+]
+
 { #category : #initialization }
 WDMTerrainPatch >> setMaterialInfoRecursively: newMaterial [
 	self material: newMaterial
@@ -450,6 +500,42 @@ WDMTerrainPatch >> texturingChanged [
 { #category : #transforming }
 WDMTerrainPatch >> transform [
 	^ TRSTransform3D translation: self position
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> updateMesh: mesh heightIndices: heightIndicesToUpdate [
+	| positionsAccessor buffer bufferData offset |
+	positionsAccessor := mesh primitives first vertexBinding attributes first accessor.
+	buffer := positionsAccessor bufferView buffer.
+	bufferData := buffer data.
+	offset := positionsAccessor bufferView byteOffset + positionsAccessor byteOffset.
+	heightIndicesToUpdate do: [ :index |
+		| height heightOffset |
+		heightOffset := offset + (index*12) + 4 + 1.
+		height := heights at: index.
+		bufferData floatAt: heightOffset put: height
+	].
+
+	buffer changed
+
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> updateMeshesHeightIndex: heightIndexToUpdate [
+	self updateMeshesHeightIndices: { heightIndexToUpdate }
+]
+
+{ #category : #'as yet unclassified' }
+WDMTerrainPatch >> updateMeshesHeightIndices: heightIndicesToUpdate [
+	wireframeMesh ifNotNil: [ 
+		self updateMesh: wireframeMesh heightIndices: heightIndicesToUpdate
+	].
+	solidMesh ifNotNil: [ 
+		self updateMesh: solidMesh heightIndices: heightIndicesToUpdate
+	].
+	texturedMesh ifNotNil: [ 
+		self updateMesh: texturedMesh heightIndices: heightIndicesToUpdate
+	].
 ]
 
 { #category : #'scene presentation' }

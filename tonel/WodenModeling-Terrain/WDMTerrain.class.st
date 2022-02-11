@@ -33,6 +33,12 @@ WDMTerrain >> columns [
 	^ columns
 ]
 
+{ #category : #'topology edition mode' }
+WDMTerrain >> commitSculptingChanges [
+	patches do: [ :each | each commitSculptingChanges ].
+	localBoundingBox := nil.
+]
+
 { #category : #serialization }
 WDMTerrain >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
@@ -181,6 +187,13 @@ WDMTerrain >> rayPickElements: picker [
 { #category : #accessing }
 WDMTerrain >> rows [
 	^ rows
+]
+
+{ #category : #'topology edition mode' }
+WDMTerrain >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius [
+	patches do: [ :each |
+		each sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius
+	]
 ]
 
 { #category : #initialization }
