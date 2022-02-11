@@ -89,6 +89,11 @@ TWDMModelingSceneObject >> subtract: otherElement withTransform: otherElementTra
 	^ { self }
 ]
 
+{ #category : #'as yet unclassified' }
+TWDMModelingSceneObject >> supportsModelingEditionMode: aMode [
+	^ aMode asModelingEditionMode isObjectEditionMode
+]
+
 { #category : #accessing }
 TWDMModelingSceneObject >> transform: aTransform [
 ]

@@ -15,7 +15,8 @@ Class {
 		'texturedMesh',
 		'meshWithAlternatives',
 		'vertices',
-		'editionColorMaterial'
+		'editionColorMaterial',
+		'verticesAreManipulated'
 	],
 	#category : #'WodenModeling-BSPStyleCSG'
 }
@@ -120,6 +121,11 @@ WDMBSPBrush >> clipAgainstPlane: plane [
 	^ { frontPolyhedron . backPolyhedron }
 ]
 
+{ #category : #'topology edition mode' }
+WDMBSPBrush >> commitTopologyChanges [
+	self invalidateTopology
+]
+
 { #category : #serialization }
 WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
@@ -144,7 +150,7 @@ WDMBSPBrush >> faces: aListOfFaces [
 	self invalidateTopology
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #queries }
 WDMBSPBrush >> findVolumeElementsThatIntersectElements: elementsToTest into: result [
 	(elementsToTest includes: self) ifFalse: [
 		(elementsToTest anySatisfy: [ :testElement | self hasIntersectionWithVolume: testElement ]) ifTrue: [ 
@@ -186,7 +192,7 @@ WDMBSPBrush >> hasIntersectionWithVolume: volumeToTest [
 	^ volumeToTest hasIntersectionWithConvexSupportFunction: self supportFunction
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #queries }
 WDMBSPBrush >> highlightingOrSelectionStatusChanged [
 	super highlightingOrSelectionStatusChanged.
 	self invalidateMeshes
@@ -196,7 +202,7 @@ WDMBSPBrush >> highlightingOrSelectionStatusChanged [
 WDMBSPBrush >> initialize [
 	super initialize.
 	hasValidTopology := false.
-	
+	verticesAreManipulated := false.
 ]
 
 { #category : #caching }
@@ -383,6 +389,27 @@ WDMBSPBrush >> supportFunction [
 	^ GeometricFunctions transformSupportFunction: self localSupportFunction with: self globalTransform
 ]
 
+{ #category : #queries }
+WDMBSPBrush >> supportsModelingEditionMode: aMode [
+	aMode asModelingEditionMode isTopologyEditionMode ifTrue: [ ^ true ].
+	^ super supportsModelingEditionMode: aMode
+]
+
+{ #category : #'topology edition mode' }
+WDMBSPBrush >> topologyControlPoints [
+	^ vertices collectWithIndex: [ :eachVertex :eachVertexIndex |
+		WDMTopologyControlPoint new
+			position: eachVertex;
+			whenChangedDo: [ :newVertexPosition |
+				vertices at: eachVertexIndex put: newVertexPosition asVector3.
+				localBoundingBox insertPoint: newVertexPosition.
+				verticesAreManipulated := true.
+				self invalidateMeshes.
+			];
+		yourself
+	]
+]
+
 { #category : #'scene presentation' }
 WDMBSPBrush >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
@@ -446,6 +473,11 @@ WDMBSPBrush >> validWireframeMesh [
 WDMBSPBrush >> validateTopology [
 	| faceCount |
 	hasValidTopology ifTrue: [ ^ self ].
+	verticesAreManipulated ifTrue: [ 
+		faces do: [ :each | each computePlaneFromVertices ].
+		verticesAreManipulated := false.
+	].
+
 	faceCount := faces size.
 	vertices := OrderedCollection new.
 	faces do: [ :f | f clearIndices ].
@@ -470,10 +502,12 @@ WDMBSPBrush >> validateTopology [
 						v := Vector3 x: p1 distance y: p2 distance z: p3 distance.
 						p := m inverse * v.
 						vi := vertices size.
-						vertices add: p.
-						f1 addIndex: vi.
-						f2 addIndex: vi.
-						f3 addIndex: vi.
+						(faces allSatisfy: [ :eachFace | eachFace plane isPointInsideOrBehind: p ]) ifTrue: [ 
+							vertices add: p.
+							f1 addIndex: vi.
+							f2 addIndex: vi.
+							f3 addIndex: vi.
+						]
 					].
 				]
 			]

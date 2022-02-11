@@ -187,3 +187,9 @@ WDMTerrain >> rows [
 WDMTerrain >> setMaterialInfoRecursively: newMaterial [
 	self patches do: [ :each | each setMaterialInfoRecursively: newMaterial ].
 ]
+
+{ #category : #'as yet unclassified' }
+WDMTerrain >> supportsModelingEditionMode: aMode [
+	aMode asModelingEditionMode isSculptEditionMode ifTrue: [ ^ true ].
+	^ super supportsModelingEditionMode: aMode
+]

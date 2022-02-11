@@ -57,6 +57,16 @@ TWDMModelingElement >> children [
 	^ #()
 ]
 
+{ #category : #'topology edition mode' }
+TWDMModelingElement >> commitSculptingChanges [
+	
+]
+
+{ #category : #'topology edition mode' }
+TWDMModelingElement >> commitTopologyChanges [
+	
+]
+
 { #category : #accessing }
 TWDMModelingElement >> editionViewColor [
 	^ Color white
@@ -262,6 +272,16 @@ TWDMModelingElement >> selectedStatus [
 
 { #category : #initialization }
 TWDMModelingElement >> setMaterialInfoRecursively: newMaterial [
+]
+
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> supportsModelingEditionMode: aMode [
+	^ false
+]
+
+{ #category : #'topology edition mode' }
+TWDMModelingElement >> topologyControlPoints [
+	^ #()
 ]
 
 { #category : #accessing }

@@ -166,6 +166,17 @@ WDMBSPBrushFace >> clearIndices [
 	vertices := nil.
 ]
 
+{ #category : #'as yet unclassified' }
+WDMBSPBrushFace >> computePlaneFromVertices [
+	| parentVertices v1 v2 v3 |
+	parentVertices := parent vertices.
+	v1 := parent vertices at: indices first + 1.
+	v2 := parent vertices at: indices second + 1.
+	v3 := parent vertices at: indices third + 1.
+
+	plane := Plane point: v1 point: v2 point: v3
+]
+
 { #category : #initialization }
 WDMBSPBrushFace >> computeTextureMatrix [
 	^ Matrix3x3 texScale: textureScale offset: textureOffset
