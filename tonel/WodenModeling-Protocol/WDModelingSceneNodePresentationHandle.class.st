@@ -5,7 +5,8 @@ Class {
 	#name : #WDModelingSceneNodePresentationHandle,
 	#superclass : #WDModelingScenePresentationHandle,
 	#instVars : [
-		'sceneNode'
+		'sceneNode',
+		'extraNodes'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
@@ -15,10 +16,23 @@ WDModelingSceneNodePresentationHandle >> addOntoSceneNode: parentSceneNode [
 	parentSceneNode add: sceneNode
 ]
 
+{ #category : #accessing }
+WDModelingSceneNodePresentationHandle >> extraNodes [
+
+	^ extraNodes
+]
+
+{ #category : #accessing }
+WDModelingSceneNodePresentationHandle >> extraNodes: anObject [
+
+	extraNodes := anObject
+]
+
 { #category : #initialization }
 WDModelingSceneNodePresentationHandle >> initializeWithModel: aModel scene: aScene [
 	super initializeWithModel: aModel scene: aScene.
 	sceneNode := WDSceneNode new.
+	extraNodes := #()
 ]
 
 { #category : #'scene presentation' }

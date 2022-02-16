@@ -160,6 +160,11 @@ TWDMModelingElement >> inspectionTree [
 ]
 
 { #category : #testing }
+TWDMModelingElement >> isPointModelingElement [
+	^ false
+]
+
+{ #category : #testing }
 TWDMModelingElement >> isSceneSelectableObject [
 	^ false
 ]
