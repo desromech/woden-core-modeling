@@ -226,6 +226,11 @@ TWDMModelingElement >> presentInScene: aScene [
 		yourself
 ]
 
+{ #category : #'property pages' }
+TWDMModelingElement >> propertyPages [
+	^ #()
+]
+
 { #category : #selection }
 TWDMModelingElement >> rayPickElements: picker [
 ]

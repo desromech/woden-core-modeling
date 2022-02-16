@@ -50,6 +50,13 @@ WDModelingElement class >> named: aName [
 	^ self new name: aName; yourself
 ]
 
+{ #category : #'property pages' }
+WDModelingElement >> buildModelingElementMainPropertyPageWith: builder [
+	builder
+		stringPropertyNamed: 'Name' selector: #name;
+		booleanPropertyNamed: 'Visible' selector: #visible
+]
+
 { #category : #serialization }
 WDModelingElement >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ {
@@ -136,6 +143,14 @@ WDModelingElement >> parent: newParent [
 WDModelingElement >> postCopy [
 	super postCopy.
 	scenePresentationHandles := WeakSet new.
+]
+
+{ #category : #'property pages' }
+WDModelingElement >> propertyPages [
+	^ {WDMPropertyPageBuilder for: self buildWith: [:builder |
+		builder title: self objectTypeName.
+		self buildModelingElementMainPropertyPageWith: builder
+	]}
 ]
 
 { #category : #'scene presentation' }
