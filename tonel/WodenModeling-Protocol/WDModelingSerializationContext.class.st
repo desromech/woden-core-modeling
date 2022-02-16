@@ -1,3 +1,6 @@
+"
+I am a modeling serialization context. I am used for discovering and resolving recursive dependencies.
+"
 Class {
 	#name : #WDModelingSerializationContext,
 	#superclass : #Object,
@@ -15,7 +18,7 @@ WDModelingSerializationContext >> initialize [
 	materialInfoDictionary := Dictionary new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 WDModelingSerializationContext >> materialInfoIndexFor: materialInfo [
 	materialInfo ifNil: [ ^ nil ].
 	^ materialInfoDictionary at: materialInfo
