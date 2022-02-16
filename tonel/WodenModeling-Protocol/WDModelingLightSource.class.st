@@ -17,6 +17,15 @@ WDModelingLightSource class >> isAbstract [
 	^ self == WDModelingLightSource
 ]
 
+{ #category : #'property pages' }
+WDModelingLightSource >> buildModelingElementMainPropertyPageWith: builder [
+	super buildModelingElementMainPropertyPageWith: builder.
+	builder
+		linearColor3PropertyNamed: 'Color' selector: #color;
+		scalarPropertyNamed: 'Intensity' selector: #intensity minimum: 1.0;
+		booleanPropertyNamed: 'Cast Shadows' selector: #castShadows
+]
+
 { #category : #accessing }
 WDModelingLightSource >> castShadows [
 
@@ -36,15 +45,15 @@ WDModelingLightSource >> color [
 ]
 
 { #category : #accessing }
-WDModelingLightSource >> color: anObject [
-	color := anObject.
+WDModelingLightSource >> color: aColor [
+	color := aColor asVector3.
 	self invalidateScenePresentations.
 ]
 
 { #category : #serialization }
 WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
-		#color . color asVector3 encodeForJSON .
+		#color . color encodeForJSON .
 		#intensity . intensity.
 	}
 ]
@@ -52,7 +61,7 @@ WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 { #category : #initialization }
 WDModelingLightSource >> initialize [
 	super initialize.
-	color := Color white.
+	color := Vector3 ones.
 	intensity := 1.0.
 	transform := TRSTransform3D identity.
 	castShadows := false.
@@ -85,7 +94,7 @@ WDModelingLightSource >> isPointModelingElement [
 WDModelingLightSource >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	jsonData at: #color ifPresent: [ :data |
-		color := (Vector3 loadFromJson: data) asColor
+		color := Vector3 loadFromJson: data
 	].
 	intensity := (jsonData at: #intensity ifAbsent: [ nil ]) ifNil: [ intensity ]
 ]

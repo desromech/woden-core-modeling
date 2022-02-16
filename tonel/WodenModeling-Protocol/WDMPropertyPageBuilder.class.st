@@ -33,10 +33,14 @@ WDMPropertyPageBuilder >> buildWith: aBlock [
 	properties := OrderedCollection new.
 	page := WDMPropertyPage new.
 	aBlock value: self.
-	properties sort: [ :a :b | a name <= b name].
 	^ page
 		properties: properties;
 		yourself
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> linearColor3PropertyNamed: name selector: selector [
+	^ self addProperty: (WDMVector3Property name: name selector: selector)
 ]
 
 { #category : #accessing }
@@ -52,6 +56,38 @@ WDMPropertyPageBuilder >> object: anObject [
 ]
 
 { #category : #building }
+WDMPropertyPageBuilder >> quaternionPropertyNamed: name selector: selector [
+	^ self addProperty: (WDMQuaternionProperty name: name selector: selector)
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> scalarPropertyNamed: name selector: selector [
+	^ self addProperty: (WDMScalarProperty name: name selector: selector)
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> scalarPropertyNamed: name selector: selector maximum: maximum [
+	^ self addProperty: ((WDMScalarProperty name: name selector: selector)
+		maximum: maximum;
+		yourself)
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> scalarPropertyNamed: name selector: selector minimum: minimum [
+	^ self addProperty: ((WDMScalarProperty name: name selector: selector)
+		minimum: minimum;
+		yourself)
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> scalarPropertyNamed: name selector: selector minimum: minimum maximum: maximum [
+	^ self addProperty: ((WDMScalarProperty name: name selector: selector)
+		minimum: minimum;
+		maximum: maximum;
+		yourself)
+]
+
+{ #category : #building }
 WDMPropertyPageBuilder >> stringPropertyNamed: name selector: selector [
 	^ self addProperty: (WDMStringProperty name: name selector: selector)
 ]
@@ -59,4 +95,19 @@ WDMPropertyPageBuilder >> stringPropertyNamed: name selector: selector [
 { #category : #accessing }
 WDMPropertyPageBuilder >> title: newTitle [
 	page title: newTitle
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> vector2PropertyNamed: name selector: selector [
+	^ self addProperty: (WDMVector2Property name: name selector: selector)
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> vector3PropertyNamed: name selector: selector [
+	^ self addProperty: (WDMVector3Property name: name selector: selector)
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> vector4PropertyNamed: name selector: selector [
+	^ self addProperty: (WDMVector4Property name: name selector: selector)
 ]

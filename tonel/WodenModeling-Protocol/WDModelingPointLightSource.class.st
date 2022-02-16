@@ -10,6 +10,13 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #'property pages' }
+WDModelingPointLightSource >> buildModelingElementMainPropertyPageWith: builder [
+	super buildModelingElementMainPropertyPageWith: builder.
+	builder
+		scalarPropertyNamed: 'Influence Radius' selector: #influenceRadius minimum: 1.0
+]
+
 { #category : #serialization }
 WDModelingPointLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {

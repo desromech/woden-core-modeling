@@ -1,3 +1,6 @@
+"
+I am an utility used for discovering some serialized resources.
+"
 Class {
 	#name : #WDModelingDeserializationContext,
 	#superclass : #Object,
@@ -20,7 +23,7 @@ WDModelingDeserializationContext >> addTypeClasses: typeClasses [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 WDModelingDeserializationContext >> getMaterialInfoWithIndex: materialIndex [
 	(materialIndex >= 0 and: [ materialIndex < materialInfos size ]) ifTrue: [ 
 		^ materialInfos at: materialIndex + 1
@@ -29,7 +32,7 @@ WDModelingDeserializationContext >> getMaterialInfoWithIndex: materialIndex [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 WDModelingDeserializationContext >> initialize [
 	super initialize.
 	objectTypeClassMap := Dictionary new.
@@ -41,7 +44,7 @@ WDModelingDeserializationContext >> materialInfos: newMaterialInfos [
 	materialInfos := newMaterialInfos
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 WDModelingDeserializationContext >> materializeObject: objectData [
 	^ (objectTypeClassMap at: (objectData at: #__type__)) new
 		loadFromJson: objectData withContext: self;

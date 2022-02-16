@@ -45,6 +45,16 @@ TWDMModelingSceneObject >> localBoundingBox [
 ]
 
 { #category : #accessing }
+TWDMModelingSceneObject >> orientation [
+	^ self transform rotation
+]
+
+{ #category : #accessing }
+TWDMModelingSceneObject >> orientation: anOrientation [
+	self transform: (self transform copy orientation: anOrientation)
+]
+
+{ #category : #accessing }
 TWDMModelingSceneObject >> position [
 	^ self transform translation
 ]
@@ -77,6 +87,16 @@ TWDMModelingSceneObject >> restorePositionStateMemento: aMemento [
 { #category : #memento }
 TWDMModelingSceneObject >> restoreTransformStateMemento: aMemento [
 	self transform: aMemento
+]
+
+{ #category : #accessing }
+TWDMModelingSceneObject >> scale [
+	^ self transform scale
+]
+
+{ #category : #accessing }
+TWDMModelingSceneObject >> scale: newScale [
+	self transform: (self transform copy scale: newScale)
 ]
 
 { #category : #accessing }

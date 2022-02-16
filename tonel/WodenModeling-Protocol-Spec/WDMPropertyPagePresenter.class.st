@@ -1,3 +1,6 @@
+"
+I am a modeling property page presenter.
+"
 Class {
 	#name : #WDMPropertyPagePresenter,
 	#superclass : #SpPresenterWithModel,

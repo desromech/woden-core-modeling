@@ -12,6 +12,13 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #'property pages' }
+WDModelingGroup >> buildModelingElementMainPropertyPageWith: builder [
+	super buildModelingElementMainPropertyPageWith: builder.
+	builder
+		booleanPropertyNamed: 'Locked Group' selector: #lockedGroup
+]
+
 { #category : #serialization }
 WDModelingGroup >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {

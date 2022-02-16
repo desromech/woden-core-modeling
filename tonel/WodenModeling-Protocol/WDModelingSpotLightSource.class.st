@@ -12,6 +12,15 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #'property pages' }
+WDModelingSpotLightSource >> buildModelingElementMainPropertyPageWith: builder [
+	super buildModelingElementMainPropertyPageWith: builder.
+	builder
+		scalarPropertyNamed: 'Influence Radius' selector: #influenceRadius minimum: 1.0;
+		scalarPropertyNamed: 'Inner Cutoff' selector: #innerCutoff minimum: 0.0 maximum: 180.0;
+		scalarPropertyNamed: 'Outer Cutoff' selector: #outerCutoff minimum: 0.0 maximum: 180.0.
+]
+
 { #category : #serialization }
 WDModelingSpotLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {

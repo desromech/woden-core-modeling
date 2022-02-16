@@ -13,6 +13,15 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #'property pages' }
+WDModelingSceneObject >> buildModelingElementMainPropertyPageWith: builder [
+	super buildModelingElementMainPropertyPageWith: builder.
+	builder
+		vector3PropertyNamed: 'Scale' selector: #scale;
+		quaternionPropertyNamed: 'Orientation' selector: #orientation;
+		vector3PropertyNamed: 'Position' selector: #position
+]
+
 { #category : #serialization }
 WDModelingSceneObject >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
