@@ -51,7 +51,7 @@ TWDMModelingSceneObject >> orientation [
 
 { #category : #accessing }
 TWDMModelingSceneObject >> orientation: anOrientation [
-	self transform: (self transform copy orientation: anOrientation)
+	self transform: (self transform copy rotation: anOrientation)
 ]
 
 { #category : #accessing }
