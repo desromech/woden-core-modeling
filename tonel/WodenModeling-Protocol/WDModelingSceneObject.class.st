@@ -46,6 +46,15 @@ WDModelingSceneObject >> instantiateForPlacingIn: owner box: placementBox [
 	^ instance
 ]
 
+{ #category : #'as yet unclassified' }
+WDModelingSceneObject >> instantiateForPlacingIn: owner point: placementPoint [
+	| instance |
+	instance := self copy setupForNewInstance.
+	instance position: placementPoint.
+	owner add: instance.
+	^ instance
+]
+
 { #category : #serialization }
 WDModelingSceneObject >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.

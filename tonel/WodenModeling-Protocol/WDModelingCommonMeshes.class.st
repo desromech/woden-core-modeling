@@ -44,14 +44,14 @@ WDModelingCommonMeshes >> lightSourceDisplayRadius [
 
 { #category : #accessing }
 WDModelingCommonMeshes >> lightSourceMaterial [
-	^ lightSourceMaterial ifNil: [ lightSourceMaterial := WDUnlitMaterial new ]
+	^ lightSourceMaterial ifNil: [ lightSourceMaterial := WDUnlitMaterial new doubleSided: true]
 ]
 
 { #category : #accessing }
 WDModelingCommonMeshes >> lightSourceWithDirection [
 	^ lightSourceWithDirectionMesh ifNil: [ lightSourceWithDirectionMesh := WDMeshBuilder new
 		currentMaterial: self lightSourceMaterial;
-		addUVSphereWithRadius: self lightSourceDisplayRadius segments: 16 slices: 16;
+		 addConeWithRadius: self lightSourceDisplayRadius halfDepth: self lightSourceDisplayRadius segments: 16;
 		mesh
 	].
 	
