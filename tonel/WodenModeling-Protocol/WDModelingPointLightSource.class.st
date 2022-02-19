@@ -36,6 +36,12 @@ WDModelingPointLightSource >> influenceRadius: anObject [
 	self invalidateScenePresentations.
 ]
 
+{ #category : #initialization }
+WDModelingPointLightSource >> initialize [
+	super initialize.
+	influenceRadius := 1.0.
+]
+
 { #category : #serialization }
 WDModelingPointLightSource >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.

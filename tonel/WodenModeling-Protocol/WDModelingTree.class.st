@@ -84,7 +84,7 @@ WDModelingTree >> objectTypeName [
 
 { #category : #accessing }
 WDModelingTree >> treeTopologyChangeListeners [
-	^ treeTopologyChangeListeners := Set new
+	^ treeTopologyChangeListeners ifNil: [treeTopologyChangeListeners := Set new]
 ]
 
 { #category : #enumerating }
