@@ -17,6 +17,11 @@ WDModelingLightSource class >> isAbstract [
 	^ self == WDModelingLightSource
 ]
 
+{ #category : #serialization }
+WDModelingLightSource class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDModeling'
+]
+
 { #category : #'property pages' }
 WDModelingLightSource >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.

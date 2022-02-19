@@ -12,6 +12,11 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #serialization }
+WDModelingGroup class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDModeling'
+]
+
 { #category : #'property pages' }
 WDModelingGroup >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.

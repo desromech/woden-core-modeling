@@ -7,6 +7,11 @@ Class {
 	#category : #'WodenModeling-Protocol-Model'
 }
 
+{ #category : #serialization }
+WDModelingNullObject class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDModeling'
+]
+
 { #category : #accessing }
 WDModelingNullObject >> objectTypeName [
 	^ 'Null'
