@@ -39,6 +39,11 @@ WDModelingGroup >> initialize [
 	
 ]
 
+{ #category : #testing }
+WDModelingGroup >> isGroup [
+	^ true
+]
+
 { #category : #serialization }
 WDModelingGroup >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.

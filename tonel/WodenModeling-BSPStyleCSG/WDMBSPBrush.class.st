@@ -502,7 +502,7 @@ WDMBSPBrush >> validateTopology [
 						v := Vector3 x: p1 distance y: p2 distance z: p3 distance.
 						p := m inverse * v.
 						vi := vertices size.
-						(faces allSatisfy: [ :eachFace | eachFace plane isPointInsideOrBehind: p ]) ifTrue: [ 
+						(faces allSatisfy: [ :eachFace | eachFace plane isPointInsideOrBehind: p withEpsilon: Epsilon]) ifTrue: [ 
 							vertices add: p.
 							f1 addIndex: vi.
 							f2 addIndex: vi.

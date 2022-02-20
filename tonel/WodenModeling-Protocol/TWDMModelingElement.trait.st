@@ -160,6 +160,20 @@ TWDMModelingElement >> inspectionTree [
 ]
 
 { #category : #testing }
+TWDMModelingElement >> isGroup [
+	^ false
+]
+
+{ #category : #selection }
+TWDMModelingElement >> isHitByGlobalRay: globalRay [
+	| picker parentTransform |
+	picker := WDMFirstRayPicker new ray: globalRay.
+	parentTransform := self parent ifNil: [ TRSTransform3D identity ] ifNotNil: [ :p | p transform ].
+	picker withTransform: parentTransform do: [ self rayPickElements: picker ].
+	^ picker result isNotNil
+]
+
+{ #category : #testing }
 TWDMModelingElement >> isPointModelingElement [
 	^ false
 ]
