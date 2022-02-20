@@ -57,6 +57,11 @@ TWDMModelingElement >> children [
 	^ #()
 ]
 
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> childrenChanged [
+	"Hook"
+]
+
 { #category : #'topology edition mode' }
 TWDMModelingElement >> commitSculptingChanges [
 	

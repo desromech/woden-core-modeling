@@ -99,7 +99,8 @@ WDModelingSceneObject >> transform: aTransform [
 
 { #category : #accessing }
 WDModelingSceneObject >> transformChanged [
-	self invalidateScenePresentations
+	self invalidateScenePresentations.
+	self parent ifNotNil: [ :p | p childrenChanged ]
 ]
 
 { #category : #'scene presentation' }

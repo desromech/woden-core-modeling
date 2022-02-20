@@ -12,8 +12,10 @@ Trait {
 { #category : #'add/remove' }
 TWDMModelingElementWithChildren >> add: aChild [
 	self children add: aChild.
+	self childrenChanged.
 	aChild parent: self.
 	self addChildOntoScenePresentations: aChild.
+	self parent ifNotNil: [ :p | p childrenChanged ].
 	self modelingTreeRoot treeTopologyChanged.
 ]
 
@@ -85,8 +87,11 @@ TWDMModelingElementWithChildren >> rayPickElements: picker [
 { #category : #'add/remove' }
 TWDMModelingElementWithChildren >> remove: aChild [
 	self children remove: aChild.
+	self childrenChanged.
 	self modelingTreeRoot treeTopologyChanged.
 	aChild removedFromModelTree.
+	self parent ifNotNil: [ :p | p childrenChanged ].
+	self modelingTreeRoot treeTopologyChanged.
 ]
 
 { #category : #initialization }
