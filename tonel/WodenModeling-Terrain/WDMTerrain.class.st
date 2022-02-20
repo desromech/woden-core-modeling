@@ -178,6 +178,8 @@ WDMTerrain >> privateSetPatches: newPatches [
 
 { #category : #selection }
 WDMTerrain >> rayPickElements: picker [
+	self visible ifFalse: [ ^ self ].
+	
 	picker editionMode isObjectEditionMode ifFalse: [ ^ self ].
 	picker withTransform: transform do: [
 		self localRayPick: picker

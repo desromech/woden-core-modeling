@@ -152,6 +152,8 @@ WDMBSPBrush >> faces: aListOfFaces [
 
 { #category : #queries }
 WDMBSPBrush >> findVolumeElementsThatIntersectElements: elementsToTest into: result [
+	self visible ifFalse: [ ^ self ].
+	
 	(elementsToTest includes: self) ifFalse: [
 		(elementsToTest anySatisfy: [ :testElement | self hasIntersectionWithVolume: testElement ]) ifTrue: [ 
 			result add: self
@@ -316,6 +318,8 @@ WDMBSPBrush >> prepareForSerializationWithContext: serializationContext [
 
 { #category : #selection }
 WDMBSPBrush >> rayPickElements: picker [
+	self visible ifFalse: [ ^ self ].
+
 	(picker editionMode isObjectEditionMode or:
 	[ picker editionMode isFaceTexturingMode ]) ifFalse: [ ^ self ].
 

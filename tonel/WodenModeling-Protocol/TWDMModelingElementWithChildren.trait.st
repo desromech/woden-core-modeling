@@ -38,6 +38,7 @@ TWDMModelingElementWithChildren >> encodeJsonKeyValuesWithContext: serialization
 
 { #category : #'as yet unclassified' }
 TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
+	self visible ifFalse: [ ^ self ].
 	self children do: [ :each |
 		each findVolumeElementsThatIntersectElements: volumesToTest into: result
 	]
@@ -45,6 +46,7 @@ TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volu
 
 { #category : #'as yet unclassified' }
 TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
+	self visible ifFalse: [ ^ self ].
 	self children do: [ :each |
 		each findVolumeElementsThatIntersectFrustum: frustumToTest into: result
 	]
@@ -78,6 +80,7 @@ TWDMModelingElementWithChildren >> prepareForSerializationWithContext: serializa
 
 { #category : #selection }
 TWDMModelingElementWithChildren >> rayPickElements: picker [
+	self visible ifFalse: [ ^ self ].
 	picker withTransform: self transform do: [ 
 		children do: [ :each | each rayPickElements: picker ]
 	].

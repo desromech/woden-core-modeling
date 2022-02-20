@@ -18,6 +18,8 @@ TWDMModelingSceneObject >> canBeDuplicatedAndPlaced [
 
 { #category : #queries }
 TWDMModelingSceneObject >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
+	self visible ifFalse: [ ^ self ].
+	
 	(self isSceneSelectableObject and: [ self hasIntersectionWithFrustum: frustumToTest ])
 	 ifTrue: [
 		result add: self
@@ -72,6 +74,7 @@ TWDMModelingSceneObject >> positionStateMemento [
 { #category : #selection }
 TWDMModelingSceneObject >> rayPickElements: picker [
 	| distance |
+	self visible ifFalse: [ ^ self ].
 	picker editionMode isObjectEditionMode ifFalse: [ ^ self ].
 	distance := self boundingBox intersectionWithRay: picker ray.
 	distance ifNotNil: [ 
