@@ -96,6 +96,8 @@ WDModelingGroup >> objectTypeName [
 
 { #category : #selection }
 WDModelingGroup >> rayPickElements: picker [
+	(self boundingBox intersectionWithRay: picker ray) ifNil: [ ^ self ].
+	
 	self isSceneSelectableObject ifTrue: [
 		self children isEmpty ifTrue: [
 			^ super rayPickElements: picker
