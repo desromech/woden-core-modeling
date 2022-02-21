@@ -9,7 +9,12 @@ Class {
 	#instVars : [
 		'materialResolver',
 		'treeTopologyChangeListeners',
-		'backgroundColor'
+		'backgroundColor',
+		'fogMode',
+		'fogColor',
+		'fogStartDistance',
+		'fogEndDistance',
+		'fogDensity'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
@@ -40,8 +45,12 @@ WDModelingTree >> backgroundColor: aColor [
 WDModelingTree >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
-		linearColor3PropertyNamed: 'Background Color' selector: #backgroundColor
-	
+		linearColor4PropertyNamed: 'Background Color' selector: #backgroundColor;
+		optionPropertyNamed: 'Fog Mode' selector: #fogMode options: #(NONE LINEAR EXP EXP2);
+		linearColor4PropertyNamed: 'Fog Color' selector: #fogColor;
+		scalarPropertyNamed: 'Fog Start Distance' selector: #fogStartDistance;
+		scalarPropertyNamed: 'Fog End Distance' selector: #fogEndDistance;
+		scalarPropertyNamed: 'Fog Density' selector: #fogDensity
 ]
 
 { #category : #serialization }
@@ -69,14 +78,84 @@ WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 	 } ,
 	(super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#backgroundColor . backgroundColor encodeForJSON .
+		#fogMode . fogMode .
+		#fogColor . fogColor encodeForJSON .
+		#fogStartDistance . fogStartDistance.
+		#fogEndDistance . fogEndDistance.
+		#fogDensity . fogDensity.
 		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ]
 	}
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogColor [
+
+	^ fogColor
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogColor: anObject [
+
+	fogColor := anObject
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogDensity [
+
+	^ fogDensity
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogDensity: anObject [
+
+	fogDensity := anObject
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogEndDistance [
+
+	^ fogEndDistance
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogEndDistance: anObject [
+
+	fogEndDistance := anObject
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogMode [
+
+	^ fogMode
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogMode: aFogModeName [
+	fogMode := aFogModeName asSymbol
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogStartDistance [
+
+	^ fogStartDistance
+]
+
+{ #category : #accessing }
+WDModelingTree >> fogStartDistance: anObject [
+
+	fogStartDistance := anObject
 ]
 
 { #category : #initialization }
 WDModelingTree >> initialize [
 	super initialize.
 	backgroundColor := Color veryDarkGray asVector4.
+	fogMode := #NONE.
+	fogColor := Vector4 zeros.
+	fogStartDistance := 0.0.
+	fogEndDistance := 0.0.
+	fogDensity := 0.0.
+	
 ]
 
 { #category : #serialization }
@@ -94,6 +173,15 @@ WDModelingTree >> loadFromJson: jsonData [
 	jsonData at: #backgroundColor ifPresent: [ :json |
 		backgroundColor := Vector4 loadFromJson: json
 	].
+
+	jsonData at: #fogColor ifPresent: [ :json |
+		fogColor := Vector4 loadFromJson: json
+	].
+
+	self fogMode: ((jsonData at: #fogMode ifAbsent: [nil]) ifNil: [ fogMode ]).
+	fogStartDistance := (jsonData at: #fogStartDistance ifAbsent: [nil]) ifNil: [ fogStartDistance ].
+	fogEndDistance := (jsonData at: #fogEndDistance ifAbsent: [nil]) ifNil: [ fogEndDistance ].
+	fogDensity := (jsonData at: #fogDensity ifAbsent: [nil]) ifNil: [ fogDensity ].
 	
 	self loadFromJson: jsonData withContext: context
 	

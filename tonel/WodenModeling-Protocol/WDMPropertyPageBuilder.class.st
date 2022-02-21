@@ -43,6 +43,11 @@ WDMPropertyPageBuilder >> linearColor3PropertyNamed: name selector: selector [
 	^ self addProperty: (WDMVector3Property name: name selector: selector)
 ]
 
+{ #category : #building }
+WDMPropertyPageBuilder >> linearColor4PropertyNamed: name selector: selector [
+	^ self addProperty: (WDMVector4Property name: name selector: selector)
+]
+
 { #category : #accessing }
 WDMPropertyPageBuilder >> object [
 
@@ -53,6 +58,13 @@ WDMPropertyPageBuilder >> object [
 WDMPropertyPageBuilder >> object: anObject [
 
 	object := anObject
+]
+
+{ #category : #building }
+WDMPropertyPageBuilder >> optionPropertyNamed: name selector: selector options: options [
+	^ self addProperty: ((WDMOptionProperty name: name selector: selector)
+		options: options;
+		yourself)
 ]
 
 { #category : #building }
