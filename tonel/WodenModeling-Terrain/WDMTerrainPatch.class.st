@@ -4,8 +4,8 @@ I am a patch in a height field based terrains.
 Class {
 	#name : #WDMTerrainPatch,
 	#superclass : #WDModelingElement,
-	#traits : 'TWDMModelingElementWithEditionViewColor',
-	#classTraits : 'TWDMModelingElementWithEditionViewColor classTrait',
+	#traits : 'TWDMModelingElementWithEditionViewColor + TWDMModelingElementWithTextureMappingSettings',
+	#classTraits : 'TWDMModelingElementWithEditionViewColor classTrait + TWDMModelingElementWithTextureMappingSettings classTrait',
 	#instVars : [
 		'patchSize',
 		'row',
@@ -175,11 +175,6 @@ WDMTerrainPatch >> computeNormalWithDx: dx dz: dz [
 	^ (tangent cross: bitangent) normalized
 ]
 
-{ #category : #initialization }
-WDMTerrainPatch >> computeTextureMatrix [
-	^ Matrix3x3 texScale: textureScale offset: textureOffset
-]
-
 { #category : #serialization }
 WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
 	| heightBytes encodedHeights |
@@ -191,8 +186,8 @@ WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
 		#heights . encodedHeights.
 		#material . serializationContext materialInfoIndexFor: material.
 		#textureScale . textureScale encodeForJSON .
-		#textureOffset . textureScale encodeForJSON .
-		#textureRotation . textureScale encodeForJSON .
+		#textureOffset . textureOffset encodeForJSON .
+		#textureRotation . textureRotation.
 	}
 ]
 
@@ -310,7 +305,7 @@ WDMTerrainPatch >> material: aMaterial [
 	newMaterial := aMaterial asWDModelingMaterialInfo.
 	changed := material ~~ newMaterial.
 	material := newMaterial.
-	changed ifTrue: [ self texturingChanged ].
+	changed ifTrue: [ self textureMappingChanged ].
 ]
 
 { #category : #accessing }
@@ -457,43 +452,7 @@ WDMTerrainPatch >> setMaterialInfoRecursively: newMaterial [
 ]
 
 { #category : #accessing }
-WDMTerrainPatch >> textureOffset [
-
-	^ textureOffset
-]
-
-{ #category : #accessing }
-WDMTerrainPatch >> textureOffset: anObject [
-
-	textureOffset := anObject
-]
-
-{ #category : #accessing }
-WDMTerrainPatch >> textureRotation [
-
-	^ textureRotation
-]
-
-{ #category : #accessing }
-WDMTerrainPatch >> textureRotation: anObject [
-
-	textureRotation := anObject
-]
-
-{ #category : #accessing }
-WDMTerrainPatch >> textureScale [
-
-	^ textureScale
-]
-
-{ #category : #accessing }
-WDMTerrainPatch >> textureScale: anObject [
-
-	textureScale := anObject
-]
-
-{ #category : #accessing }
-WDMTerrainPatch >> texturingChanged [
+WDMTerrainPatch >> textureMappingChanged [
 	self invalidateTexturedMeshes
 ]
 
@@ -577,6 +536,7 @@ WDMTerrainPatch >> validTexturedMesh [
 		currentMaterial: WDMetallicRoughnessMaterial default.
 	self buildPatchTexturedWith: builder.
 
+	builder generateTangentSpaceFrame.
 	^ texturedMesh := builder mesh
 ]
 

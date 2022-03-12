@@ -4,13 +4,12 @@ I represent a single face in a old-school bsp brush.
 Class {
 	#name : #WDMBSPBrushFace,
 	#superclass : #WDModelingElement,
+	#traits : 'TWDMModelingElementWithTextureMappingSettings',
+	#classTraits : 'TWDMModelingElementWithTextureMappingSettings classTrait',
 	#instVars : [
 		'plane',
 		'indices',
 		'vertices',
-		'textureScale',
-		'textureOffset',
-		'textureRotation',
 		'material'
 	],
 	#classVars : [
@@ -177,11 +176,6 @@ WDMBSPBrushFace >> computePlaneFromVertices [
 	plane := Plane point: v1 point: v2 point: v3
 ]
 
-{ #category : #initialization }
-WDMBSPBrushFace >> computeTextureMatrix [
-	^ Matrix3x3 texScale: textureScale offset: textureOffset
-]
-
 { #category : #serialization }
 WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
@@ -287,39 +281,8 @@ WDMBSPBrushFace >> sortIndices [
 ]
 
 { #category : #accessing }
-WDMBSPBrushFace >> textureOffset [
-
-	^ textureOffset
-]
-
-{ #category : #accessing }
-WDMBSPBrushFace >> textureOffset: anObject [
-
-	textureOffset := anObject
-]
-
-{ #category : #accessing }
-WDMBSPBrushFace >> textureRotation [
-
-	^ textureRotation
-]
-
-{ #category : #accessing }
-WDMBSPBrushFace >> textureRotation: anObject [
-
-	textureRotation := anObject
-]
-
-{ #category : #accessing }
-WDMBSPBrushFace >> textureScale [
-
-	^ textureScale
-]
-
-{ #category : #accessing }
-WDMBSPBrushFace >> textureScale: anObject [
-
-	textureScale := anObject
+WDMBSPBrushFace >> textureMappingChanged [
+	parent ifNotNil: [ parent faceTexturesChanged ].
 ]
 
 { #category : #accessing }

@@ -121,6 +121,11 @@ WDMBSPBrush >> clipAgainstPlane: plane [
 	^ { frontPolyhedron . backPolyhedron }
 ]
 
+{ #category : #'as yet unclassified' }
+WDMBSPBrush >> collectElementsWithTextureMappingSettingsOnto: result [
+	result addAll: self faces
+]
+
 { #category : #'topology edition mode' }
 WDMBSPBrush >> commitTopologyChanges [
 	self invalidateTopology
@@ -456,6 +461,7 @@ WDMBSPBrush >> validTexturedMesh [
 		face buildTexturedFaceMeshWith: builder transform: self transform
 	].
 
+	builder generateTangentSpaceFrame.
 	^ texturedMesh := builder mesh
 ]
 

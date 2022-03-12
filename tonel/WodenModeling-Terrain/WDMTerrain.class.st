@@ -28,6 +28,11 @@ WDMTerrain >> children [
 	^ patches
 ]
 
+{ #category : #'as yet unclassified' }
+WDMTerrain >> collectElementsWithTextureMappingSettingsOnto: result [
+	result addAll: self patches
+]
+
 { #category : #accessing }
 WDMTerrain >> columns [
 	^ columns

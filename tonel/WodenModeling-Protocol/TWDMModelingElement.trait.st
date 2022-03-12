@@ -62,6 +62,10 @@ TWDMModelingElement >> childrenChanged [
 	"Hook"
 ]
 
+{ #category : #'as yet unclassified' }
+TWDMModelingElement >> collectElementsWithTextureMappingSettingsOnto: result [
+]
+
 { #category : #'topology edition mode' }
 TWDMModelingElement >> commitSculptingChanges [
 	

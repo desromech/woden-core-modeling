@@ -29,6 +29,11 @@ TWDMModelingElementWithChildren >> children [
 	^ children ifNil: [ children := OrderedCollection new ]
 ]
 
+{ #category : #enumerating }
+TWDMModelingElementWithChildren >> collectElementsWithTextureMappingSettingsOnto: result [
+	self children do: [ :each | each collectElementsWithTextureMappingSettingsOnto: result ]
+]
+
 { #category : #serialization }
 TWDMModelingElementWithChildren >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
