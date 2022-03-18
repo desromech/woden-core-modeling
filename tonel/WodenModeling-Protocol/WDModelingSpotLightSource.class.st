@@ -58,8 +58,8 @@ WDModelingSpotLightSource >> innerCutoff [
 
 { #category : #accessing }
 WDModelingSpotLightSource >> innerCutoff: anObject [
-
-	innerCutoff := anObject
+	innerCutoff := anObject.
+	self invalidateScenePresentations.
 ]
 
 { #category : #serialization }
@@ -83,8 +83,8 @@ WDModelingSpotLightSource >> outerCutoff [
 
 { #category : #accessing }
 WDModelingSpotLightSource >> outerCutoff: anObject [
-
-	outerCutoff := anObject
+	outerCutoff := anObject.
+	self invalidateScenePresentations.
 ]
 
 { #category : #'scene presentation' }
