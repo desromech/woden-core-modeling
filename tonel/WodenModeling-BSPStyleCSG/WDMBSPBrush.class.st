@@ -386,7 +386,7 @@ WDMBSPBrush >> subtract: otherBrush withTransform: otherBrushTransform [
 			result add: front
 		].
 
-		self assert: back isNotNil.
+		self assert: back notNil.
 		remaining := back
 	].
 	

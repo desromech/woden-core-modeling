@@ -230,7 +230,7 @@ WDMBSPBrushFace >> material: aMaterial [
 	newMaterial := aMaterial asWDModelingMaterialInfo.
 	changed := material ~~ newMaterial.
 	material := newMaterial.
-	(changed and: [parent isNotNil]) ifTrue: [ parent faceTexturesChanged ].
+	(changed and: [parent notNil]) ifTrue: [ parent faceTexturesChanged ].
 ]
 
 { #category : #accessing }

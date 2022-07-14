@@ -179,7 +179,7 @@ TWDMModelingElement >> isHitByGlobalRay: globalRay [
 	picker := WDMFirstRayPicker new ray: globalRay.
 	parentTransform := self parent ifNil: [ TRSTransform3D identity ] ifNotNil: [ :p | p transform ].
 	picker withTransform: parentTransform do: [ self rayPickElements: picker ].
-	^ picker result isNotNil
+	^ picker result notNil
 ]
 
 { #category : #testing }
