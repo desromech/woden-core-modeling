@@ -374,7 +374,7 @@ WDMBSPBrush >> subtract: otherBrush withTransform: otherBrushTransform [
 		].
 	].
 
-	self assert: clippingPlanes isNotEmpty.
+	self assert: clippingPlanes isEmpty not.
 	result := OrderedCollection new. 
 	remaining := self.
 	clippingPlanes do: [ :plane |
