@@ -26,7 +26,7 @@ WDModelingTree class >> loadFromJson: jsonData [
 
 { #category : #serialization }
 WDModelingTree class >> loadFromJsonString: jsonString [
-	^ self loadFromJson: (NeoJSONReader fromString: jsonString)
+	^ self loadFromJson: (STONJSON fromString: jsonString)
 ]
 
 { #category : #accessing }
@@ -55,7 +55,7 @@ WDModelingTree >> buildModelingElementMainPropertyPageWith: builder [
 
 { #category : #serialization }
 WDModelingTree >> encodeAsJSONString [
-	^ (NeoJSONWriter toStringPretty: self encodeForJSON) withUnixLineEndings
+	^ (STONJSON toStringPretty: self encodeForJSON) withUnixLineEndings
 ]
 
 { #category : #serialization }
