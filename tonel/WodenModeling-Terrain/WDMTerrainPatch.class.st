@@ -25,6 +25,12 @@ Class {
 }
 
 { #category : #serialization }
+WDMTerrainPatch class >> floatArray [
+
+	^ Float32Array
+]
+
+{ #category : #serialization }
 WDMTerrainPatch class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDM'
 ]
@@ -194,7 +200,7 @@ WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
 { #category : #'as yet unclassified' }
 WDMTerrainPatch >> generateLocalHeightWith: aBlock [
 	| newHeights destIndex columnOffset rowOffset |
-	newHeights := FloatArray new: patchSize * patchSize.
+	newHeights := self class floatArray new: patchSize * patchSize.
 	destIndex := 1.
 	columnOffset := column.
 	rowOffset := row.
@@ -235,7 +241,7 @@ WDMTerrainPatch >> initialize [
 	patchSize := 32.
 	row := 0.
 	column := 0.
-	heights := FloatArray new: patchSize*patchSize.
+	heights := self class floatArray new: patchSize*patchSize.
 	textureScale := Vector2 withAll: 1.0.
 	textureOffset := Vector2 withAll: 0.0.
 	textureRotation := 0.0
@@ -270,7 +276,7 @@ WDMTerrainPatch >> loadFromJson: jsonData withContext: deserializationContext [
 		self editionViewColor: (Vector4 loadFromJson: c) asColor
 	].
 	heights := encodedHeights base64Decoded shallowCopy.
-	FloatArray adoptInstance: heights.
+	self class floatArray adoptInstance: heights.
 
 	(jsonData at: #material ifAbsent: [nil]) ifNotNil: [ :materialIndex |
 		material := deserializationContext getMaterialInfoWithIndex: materialIndex
@@ -316,7 +322,7 @@ WDMTerrainPatch >> objectTypeName [
 { #category : #accessing }
 WDMTerrainPatch >> patchSize: newPatchSize [
 	patchSize := newPatchSize.
-	heights := FloatArray new: patchSize*patchSize
+	heights := self class floatArray new: patchSize*patchSize
 ]
 
 { #category : #accessing }
