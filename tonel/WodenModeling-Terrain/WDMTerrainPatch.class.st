@@ -27,7 +27,13 @@ Class {
 { #category : #serialization }
 WDMTerrainPatch class >> floatArray [
 
-	^ Float32Array
+	| bool |
+	bool := SystemVersion current major = 11
+	        &
+	        (SystemVersion current date
+	         > (Date year: 2022 month: 7 day: 8))
+		        ifTrue: [ ^ 'Float32Array' asClass ]
+		        ifFalse: [ ^ 'FloatArray' asClass ]
 ]
 
 { #category : #serialization }
