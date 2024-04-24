@@ -37,7 +37,7 @@ TWDMModelingElementWithChildren >> collectElementsWithTextureMappingSettingsOnto
 { #category : #serialization }
 TWDMModelingElementWithChildren >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
-		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ]
+		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
 

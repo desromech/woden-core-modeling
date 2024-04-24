@@ -74,7 +74,7 @@ WDModelingTree >> encodeJsonKeyValues [
 { #category : #serialization }
 WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ {
-		#materials . serializationContext materialInfos collect: [ :each | each encodeForJSON ]
+		#materials . serializationContext materialInfos collect: [ :each | each encodeForJSON ] as: Array
 	 } ,
 	(super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#backgroundColor . backgroundColor encodeForJSON .
@@ -83,7 +83,7 @@ WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 		#fogStartDistance . fogStartDistance.
 		#fogEndDistance . fogEndDistance.
 		#fogDensity . fogDensity.
-		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ]
+		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
 

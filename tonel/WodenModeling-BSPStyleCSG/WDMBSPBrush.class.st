@@ -134,7 +134,7 @@ WDMBSPBrush >> commitTopologyChanges [
 { #category : #serialization }
 WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
-		#faces . faces collect: [ :each | each encodeForJSONWithContext: serializationContext ]
+		#faces . faces collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
 

@@ -34,7 +34,7 @@ WDModelingGroup >> childrenChanged [
 WDModelingGroup >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#lockedGroup . lockedGroup.
-		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ]
+		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
 

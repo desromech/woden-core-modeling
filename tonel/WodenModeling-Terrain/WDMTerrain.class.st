@@ -50,7 +50,7 @@ WDMTerrain >> encodeJsonKeyValuesWithContext: serializationContext [
 		#patchSize . patchSize.
 		#rows . rows.
 		#columns . columns.
-		#patches . patches collect: [:each | each encodeForJSONWithContext: serializationContext ]
+		#patches . patches collect: [:each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
 
