@@ -58,6 +58,7 @@ WDModelingPointLightSource >> presentationLightSource [
 	^ WDPointLightSource new
 		intensity: self intensityWithColor;
 		influenceRadius: self influenceRadius;
+		castShadows: castShadows;
 		yourself
 ]
 

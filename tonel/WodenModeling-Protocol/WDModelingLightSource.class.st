@@ -38,9 +38,9 @@ WDModelingLightSource >> castShadows [
 ]
 
 { #category : #accessing }
-WDModelingLightSource >> castShadows: anObject [
-
-	castShadows := anObject
+WDModelingLightSource >> castShadows: aBoolean [
+	castShadows := aBoolean.
+	self invalidateScenePresentations.
 ]
 
 { #category : #accessing }
@@ -58,6 +58,7 @@ WDModelingLightSource >> color: aColor [
 { #category : #serialization }
 WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#castShadows . castShadows.
 		#color . color encodeForJSON .
 		#intensity . intensity.
 	}
@@ -101,6 +102,7 @@ WDModelingLightSource >> loadFromJson: jsonData withContext: level [
 	jsonData at: #color ifPresent: [ :data |
 		color := Vector3 loadFromJson: data
 	].
+	castShadows := (jsonData at: #castShadows ifAbsent: [ nil ]) ifNil: [ false ].
 	intensity := (jsonData at: #intensity ifAbsent: [ nil ]) ifNil: [ intensity ]
 ]
 

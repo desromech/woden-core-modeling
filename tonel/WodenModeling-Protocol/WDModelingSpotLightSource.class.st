@@ -94,6 +94,7 @@ WDModelingSpotLightSource >> presentationLightSource [
 		influenceRadius: self influenceRadius;
 		innerCutoff: innerCutoff;
 		outerCutoff: outerCutoff;
+		castShadows: castShadows;
 		yourself
 ]
 

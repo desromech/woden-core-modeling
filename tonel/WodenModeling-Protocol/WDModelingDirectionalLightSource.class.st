@@ -16,6 +16,7 @@ WDModelingDirectionalLightSource >> objectTypeName [
 WDModelingDirectionalLightSource >> presentationLightSource [
 	^ WDDirectionalLightSource new
 		intensity: self intensityWithColor;
+		castShadows: castShadows;
 		yourself
 ]
 
