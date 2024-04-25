@@ -66,7 +66,7 @@ WDModelingGroup >> loadFromJson: jsonData withContext: deserializationContext [
 	].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 WDModelingGroup >> localBoundingBox [
 	localBoundingBox ifNil: [ 
 		localBoundingBox := AABox empty.

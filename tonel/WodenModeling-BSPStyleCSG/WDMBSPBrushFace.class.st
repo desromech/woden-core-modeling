@@ -10,7 +10,8 @@ Class {
 		'plane',
 		'indices',
 		'vertices',
-		'material'
+		'material',
+		'texcoords'
 	],
 	#classVars : [
 		'BitangentAxis',
@@ -91,6 +92,7 @@ WDMBSPBrushFace class >> plane: aPlane [
 WDMBSPBrushFace >> addIndex: index [
 	indices add: index.
 	vertices := nil.
+	texcoords := nil.
 ]
 
 { #category : #'mesh building' }
@@ -163,6 +165,7 @@ WDMBSPBrushFace >> buildWireframeFaceMeshWith: builder [
 WDMBSPBrushFace >> clearIndices [
 	indices := OrderedCollection new.
 	vertices := nil.
+	texcoords := nil.
 ]
 
 { #category : #'as yet unclassified' }
@@ -184,6 +187,8 @@ WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
 		#textureScale . textureScale encodeForJSON.
 		#textureOffset . textureOffset encodeForJSON.
 		#textureRotation . textureRotation.
+		#vertices . (self vertices collect: [ :each | each encodeForJSON ]) flattened.
+		#texcoords . (self texcoords collect: [ :each | each encodeForJSON ]) flattened.
 	}
 ]
 
@@ -277,6 +282,30 @@ WDMBSPBrushFace >> sortIndices [
 		u := centroid - (brushVertices at: a + 1).
 		v := centroid - (brushVertices at: b + 1).
 		((u cross: v) dot: n) >= 0
+	]
+]
+
+{ #category : #accessing }
+WDMBSPBrushFace >> texcoords [
+	^ texcoords ifNil: [
+		| brushVertices textureMatrix normal normalAxis tangent bitangent globalTransform |
+		textureMatrix := self computeTextureMatrix.
+		globalTransform := self globalTransform.
+		
+		normal := plane normal.
+		normalAxis := self class findAxisForNormal: normal.
+		tangent := self class getTangentForNormalAxis: normalAxis.
+		bitangent := self class getBitangentForNormalAxis: normalAxis.
+
+		brushVertices := parent vertices.
+		texcoords := indices collect: [ :i |
+			| v wv tu tv |
+			v := brushVertices at: i + 1.
+			wv := globalTransform transformPosition: v.
+			tu := wv dot: tangent.
+			tv := wv dot: bitangent.
+			textureMatrix transformVector2: (Vector2 x: tu y: tv).
+		]
 	]
 ]
 

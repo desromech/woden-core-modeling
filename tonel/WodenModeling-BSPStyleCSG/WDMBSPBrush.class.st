@@ -133,8 +133,10 @@ WDMBSPBrush >> commitTopologyChanges [
 
 { #category : #serialization }
 WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
+	self validateTopology.
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
-		#faces . faces collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
+		#faces . faces collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array.
+		#vertices . (vertices collect: [ :each | each encodeForJSON ]) flattened
 	}
 ]
 
