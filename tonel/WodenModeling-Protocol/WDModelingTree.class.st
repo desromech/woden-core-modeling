@@ -73,6 +73,7 @@ WDModelingTree >> backgroundColor: aColor [
 WDModelingTree >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
+		linearColor3PropertyNamed: 'Ambient Lighting' selector: #ambientLighting;
 		linearColor4PropertyNamed: 'Background Color' selector: #backgroundColor;
 		optionPropertyNamed: 'Fog Mode' selector: #fogMode options: #(NONE LINEAR EXP EXP2);
 		linearColor4PropertyNamed: 'Fog Color' selector: #fogColor;
@@ -277,7 +278,7 @@ WDModelingTree >> updateScenePresentationHandle: aHandle [
 		ambientLighting: ambientLighting;
 		ambientLightProbe: hdriLightProbe.
 		
-	(useHDRIAsSkybox and: [hdriLightProbe isNotNil]) ifTrue: [
+	(useHDRIAsSkybox and: [hdriLightProbe notNil]) ifTrue: [
 		aHandle extraNodes ifEmpty: [
 			| backgroundNode environmentMaterial environmentMesh |
 			environmentMaterial := (WDEnvironmentMapMaterial new
