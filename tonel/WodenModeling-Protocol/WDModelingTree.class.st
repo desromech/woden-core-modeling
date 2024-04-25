@@ -14,7 +14,13 @@ Class {
 		'fogColor',
 		'fogStartDistance',
 		'fogEndDistance',
-		'fogDensity'
+		'fogDensity',
+		'hdri',
+		'useHDRIAsSkybox',
+		'hdriLightProbePath',
+		'hdriLightProbe',
+		'assetResolver',
+		'ambientLighting'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
@@ -27,6 +33,28 @@ WDModelingTree class >> loadFromJson: jsonData [
 { #category : #serialization }
 WDModelingTree class >> loadFromJsonString: jsonString [
 	^ self loadFromJson: (STONJSON fromString: jsonString)
+]
+
+{ #category : #accessing }
+WDModelingTree >> ambientLighting [
+
+	^ ambientLighting
+]
+
+{ #category : #accessing }
+WDModelingTree >> ambientLighting: anAmbientLightColor [
+	ambientLighting := anAmbientLightColor asVector3.
+	self invalidateScenePresentations.
+]
+
+{ #category : #accessing }
+WDModelingTree >> assetResolver [
+	^ assetResolver
+]
+
+{ #category : #accessing }
+WDModelingTree >> assetResolver: anAssetResolver [
+	assetResolver := anAssetResolver
 ]
 
 { #category : #accessing }
@@ -50,7 +78,9 @@ WDModelingTree >> buildModelingElementMainPropertyPageWith: builder [
 		linearColor4PropertyNamed: 'Fog Color' selector: #fogColor;
 		scalarPropertyNamed: 'Fog Start Distance' selector: #fogStartDistance;
 		scalarPropertyNamed: 'Fog End Distance' selector: #fogEndDistance;
-		scalarPropertyNamed: 'Fog Density' selector: #fogDensity
+		scalarPropertyNamed: 'Fog Density' selector: #fogDensity;
+		stringPropertyNamed: 'HDRI' selector: #hdri;
+		booleanPropertyNamed: 'Use HDRI as Sky Box' selector: #useHDRIAsSkybox
 ]
 
 { #category : #serialization }
@@ -77,12 +107,15 @@ WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 		#materials . serializationContext materialInfos collect: [ :each | each encodeForJSON ] as: Array
 	 } ,
 	(super encodeJsonKeyValuesWithContext: serializationContext) , {
+		#ambientLighting . ambientLighting encodeForJSON .
 		#backgroundColor . backgroundColor encodeForJSON .
 		#fogMode . fogMode .
 		#fogColor . fogColor encodeForJSON .
 		#fogStartDistance . fogStartDistance.
 		#fogEndDistance . fogEndDistance.
 		#fogDensity . fogDensity.
+		#hdri . hdri.
+		#useHDRIAsSkybox. useHDRIAsSkybox.
 		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
@@ -95,8 +128,8 @@ WDModelingTree >> fogColor [
 
 { #category : #accessing }
 WDModelingTree >> fogColor: anObject [
-
-	fogColor := anObject
+	fogColor := anObject.
+	self invalidateScenePresentations.
 ]
 
 { #category : #accessing }
@@ -108,7 +141,8 @@ WDModelingTree >> fogDensity [
 { #category : #accessing }
 WDModelingTree >> fogDensity: anObject [
 
-	fogDensity := anObject
+	fogDensity := anObject.
+	self invalidateScenePresentations.
 ]
 
 { #category : #accessing }
@@ -120,7 +154,8 @@ WDModelingTree >> fogEndDistance [
 { #category : #accessing }
 WDModelingTree >> fogEndDistance: anObject [
 
-	fogEndDistance := anObject
+	fogEndDistance := anObject.
+	self invalidateScenePresentations.
 ]
 
 { #category : #accessing }
@@ -131,7 +166,8 @@ WDModelingTree >> fogMode [
 
 { #category : #accessing }
 WDModelingTree >> fogMode: aFogModeName [
-	fogMode := aFogModeName asSymbol
+	fogMode := aFogModeName asSymbol.
+	self invalidateScenePresentations.
 ]
 
 { #category : #accessing }
@@ -143,18 +179,33 @@ WDModelingTree >> fogStartDistance [
 { #category : #accessing }
 WDModelingTree >> fogStartDistance: anObject [
 
-	fogStartDistance := anObject
+	fogStartDistance := anObject.
+	self invalidateScenePresentations.
+]
+
+{ #category : #accessing }
+WDModelingTree >> hdri [
+
+	^ hdri
+]
+
+{ #category : #accessing }
+WDModelingTree >> hdri: anObject [
+	hdri := anObject.
+	self invalidateScenePresentations.
 ]
 
 { #category : #initialization }
 WDModelingTree >> initialize [
 	super initialize.
 	backgroundColor := Color veryDarkGray asVector4.
+	ambientLighting := 0.2 asVector3.
 	fogMode := #NONE.
 	fogColor := Vector4 zeros.
 	fogStartDistance := 0.0.
 	fogEndDistance := 0.0.
 	fogDensity := 0.0.
+	useHDRIAsSkybox := true.
 	
 ]
 
@@ -170,6 +221,10 @@ WDModelingTree >> loadFromJson: jsonData [
 		)
 	].
 
+	jsonData at: #ambientLighting ifPresent: [ :json |
+		backgroundColor := Vector3 loadFromJson: json
+	].
+
 	jsonData at: #backgroundColor ifPresent: [ :json |
 		backgroundColor := Vector4 loadFromJson: json
 	].
@@ -182,6 +237,8 @@ WDModelingTree >> loadFromJson: jsonData [
 	fogStartDistance := (jsonData at: #fogStartDistance ifAbsent: [nil]) ifNil: [ fogStartDistance ].
 	fogEndDistance := (jsonData at: #fogEndDistance ifAbsent: [nil]) ifNil: [ fogEndDistance ].
 	fogDensity := (jsonData at: #fogDensity ifAbsent: [nil]) ifNil: [ fogDensity ].
+	hdri := (jsonData at: #hdri ifAbsent: [nil]) ifNil: [ hdri ].
+	useHDRIAsSkybox := (jsonData at: #useHDRIAsSkybox ifAbsent: [nil]) ifNil: [ useHDRIAsSkybox ].
 	
 	self loadFromJson: jsonData withContext: context
 	
@@ -215,7 +272,66 @@ WDModelingTree >> treeTopologyChanged [
 { #category : #'scene presentation' }
 WDModelingTree >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
+	self validateHdriLightProbe.
+	aHandle scene
+		ambientLighting: ambientLighting;
+		ambientLightProbe: hdriLightProbe.
+		
+	(useHDRIAsSkybox and: [hdriLightProbe isNotNil]) ifTrue: [
+		aHandle extraNodes ifEmpty: [
+			| backgroundNode environmentMaterial environmentMesh |
+			environmentMaterial := (WDEnvironmentMapMaterial new
+				background: true;
+				yourself).
+			
+			environmentMesh := WDMeshBuilder new
+				currentMaterial: environmentMaterial;
+				addInteriorCubeWithWidth: 1.0 height: 1.0 depth: 1.0;
+				mesh.
+			backgroundNode := (WDRenderableWithViewModeAlternatives new
+				defaultAlternativeIsEmpty: true;
+				flatColorShaded: environmentMesh;
+				fullShaded: environmentMesh;
+				yourself
+			) asSceneNode.
+			aHandle extraNodes: {backgroundNode}.
+			aHandle material: environmentMaterial.
+			aHandle scene addBackground: backgroundNode
+		].
+	
+		aHandle material colorTexture: hdriLightProbe environment
+	] ifFalse: [
+		aHandle extraNodes do: [ :each | each removeFromScene ].
+		aHandle extraNodes: #().
+		aHandle material: nil.
+	]
+]
 
+{ #category : #accessing }
+WDModelingTree >> useHDRIAsSkybox [
+
+	^ useHDRIAsSkybox
+]
+
+{ #category : #accessing }
+WDModelingTree >> useHDRIAsSkybox: anObject [
+
+	useHDRIAsSkybox := anObject.
+	self invalidateScenePresentations.
+]
+
+{ #category : #'as yet unclassified' }
+WDModelingTree >> validateHdriLightProbe [
+	| resolvedHdriLocation |
+	hdri = hdriLightProbePath ifTrue: [ ^ hdriLightProbe ].
+	
+	resolvedHdriLocation := assetResolver ifNotNil: [ assetResolver resolveAssetPath: hdri ].
+	hdriLightProbe := resolvedHdriLocation exists
+		ifTrue: [ WDLightProbe forHDRIFileReference: resolvedHdriLocation ]
+		ifFalse: [ nil ].
+	
+	hdriLightProbePath := hdri.
+	hdriLightProbe
 ]
 
 { #category : #enumerating }

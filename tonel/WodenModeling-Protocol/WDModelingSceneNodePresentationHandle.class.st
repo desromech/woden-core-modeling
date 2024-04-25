@@ -6,7 +6,8 @@ Class {
 	#superclass : #WDModelingScenePresentationHandle,
 	#instVars : [
 		'sceneNode',
-		'extraNodes'
+		'extraNodes',
+		'material'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
@@ -33,6 +34,18 @@ WDModelingSceneNodePresentationHandle >> initializeWithModel: aModel scene: aSce
 	super initializeWithModel: aModel scene: aScene.
 	sceneNode := WDSceneNode new.
 	extraNodes := #()
+]
+
+{ #category : #accessing }
+WDModelingSceneNodePresentationHandle >> material [
+
+	^ material
+]
+
+{ #category : #accessing }
+WDModelingSceneNodePresentationHandle >> material: anObject [
+
+	material := anObject
 ]
 
 { #category : #'scene presentation' }

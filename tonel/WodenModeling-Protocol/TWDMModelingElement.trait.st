@@ -37,6 +37,11 @@ TWDMModelingElement >> addChildrenOntoScenePresentations [
 	self scenePresentationHandles do: [ :each | self addChildrenOntoScenePresentationHandle: each ]
 ]
 
+{ #category : #'scene presentation' }
+TWDMModelingElement >> assetResolver [
+	^ nil
+]
+
 { #category : #testing }
 TWDMModelingElement >> canAddOrRemoveChildren [
 	^ false
