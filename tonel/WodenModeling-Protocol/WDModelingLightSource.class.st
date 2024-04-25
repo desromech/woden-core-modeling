@@ -125,6 +125,7 @@ WDModelingLightSource >> transform: newTransform [
 WDModelingLightSource >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	aHandle sceneNode
+		castShadows: false;
 		renderables: { self presentationMesh };
 		lights: { self presentationLightSource }
 ]
