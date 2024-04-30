@@ -91,8 +91,18 @@ TWDMModelingElement >> editionViewColor: aColor [
 ]
 
 { #category : #'scene presentation' }
+TWDMModelingElement >> findAssetResolver [
+	^ self modelingTreeRoot ifNotNil: [ :root | root assetResolver ]
+]
+
+{ #category : #'scene presentation' }
 TWDMModelingElement >> findMaterialResolver [
 	^ self modelingTreeRoot ifNotNil: [ :root | root materialResolver ]
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> findModelResolver [
+	^ self modelingTreeRoot ifNotNil: [ :root | root modelResolver ]
 ]
 
 { #category : #queries }
@@ -209,6 +219,11 @@ TWDMModelingElement >> materialResolver [
 
 { #category : #memento }
 TWDMModelingElement >> materialStateMemento [
+	^ nil
+]
+
+{ #category : #'scene presentation' }
+TWDMModelingElement >> modelResolver [
 	^ nil
 ]
 

@@ -12,6 +12,11 @@ WDModelingNullObject class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDModeling'
 ]
 
+{ #category : #testing }
+WDModelingNullObject >> isPointModelingElement [
+	^ true
+]
+
 { #category : #accessing }
 WDModelingNullObject >> objectTypeName [
 	^ 'Null'

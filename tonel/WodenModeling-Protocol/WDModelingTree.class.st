@@ -20,7 +20,8 @@ Class {
 		'hdriLightProbePath',
 		'hdriLightProbe',
 		'assetResolver',
-		'ambientLighting'
+		'ambientLighting',
+		'modelResolver'
 	],
 	#category : #'WodenModeling-Protocol-Model'
 }
@@ -253,6 +254,16 @@ WDModelingTree >> materialResolver [
 { #category : #accessing }
 WDModelingTree >> materialResolver: aMaterialResolver [
 	materialResolver := aMaterialResolver
+]
+
+{ #category : #accessing }
+WDModelingTree >> modelResolver [
+	^ modelResolver
+]
+
+{ #category : #accessing }
+WDModelingTree >> modelResolver: aModelResolver [
+	modelResolver := aModelResolver
 ]
 
 { #category : #accessing }

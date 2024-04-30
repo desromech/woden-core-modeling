@@ -10,7 +10,8 @@ Class {
 		'lightSourceWithDirectionMesh',
 		'pointObjectBoundingBox',
 		'pointObjectDisplayBox',
-		'greenPointObjectDisplayMaterial'
+		'greenPointObjectDisplayMaterial',
+		'orangePointObjectDisplayMaterial'
 	],
 	#classInstVars : [
 		'uniqueInstance'
@@ -65,6 +66,14 @@ WDModelingCommonMeshes >> lightSourceWithoutDirection [
 		mesh
 	].
 	
+]
+
+{ #category : #accessing }
+WDModelingCommonMeshes >> orangePointObjectDisplayMaterial [
+	^ orangePointObjectDisplayMaterial ifNil: [ orangePointObjectDisplayMaterial := WDUnlitMaterial new
+		colorFactor: (Vector4 x: 0.8 y: 0.4 z: 0.01 w: 1.0);
+		yourself
+	]
 ]
 
 { #category : #accessing }
