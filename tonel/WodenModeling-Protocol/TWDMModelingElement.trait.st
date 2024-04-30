@@ -203,6 +203,11 @@ TWDMModelingElement >> isPointModelingElement [
 ]
 
 { #category : #testing }
+TWDMModelingElement >> isPointPlacedElement [
+	^ false
+]
+
+{ #category : #testing }
 TWDMModelingElement >> isSceneSelectableObject [
 	^ false
 ]

@@ -96,6 +96,11 @@ WDModelingLightSource >> isPointModelingElement [
 	^ true
 ]
 
+{ #category : #testing }
+WDModelingLightSource >> isPointPlacedElement [
+	^ true
+]
+
 { #category : #serialization }
 WDModelingLightSource >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.

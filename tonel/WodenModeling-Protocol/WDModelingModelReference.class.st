@@ -45,7 +45,7 @@ WDModelingModelReference >> invalidateModelPresentation [
 ]
 
 { #category : #testing }
-WDModelingModelReference >> isPointModelingElement [
+WDModelingModelReference >> isPointPlacedElement [
 	^ true
 ]
 

@@ -17,6 +17,11 @@ WDModelingNullObject >> isPointModelingElement [
 	^ true
 ]
 
+{ #category : #testing }
+WDModelingNullObject >> isPointPlacedElement [
+	^ true
+]
+
 { #category : #accessing }
 WDModelingNullObject >> objectTypeName [
 	^ 'Null'
