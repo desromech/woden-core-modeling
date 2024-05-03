@@ -271,6 +271,12 @@ WDModelingTree >> objectTypeName [
 	^ 'Modeling Tree'
 ]
 
+{ #category : #copying }
+WDModelingTree >> postCopy [
+	super postCopy.
+	hdriLightProbe := nil.
+]
+
 { #category : #accessing }
 WDModelingTree >> treeTopologyChangeListeners [
 	^ treeTopologyChangeListeners ifNil: [treeTopologyChangeListeners := Set new]

@@ -6,6 +6,9 @@ Class {
 	#superclass : #WDModelingSceneObject,
 	#instVars : [
 		'path',
+		'elementName',
+		'hasCollisions',
+		'collisionElementName',
 		'solvedModel',
 		'solvedSceneNode'
 	],
@@ -21,20 +24,67 @@ WDModelingModelReference class >> jsonObjectTypeName [
 WDModelingModelReference >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
-		stringPropertyNamed: 'Path' selector: #path
+		stringPropertyNamed: 'Path' selector: #path;
+		stringPropertyNamed: 'Element Name' selector: #elementName;
+		booleanPropertyNamed: 'Has Collisions' selector: #hasCollisions;
+		stringPropertyNamed: 'Collision Element Name' selector: #collisionElementName
+]
+
+{ #category : #accessing }
+WDModelingModelReference >> collisionElementName [
+
+	^ collisionElementName
+]
+
+{ #category : #accessing }
+WDModelingModelReference >> collisionElementName: anObject [
+
+	collisionElementName := anObject
+]
+
+{ #category : #accessing }
+WDModelingModelReference >> elementName [
+
+	^ elementName
+]
+
+{ #category : #accessing }
+WDModelingModelReference >> elementName: anObject [
+	elementName := anObject.
+	solvedSceneNode := nil.
+	self invalidateScenePresentations
 ]
 
 { #category : #serialization }
 WDModelingModelReference >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
-		#path . path.
+		#path. path.
+		#elementName. elementName.
+		#hasCollisions. hasCollisions.
+		#collisionElementName. collisionElementName.
 	}
+]
+
+{ #category : #accessing }
+WDModelingModelReference >> hasCollisions [
+
+	^ hasCollisions
+]
+
+{ #category : #accessing }
+WDModelingModelReference >> hasCollisions: anObject [
+
+	hasCollisions := anObject
 ]
 
 { #category : #initialization }
 WDModelingModelReference >> initialize [
 	super initialize.
 	path := ''.
+	elementName := ''.
+	collisionElementName := ''.
+	hasCollisions := true.
+	
 ]
 
 { #category : #accessing }
@@ -53,6 +103,10 @@ WDModelingModelReference >> isPointPlacedElement [
 WDModelingModelReference >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	path := (jsonData at: #path ifAbsent: [ nil ]) ifNil: [ path ].
+	elementName := (jsonData at: #elementName ifAbsent: [ nil ]) ifNil: [ elementName ].
+	hasCollisions := (jsonData at: #hasCollisions ifAbsent: [ nil ]) ifNil: [ hasCollisions ].
+	collisionElementName := (jsonData at: #collisionElementName ifAbsent: [ nil ]) ifNil: [ collisionElementName ].
+	
 ]
 
 { #category : #accessing }
@@ -83,6 +137,14 @@ WDModelingModelReference >> path [
 WDModelingModelReference >> path: aModelPath [
 	path := aModelPath.
 	self invalidateModelPresentation
+]
+
+{ #category : #copying }
+WDModelingModelReference >> postCopy [
+	super postCopy.
+	solvedModel := nil.
+	solvedSceneNode := nil.
+	
 ]
 
 { #category : #'scene presentation' }
