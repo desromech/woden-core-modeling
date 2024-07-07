@@ -2,22 +2,23 @@
 I am a modeling property page presenter.
 "
 Class {
-	#name : #WDMPropertyPagePresenter,
-	#superclass : #SpPresenterWithModel,
+	#name : 'WDMPropertyPagePresenter',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'treeView'
 	],
-	#category : #'WodenModeling-Protocol-Spec'
+	#category : 'WodenModeling-Protocol-Spec',
+	#package : 'WodenModeling-Protocol-Spec'
 }
 
-{ #category : #specs }
-WDMPropertyPagePresenter class >> defaultSpec [
+{ #category : 'specs' }
+WDMPropertyPagePresenter class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		beNotHomogeneous;
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMPropertyPagePresenter >> modelChanged [
 	| grid |
 	grid := SpGridLayout new

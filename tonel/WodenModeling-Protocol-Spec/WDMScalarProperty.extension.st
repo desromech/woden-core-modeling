@@ -1,6 +1,6 @@
-Extension { #name : #WDMScalarProperty }
+Extension { #name : 'WDMScalarProperty' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMScalarProperty >> buildSpecPresenter [
 	^ SpNumberInputFieldPresenter new
 		beFloat;

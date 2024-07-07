@@ -1,6 +1,6 @@
-Extension { #name : #WDMBooleanProperty }
+Extension { #name : 'WDMBooleanProperty' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMBooleanProperty >> buildSpecPresenter [
 	^ SpCheckBoxPresenter new
 		state: self getValue;

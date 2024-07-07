@@ -1,6 +1,6 @@
-Extension { #name : #WDMIntegerProperty }
+Extension { #name : 'WDMIntegerProperty' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMIntegerProperty >> buildSpecPresenter [
 	^ SpNumberInputFieldPresenter new
 		beInteger;

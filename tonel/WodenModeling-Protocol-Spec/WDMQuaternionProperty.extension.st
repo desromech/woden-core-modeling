@@ -1,6 +1,6 @@
-Extension { #name : #WDMQuaternionProperty }
+Extension { #name : 'WDMQuaternionProperty' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMQuaternionProperty >> buildEulerSpecPresenter [
 	| euler |
 	euler := self getValue asEulerZYX.
@@ -33,7 +33,7 @@ WDMQuaternionProperty >> buildEulerSpecPresenter [
 		yourself
 ]
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMQuaternionProperty >> buildQuaternionSpecPresenter [
 	^ SpBoxLayout newHorizontal
 		add: (	SpNumberInputFieldPresenter new
@@ -71,7 +71,7 @@ WDMQuaternionProperty >> buildQuaternionSpecPresenter [
 		yourself
 ]
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMQuaternionProperty >> buildSpecPresenter [
 	^ SpBoxLayout newVertical
 		add: self buildQuaternionSpecPresenter;

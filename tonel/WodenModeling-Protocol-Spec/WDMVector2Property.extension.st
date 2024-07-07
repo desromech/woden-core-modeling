@@ -1,6 +1,6 @@
-Extension { #name : #WDMVector2Property }
+Extension { #name : 'WDMVector2Property' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMVector2Property >> buildSpecPresenter [
 	^ SpBoxLayout newHorizontal
 		add: (	SpNumberInputFieldPresenter new

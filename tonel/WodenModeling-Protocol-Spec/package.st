@@ -1,1 +1,1 @@
-Package { #name : #'WodenModeling-Protocol-Spec' }
+Package { #name : 'WodenModeling-Protocol-Spec' }

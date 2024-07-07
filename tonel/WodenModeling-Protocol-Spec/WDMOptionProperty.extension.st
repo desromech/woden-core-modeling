@@ -1,6 +1,6 @@
-Extension { #name : #WDMOptionProperty }
+Extension { #name : 'WDMOptionProperty' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMOptionProperty >> buildSpecPresenter [
 	^ SpDropListPresenter new
 		items: options;

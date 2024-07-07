@@ -1,6 +1,6 @@
-Extension { #name : #WDMStringProperty }
+Extension { #name : 'WDMStringProperty' }
 
-{ #category : #'*WodenModeling-Protocol-Spec' }
+{ #category : '*WodenModeling-Protocol-Spec' }
 WDMStringProperty >> buildSpecPresenter [
 	^ SpTextInputFieldPresenter new
 		text: self getFormattedValue;
