@@ -183,7 +183,7 @@ WDModelingModelReference >> validSolvedModel [
 WDModelingModelReference >> validSolvedSceneNode [
 	^ solvedSceneNode ifNil: [
 		solvedSceneNode := self validSolvedModel ifNotNil: [ :validSolvedModel |
-			validSolvedModel instanceDefaultSceneNode
+			validSolvedModel instanceSceneNodeForElementNamed: elementName
 		]
 	]
 ]
