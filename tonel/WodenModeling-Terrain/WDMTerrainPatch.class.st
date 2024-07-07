@@ -82,45 +82,13 @@ WDMTerrainPatch >> buildPatchSolidWith: builder [
 
 { #category : 'as yet unclassified' }
 WDMTerrainPatch >> buildPatchTexturedWith: builder [
-	| vx sourceIndex vz textureMatrix terrainScale |
+	| textureMatrix terrainScale |
 	builder
 		currentMaterial: ((material ifNotNil: [ material validMaterialWithResolver: self findMaterialResolver ])
-			ifNil: [WDMetallicRoughnessMaterial default]);
-		beginTriangles.
+			ifNil: [WDMetallicRoughnessMaterial default]).
 	terrainScale := parent ifNotNil: [parent transform scale] ifNil: [Vector3 withAll: 1].
-	sourceIndex := 1.
 	textureMatrix := self computeTextureMatrix.
-	0 to: patchSize - 1 do: [ :y |
-		vz := (y / (patchSize - 1)).
-		0 to: patchSize - 1 do: [ :x |
-			| t b l r c tc |
-			vx := (x / (patchSize - 1)).
-			t := b := l := r := c := heights at: sourceIndex.
-			y > 0 ifTrue: [ b := heights at: sourceIndex - patchSize ].
-			y + 1 < patchSize ifTrue: [ t := heights at: sourceIndex + patchSize ].
-			x > 0 ifTrue: [ l := heights at: sourceIndex - 1 ].
-			x + 1 < patchSize ifTrue: [ r := heights at: sourceIndex + 1 ].
-			tc := textureMatrix transformVector2: (Vector2 x: vx * terrainScale x y: vz * terrainScale z).
-			
-			builder
-				addPx: vx y: c z: vz;
-				addT0: tc;
-				addN: (self computeNormalWithDx: r - l dz: t - b).
-			sourceIndex := sourceIndex + 1.
-		]
-	].
-
-	0 to: patchSize - 2 do: [ :y |
-		| rowStart |
-		rowStart := patchSize * y.
-		0 to: patchSize - 2 do: [ :x |
-			builder
-				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + 1 i2: rowStart + x;
-				addTriangleI0: rowStart + x i1: rowStart + x + patchSize i2: rowStart + x + patchSize + 1.
-			sourceIndex := sourceIndex + 1.
-		].
-	].
-	
+	builder addTexturedTerrainPatchWithSize: patchSize scale: terrainScale heights: heights textureMatrix: textureMatrix.
 ]
 
 { #category : 'as yet unclassified' }
