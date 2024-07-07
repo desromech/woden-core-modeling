@@ -2,60 +2,62 @@
 I provide the abstract ray picker interface.
 "
 Class {
-	#name : #WDMAbstractRayPicker,
-	#superclass : #Object,
+	#name : 'WDMAbstractRayPicker',
+	#superclass : 'Object',
 	#instVars : [
 		'ray',
 		'editionMode'
 	],
-	#category : #'WodenModeling-Protocol-Selection'
+	#category : 'WodenModeling-Protocol-Selection',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Selection'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMAbstractRayPicker class >> ray: aRay [
 	^ self new ray: aRay; yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMAbstractRayPicker class >> ray: aRay editionMode: aMode [
 	^ self new ray: aRay; editionMode: aMode; yourself
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 WDMAbstractRayPicker >> addResult: result withDistance: distance [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMAbstractRayPicker >> editionMode [
 
 	^ editionMode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMAbstractRayPicker >> editionMode: anEditionMode [
 	editionMode := anEditionMode asModelingEditionMode
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 WDMAbstractRayPicker >> initialize [
 	super initialize.
 	self editionMode: WDObjectEditionMode.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMAbstractRayPicker >> ray [
 
 	^ ray
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMAbstractRayPicker >> ray: anObject [
 
 	ray := anObject
 ]
 
-{ #category : #transformation }
+{ #category : 'transformation' }
 WDMAbstractRayPicker >> withTransform: aTransform do: aBlock [
 	self subclassResponsibility
 ]

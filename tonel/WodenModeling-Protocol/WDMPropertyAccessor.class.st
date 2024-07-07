@@ -2,16 +2,18 @@
 I am an accessor for getting and setting a specific property.
 "
 Class {
-	#name : #WDMPropertyAccessor,
-	#superclass : #Object,
+	#name : 'WDMPropertyAccessor',
+	#superclass : 'Object',
 	#instVars : [
 		'getter',
 		'setter'
 	],
-	#category : #'WodenModeling-Protocol-Properties'
+	#category : 'WodenModeling-Protocol-Properties',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Properties'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 WDMPropertyAccessor class >> forSelector: propertySelector [
 	| setterSelector |
 	setterSelector := (propertySelector , ':') asSymbol.
@@ -21,35 +23,35 @@ WDMPropertyAccessor class >> forSelector: propertySelector [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMPropertyAccessor >> getFrom: object [
 	^ getter value: object
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMPropertyAccessor >> getter [
 
 	^ getter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMPropertyAccessor >> getter: anObject [
 
 	getter := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMPropertyAccessor >> set: newValue in: object [
 	^ setter value: object value: newValue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMPropertyAccessor >> setter [
 
 	^ setter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMPropertyAccessor >> setter: anObject [
 
 	setter := anObject

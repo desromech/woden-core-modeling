@@ -2,34 +2,36 @@
 I am a scalar property.
 "
 Class {
-	#name : #WDMScalarProperty,
-	#superclass : #WDMProperty,
+	#name : 'WDMScalarProperty',
+	#superclass : 'WDMProperty',
 	#instVars : [
 		'minimum',
 		'maximum'
 	],
-	#category : #'WodenModeling-Protocol-Properties'
+	#category : 'WodenModeling-Protocol-Properties',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Properties'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMScalarProperty >> maximum [
 
 	^ maximum
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMScalarProperty >> maximum: anObject [
 
 	maximum := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMScalarProperty >> minimum [
 
 	^ minimum
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMScalarProperty >> minimum: anObject [
 
 	minimum := anObject

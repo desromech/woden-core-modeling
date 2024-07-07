@@ -2,16 +2,18 @@
 I provide the protocol that is required to be implemented by a modeling tree element.
 "
 Trait {
-	#name : #TWDMModelingElement,
-	#category : #'WodenModeling-Protocol-Model'
+	#name : 'TWDMModelingElement',
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 TWDMModelingElement >> add: anElement [
 	self error: 'Children cannot be added to me'
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> addChildOntoScenePresentations: aChild [
 	self scenePresentationHandles do: [ :eachHandle |
 		| childHandle |
@@ -21,7 +23,7 @@ TWDMModelingElement >> addChildOntoScenePresentations: aChild [
 	].
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> addChildrenOntoScenePresentationHandle: aPresentationHandle [
 	self children do: [ :each |
 		| childHandle |
@@ -32,80 +34,80 @@ TWDMModelingElement >> addChildrenOntoScenePresentationHandle: aPresentationHand
 
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> addChildrenOntoScenePresentations [
 	self scenePresentationHandles do: [ :each | self addChildrenOntoScenePresentationHandle: each ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> assetResolver [
 	^ nil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> canAddOrRemoveChildren [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> canBeDuplicatedAndPlaced [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> canBeSubtracted [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> children [
 	^ #()
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElement >> childrenChanged [
 	"Hook"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElement >> collectElementsWithTextureMappingSettingsOnto: result [
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 TWDMModelingElement >> commitSculptingChanges [
 	
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 TWDMModelingElement >> commitTopologyChanges [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> editionViewColor [
 	^ Color white
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> editionViewColor: aColor [
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> findAssetResolver [
 	^ self modelingTreeRoot ifNotNil: [ :root | root assetResolver ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> findMaterialResolver [
 	^ self modelingTreeRoot ifNotNil: [ :root | root materialResolver ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> findModelResolver [
 	^ self modelingTreeRoot ifNotNil: [ :root | root modelResolver ]
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest [
 	| result |
 	result := OrderedCollection new.
@@ -113,11 +115,11 @@ TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest [
 	^ result
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 TWDMModelingElement >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 TWDMModelingElement >> findVolumeElementsThatIntersectFrustum: volumesToTest [
 	| result |
 	result := OrderedCollection new.
@@ -125,40 +127,40 @@ TWDMModelingElement >> findVolumeElementsThatIntersectFrustum: volumesToTest [
 	^ result
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 TWDMModelingElement >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> globalTransform [
 	^ self parent
 		ifNil: [ self transform ]
 		ifNotNil: [ :p | p globalTransform transformTransform: self transform ]
 ]
 
-{ #category : #highlighting }
+{ #category : 'highlighting' }
 TWDMModelingElement >> highlighted [
 	^ false
 ]
 
-{ #category : #highlighting }
+{ #category : 'highlighting' }
 TWDMModelingElement >> highlighted: aBoolean [
 ]
 
-{ #category : #highlighting }
+{ #category : 'highlighting' }
 TWDMModelingElement >> highlightedStatus [
 	^ self highlighted or: [ self parent ifNil: [ false ] ifNotNil: [ :p | p highlightedStatus ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElement >> highlightingOrSelectionStatusChanged [
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> initializeScenePresentationHandle: presentationHandle [
 ]
 
-{ #category : #inspector }
+{ #category : 'inspector' }
 TWDMModelingElement >> inspectionScene [
 	<inspectorPresentationOrder: 20 title: 'Scene'>
 
@@ -172,7 +174,7 @@ TWDMModelingElement >> inspectionScene [
 		yourself
 ]
 
-{ #category : #inspector }
+{ #category : 'inspector' }
 TWDMModelingElement >> inspectionTree [
 	<inspectorPresentationOrder: 10 title: 'Tree'>
 
@@ -183,12 +185,12 @@ TWDMModelingElement >> inspectionTree [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> isGroup [
 	^ false
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingElement >> isHitByGlobalRay: globalRay [
 	| picker parentTransform |
 	picker := WDMFirstRayPicker new ray: globalRay.
@@ -197,166 +199,166 @@ TWDMModelingElement >> isHitByGlobalRay: globalRay [
 	^ picker result notNil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> isPointModelingElement [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> isPointPlacedElement [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElement >> isSceneSelectableObject [
 	^ false
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> makeScenePresentationHandleFor: aScene [
 	^ self explicitRequirement 
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> materialResolver [
 	^ nil
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingElement >> materialStateMemento [
 	^ nil
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> modelResolver [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> modelingTreeRoot [
 	^ self parent ifNil: [ self ] ifNotNil: [ :p | p modelingTreeRoot ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> name [
 	^ self explicitRequirement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> name: theName [
 	^ self explicitRequirement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> objectTypeName [
 	self explicitRequirement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> parent [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> parent: aParent [
 
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingElement >> positionStateMemento [
 	^ nil
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> presentInScene: aScene [
 	^ (self makeScenePresentationHandleFor: aScene)
 		addOntoScene;
 		yourself
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 TWDMModelingElement >> propertyPages [
 	^ #()
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingElement >> rayPickElements: picker [
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 TWDMModelingElement >> remove: anElement [
 	self error: 'Children cannot be removed from me'
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 TWDMModelingElement >> removeFromParent [
 	^ self parent ifNotNil: [:p | p remove: self ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> removedFromModelTree [
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingElement >> restoreMaterialStateMemento: aMemento [
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingElement >> restorePositionStateMemento: aMemento [
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingElement >> restoreTransformStateMemento: aMemento [
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> scenePresentationHandles [
 	^ #()
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 TWDMModelingElement >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius [
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingElement >> selected [
 	^ false
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingElement >> selected: aBoolean [
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingElement >> selectedStatus [
 	^ self selected or: [ self parent ifNil: [ false ] ifNotNil: [ :p | p selectedStatus ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 TWDMModelingElement >> setMaterialInfoRecursively: newMaterial [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElement >> supportsModelingEditionMode: aMode [
 	^ false
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 TWDMModelingElement >> topologyControlPoints [
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> transform [
 	^ TRSTransform3D identity
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingElement >> transformStateMemento [
 	^ nil
 ]
 
-{ #category : #inspector }
+{ #category : 'inspector' }
 TWDMModelingElement >> treeDisplayName [
 	^ String streamContents: [ :stream | 
 		stream
@@ -365,20 +367,20 @@ TWDMModelingElement >> treeDisplayName [
 	]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 TWDMModelingElement >> treeTopologyChanged [
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 TWDMModelingElement >> updateScenePresentationHandle: presentationHandle [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> visible [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElement >> visible: aBoolean [
 	
 ]

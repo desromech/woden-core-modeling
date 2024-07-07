@@ -2,8 +2,8 @@
 I am a modeling element.
 "
 Class {
-	#name : #WDModelingElement,
-	#superclass : #Object,
+	#name : 'WDModelingElement',
+	#superclass : 'Object',
 	#traits : 'TWDMModelingElement + TWDMJsonSerializableModelingElement',
 	#classTraits : 'TWDMModelingElement classTrait + TWDMJsonSerializableModelingElement classTrait',
 	#instVars : [
@@ -20,10 +20,12 @@ Class {
 		'EditionColorPaletteRandomGenerator',
 		'Epsilon'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingElement class >> generateEditionViewColor [
 	| newColor |
 	[
@@ -32,7 +34,7 @@ WDModelingElement class >> generateEditionViewColor [
 	^ (EditionColorPaletteLastGeneratedColor := newColor) asVector4
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingElement class >> initialize [
 	Epsilon := 0.00001.
 	EditionColorPalette := Color wheel: 13.
@@ -40,24 +42,29 @@ WDModelingElement class >> initialize [
 	EditionColorPaletteLastGeneratedColor := nil.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingElement class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WD'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 WDModelingElement class >> named: aName [
 	^ self new name: aName; yourself
 ]
 
-{ #category : #'property pages' }
+{ #category : 'accessing' }
+WDModelingElement >> boundingBox [
+	^ nil
+]
+
+{ #category : 'property pages' }
 WDModelingElement >> buildModelingElementMainPropertyPageWith: builder [
 	builder
 		stringPropertyNamed: 'Name' selector: #name;
 		booleanPropertyNamed: 'Visible' selector: #visible
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingElement >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ {
 		#__type__ . self jsonObjectTypeName.
@@ -66,18 +73,18 @@ WDModelingElement >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> highlighted [
 	^ highlighted
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> highlighted: aBoolean [
 	highlighted := aBoolean.
 	self highlightingOrSelectionStatusChanged.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingElement >> initialize [
 	super initialize.
 	name := ''.
@@ -87,23 +94,23 @@ WDModelingElement >> initialize [
 	scenePresentationHandles := WeakSet new.
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingElement >> initializeScenePresentationHandle: aHandle [
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingElement >> invalidateScenePresentations [
 	scenePresentationHandles do: [ :each | each invalidate ]
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingElement >> loadFromJson: jsonData withContext: deserializationContext [
 	name := (jsonData at: #name ifAbsent: [ nil ]) ifNil: [ name].
 	visible := (jsonData at: #visible ifAbsent: [ nil ]) ifNil: [visible].
 
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingElement >> makeScenePresentationHandleFor: aScene [
 	| newHandle |
 	newHandle := self scenePresentationHandleClass for: self scene: aScene.
@@ -114,38 +121,38 @@ WDModelingElement >> makeScenePresentationHandleFor: aScene [
 	^ newHandle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> name: aString [
 	name := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> objectTypeName [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> parent [
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> parent: newParent [
 	parent := newParent
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 WDModelingElement >> postCopy [
 	super postCopy.
 	scenePresentationHandles := WeakSet new.
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingElement >> propertyPages [
 	^ {WDMPropertyPageBuilder for: self buildWith: [:builder |
 		builder title: self objectTypeName.
@@ -153,46 +160,46 @@ WDModelingElement >> propertyPages [
 	]}
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingElement >> removedFromModelTree [
 	parent := nil.
 	scenePresentationHandles do: [ :each | each removedFromModelTree ].
 	scenePresentationHandles := WeakSet new.
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingElement >> scenePresentationHandleClass [
 	^ WDModelingSceneNodePresentationHandle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> scenePresentationHandles [
 	^ scenePresentationHandles
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> selected [
 
 	^ selected
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> selected: aBoolean [
 	selected := aBoolean.
 	self highlightingOrSelectionStatusChanged.
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingElement >> updateScenePresentationHandle: aHandle [
 	aHandle sceneNode visible: self visible
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> visible [
 	^ visible
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingElement >> visible: aBoolean [
 	visible := aBoolean.
 	self invalidateScenePresentations.

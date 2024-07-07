@@ -2,42 +2,44 @@
 I am an utility that is used for picking elements by using a ray.
 "
 Class {
-	#name : #WDMRayPicker,
-	#superclass : #WDMAbstractRayPicker,
+	#name : 'WDMRayPicker',
+	#superclass : 'WDMAbstractRayPicker',
 	#instVars : [
 		'results'
 	],
-	#category : #'WodenModeling-Protocol-Selection'
+	#category : 'WodenModeling-Protocol-Selection',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Selection'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 WDMRayPicker >> addResult: result withDistance: distance [
 	results add: distance -> result
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMRayPicker >> initialize [
 	super initialize.
 	results := OrderedCollection new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMRayPicker >> results [
 
 	^ results
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 WDMRayPicker >> sortedDistancesWithResults [
 	^ results sorted
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 WDMRayPicker >> sortedResults [
 	^ self sortedDistancesWithResults collect: [ :each | each value ]
 ]
 
-{ #category : #transformation }
+{ #category : 'transformation' }
 WDMRayPicker >> withTransform: aTransform do: aBlock [
 	| oldResults oldRay newResults newRay |
 	aTransform isIdentity ifTrue: [ ^ aBlock value ].

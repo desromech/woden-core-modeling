@@ -2,68 +2,70 @@
 I am a specific object property.
 "
 Class {
-	#name : #WDMProperty,
-	#superclass : #Object,
+	#name : 'WDMProperty',
+	#superclass : 'Object',
 	#instVars : [
 		'object',
 		'name',
 		'accessor'
 	],
-	#category : #'WodenModeling-Protocol-Properties'
+	#category : 'WodenModeling-Protocol-Properties',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Properties'
 }
 
-{ #category : #constructing }
+{ #category : 'constructing' }
 WDMProperty class >> name: propertyName accessor: propertyAccessor [
 	^ self new name: propertyName; accessor: propertyAccessor; yourself
 ]
 
-{ #category : #constructing }
+{ #category : 'constructing' }
 WDMProperty class >> name: propertyName selector: propertySelector [
 	^ self name: propertyName accessor: (WDMPropertyAccessor forSelector: propertySelector)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> accessor [
 
 	^ accessor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> accessor: anObject [
 
 	accessor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> getValue [
 	^ accessor getFrom: object
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> name: anObject [
 
 	name := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> object [
 
 	^ object
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> object: anObject [
 
 	object := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMProperty >> setValue: newValue [
 	^ accessor set: newValue in: object
 ]

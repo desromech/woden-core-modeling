@@ -2,17 +2,19 @@
 I am a modeling spot light source.
 "
 Class {
-	#name : #WDModelingSpotLightSource,
-	#superclass : #WDModelingLightSource,
+	#name : 'WDModelingSpotLightSource',
+	#superclass : 'WDModelingLightSource',
 	#instVars : [
 		'influenceRadius',
 		'innerCutoff',
 		'outerCutoff'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingSpotLightSource >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
@@ -21,7 +23,7 @@ WDModelingSpotLightSource >> buildModelingElementMainPropertyPageWith: builder [
 		scalarPropertyNamed: 'Outer Cutoff' selector: #outerCutoff minimum: 0.0 maximum: 180.0.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingSpotLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#influenceRadius . influenceRadius .
@@ -30,19 +32,19 @@ WDModelingSpotLightSource >> encodeJsonKeyValuesWithContext: serializationContex
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> influenceRadius [
 
 	^ influenceRadius
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> influenceRadius: anObject [
 	influenceRadius := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingSpotLightSource >> initialize [
 	super initialize.
 	influenceRadius := 1.0.
@@ -50,19 +52,19 @@ WDModelingSpotLightSource >> initialize [
 	outerCutoff := 60.0.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> innerCutoff [
 
 	^ innerCutoff
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> innerCutoff: anObject [
 	innerCutoff := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingSpotLightSource >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	influenceRadius := (jsonData at: #influenceRadius ifAbsent: [ nil ]) ifNil: [ influenceRadius ].
@@ -70,24 +72,24 @@ WDModelingSpotLightSource >> loadFromJson: jsonData withContext: level [
 	outerCutoff := (jsonData at: #outerCutoff ifAbsent: [ nil ]) ifNil: [ outerCutoff ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> objectTypeName [
 	^ 'SpotLightSource'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> outerCutoff [
 
 	^ outerCutoff
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSpotLightSource >> outerCutoff: anObject [
 	outerCutoff := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingSpotLightSource >> presentationLightSource [
 	^ WDSpotLightSource new
 		intensity: self intensityWithColor;
@@ -98,7 +100,7 @@ WDModelingSpotLightSource >> presentationLightSource [
 		yourself
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingSpotLightSource >> presentationMesh [
 	^ WDModelingCommonMeshes uniqueInstance lightSourceWithDirection
 ]

@@ -2,14 +2,16 @@
 I provide the implementation for a modeling element with children.
 "
 Trait {
-	#name : #TWDMModelingElementWithChildren,
+	#name : 'TWDMModelingElementWithChildren',
 	#instVars : [
 		'children'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #'add/remove' }
+{ #category : 'add/remove' }
 TWDMModelingElementWithChildren >> add: aChild [
 	self children add: aChild.
 	self childrenChanged.
@@ -19,29 +21,29 @@ TWDMModelingElementWithChildren >> add: aChild [
 	self modelingTreeRoot treeTopologyChanged.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingElementWithChildren >> canAddOrRemoveChildren [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingElementWithChildren >> children [
 	^ children ifNil: [ children := OrderedCollection new ]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 TWDMModelingElementWithChildren >> collectElementsWithTextureMappingSettingsOnto: result [
 	self children do: [ :each | each collectElementsWithTextureMappingSettingsOnto: result ]
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMModelingElementWithChildren >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#children . self children collect: [ :each | each encodeForJSONWithContext: serializationContext ] as: Array
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volumesToTest into: result [
 	self visible ifFalse: [ ^ self ].
 	self children do: [ :each |
@@ -49,7 +51,7 @@ TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectElements: volu
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
 	self visible ifFalse: [ ^ self ].
 	self children do: [ :each |
@@ -57,18 +59,18 @@ TWDMModelingElementWithChildren >> findVolumeElementsThatIntersectFrustum: frust
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElementWithChildren >> highlightingOrSelectionStatusChanged [
 	self children do: [ :each | each highlightingOrSelectionStatusChanged ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 TWDMModelingElementWithChildren >> initializeScenePresentationHandle: aPresentationHandle [
 	self addChildrenOntoScenePresentationHandle: aPresentationHandle
 
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMModelingElementWithChildren >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.
 	(jsonData at: #children ifAbsent: [ nil ]) ifNotNil: [ :childrenData |
@@ -78,12 +80,12 @@ TWDMModelingElementWithChildren >> loadFromJson: jsonData withContext: deseriali
 	].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingElementWithChildren >> prepareForSerializationWithContext: serializationContext [
 	self children do: [ :each | each prepareForSerializationWithContext: serializationContext ]
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingElementWithChildren >> rayPickElements: picker [
 	self visible ifFalse: [ ^ self ].
 	picker withTransform: self transform do: [ 
@@ -92,7 +94,7 @@ TWDMModelingElementWithChildren >> rayPickElements: picker [
 
 ]
 
-{ #category : #'add/remove' }
+{ #category : 'add/remove' }
 TWDMModelingElementWithChildren >> remove: aChild [
 	self children remove: aChild.
 	self childrenChanged.
@@ -102,7 +104,7 @@ TWDMModelingElementWithChildren >> remove: aChild [
 	self modelingTreeRoot treeTopologyChanged.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 TWDMModelingElementWithChildren >> setMaterialInfoRecursively: newMaterial [
 	self children do: [ :each | each setMaterialInfoRecursively: newMaterial ].
 ]

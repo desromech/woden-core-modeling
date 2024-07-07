@@ -2,14 +2,16 @@
 I am a modeling layer.
 "
 Class {
-	#name : #WDModelingLayer,
-	#superclass : #WDModelingElement,
+	#name : 'WDModelingLayer',
+	#superclass : 'WDModelingElement',
 	#traits : 'TWDMModelingElementWithChildren',
 	#classTraits : 'TWDMModelingElementWithChildren classTrait',
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLayer >> objectTypeName [
 	^ 'Layer'
 ]

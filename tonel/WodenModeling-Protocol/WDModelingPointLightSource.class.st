@@ -2,58 +2,60 @@
 I am a modeling point light source.
 "
 Class {
-	#name : #WDModelingPointLightSource,
-	#superclass : #WDModelingLightSource,
+	#name : 'WDModelingPointLightSource',
+	#superclass : 'WDModelingLightSource',
 	#instVars : [
 		'influenceRadius'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingPointLightSource >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
 		scalarPropertyNamed: 'Influence Radius' selector: #influenceRadius minimum: 1.0
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPointLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#influenceRadius . influenceRadius .
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPointLightSource >> influenceRadius [
 
 	^ influenceRadius
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPointLightSource >> influenceRadius: anObject [
 	influenceRadius := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingPointLightSource >> initialize [
 	super initialize.
 	influenceRadius := 1.0.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPointLightSource >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	influenceRadius := (jsonData at: #influenceRadius ifAbsent: [ nil ]) ifNil: [ influenceRadius ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPointLightSource >> objectTypeName [
 	^ 'PointLightSource'
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingPointLightSource >> presentationLightSource [
 	^ WDPointLightSource new
 		intensity: self intensityWithColor;
@@ -62,7 +64,7 @@ WDModelingPointLightSource >> presentationLightSource [
 		yourself
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingPointLightSource >> presentationMesh [
 	^ WDModelingCommonMeshes uniqueInstance lightSourceWithoutDirection
 ]

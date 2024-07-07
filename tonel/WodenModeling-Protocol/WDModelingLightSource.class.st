@@ -2,27 +2,29 @@
 I am a modeling light source.
 "
 Class {
-	#name : #WDModelingLightSource,
-	#superclass : #WDModelingSceneObject,
+	#name : 'WDModelingLightSource',
+	#superclass : 'WDModelingSceneObject',
 	#instVars : [
 		'color',
 		'intensity',
 		'castShadows'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingLightSource class >> isAbstract [
 	^ self == WDModelingLightSource
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingLightSource class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDModeling'
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingLightSource >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
@@ -31,31 +33,31 @@ WDModelingLightSource >> buildModelingElementMainPropertyPageWith: builder [
 		booleanPropertyNamed: 'Cast Shadows' selector: #castShadows
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> castShadows [
 
 	^ castShadows
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> castShadows: aBoolean [
 	castShadows := aBoolean.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> color [
 
 	^ color
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> color: aColor [
 	color := aColor asVector3.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#castShadows . castShadows.
@@ -64,7 +66,7 @@ WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingLightSource >> initialize [
 	super initialize.
 	color := Vector3 ones.
@@ -74,34 +76,34 @@ WDModelingLightSource >> initialize [
 	localBoundingBox := AABox halfExtent: (Vector3 withAll: WDModelingCommonMeshes uniqueInstance lightSourceDisplayRadius)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> intensity [
 
 	^ intensity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> intensity: anObject [
 	intensity := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> intensityWithColor [
 	^ color asVector3 * intensity
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingLightSource >> isPointModelingElement [
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingLightSource >> isPointPlacedElement [
 	^ true
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingLightSource >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	jsonData at: #color ifPresent: [ :data |
@@ -111,22 +113,22 @@ WDModelingLightSource >> loadFromJson: jsonData withContext: level [
 	intensity := (jsonData at: #intensity ifAbsent: [ nil ]) ifNil: [ intensity ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingLightSource >> presentationLightSource [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingLightSource >> presentationMesh [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingLightSource >> transform: newTransform [
 	super transform: newTransform withoutScale
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingLightSource >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	aHandle sceneNode

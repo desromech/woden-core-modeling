@@ -1,35 +1,37 @@
 Trait {
-	#name : #TWDMJsonSerializableModelingElement,
-	#category : #'WodenModeling-Protocol-Model'
+	#name : 'TWDMJsonSerializableModelingElement',
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMJsonSerializableModelingElement classSide >> jsonObjectTypeName [
 	^ self name
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMJsonSerializableModelingElement >> encodeForJSONWithContext: serializationContext [
 	^ OrderedDictionary newFromPairs: (self encodeJsonKeyValuesWithContext: serializationContext)
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMJsonSerializableModelingElement >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ {
 		#__type__ . self jsonObjectTypeName
 	}
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMJsonSerializableModelingElement >> jsonObjectTypeName [
 	^ self class jsonObjectTypeName
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMJsonSerializableModelingElement >> loadFromJson: jsonData withContext: deserializationContext [
 	
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 TWDMJsonSerializableModelingElement >> prepareForSerializationWithContext: serializationContext [
 ]

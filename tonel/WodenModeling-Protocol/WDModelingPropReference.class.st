@@ -1,58 +1,60 @@
 Class {
-	#name : #WDModelingPropReference,
-	#superclass : #WDModelingSceneObject,
+	#name : 'WDModelingPropReference',
+	#superclass : 'WDModelingSceneObject',
 	#instVars : [
 		'path',
 		'solvedModel',
 		'solvedSceneNode'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPropReference class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDModeling'
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingPropReference >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
 		stringPropertyNamed: 'Path' selector: #path
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPropReference >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#path. path.
 	}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingPropReference >> initialize [
 	super initialize.
 	path := ''.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPropReference >> invalidateModelPresentation [
 	solvedModel := nil.
 	solvedSceneNode := nil.
 	self invalidateScenePresentations
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingPropReference >> isPointPlacedElement [
 	^ true
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPropReference >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	path := (jsonData at: #path ifAbsent: [ nil ]) ifNil: [ path ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPropReference >> localBoundingBox [
 	self validSolvedSceneNode ifNotNil: [ :validSolvedSceneNode |
 		| sceneNodeBoundingBox |
@@ -65,24 +67,24 @@ WDModelingPropReference >> localBoundingBox [
 	^ WDModelingCommonMeshes uniqueInstance pointObjectBoundingBox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPropReference >> objectTypeName [
 	^ 'PropReference'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPropReference >> path [
 
 	^ path
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingPropReference >> path: anObject [
 
 	path := anObject
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPropReference >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	
@@ -103,7 +105,7 @@ WDModelingPropReference >> updateScenePresentationHandle: aHandle [
 
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPropReference >> validSolvedModel [
 	^ solvedModel ifNil: [
 		solvedModel := self findModelResolver ifNotNil: [:resolver |
@@ -112,7 +114,7 @@ WDModelingPropReference >> validSolvedModel [
 	]
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingPropReference >> validSolvedSceneNode [
 	^ solvedSceneNode ifNil: [
 		solvedSceneNode := self validSolvedModel ifNotNil: [ :validSolvedModel |

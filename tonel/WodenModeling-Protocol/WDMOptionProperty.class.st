@@ -2,21 +2,23 @@
 I am a property where an option is selected.
 "
 Class {
-	#name : #WDMOptionProperty,
-	#superclass : #WDMProperty,
+	#name : 'WDMOptionProperty',
+	#superclass : 'WDMProperty',
 	#instVars : [
 		'options'
 	],
-	#category : #'WodenModeling-Protocol-Properties'
+	#category : 'WodenModeling-Protocol-Properties',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Properties'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMOptionProperty >> options [
 
 	^ options
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMOptionProperty >> options: anObject [
 
 	options := anObject

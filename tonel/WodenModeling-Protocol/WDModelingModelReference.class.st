@@ -2,8 +2,8 @@
 I am a reference to a 3D model.
 "
 Class {
-	#name : #WDModelingModelReference,
-	#superclass : #WDModelingSceneObject,
+	#name : 'WDModelingModelReference',
+	#superclass : 'WDModelingSceneObject',
 	#instVars : [
 		'path',
 		'elementName',
@@ -12,15 +12,17 @@ Class {
 		'solvedModel',
 		'solvedSceneNode'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingModelReference class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDModeling'
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingModelReference >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
@@ -30,32 +32,32 @@ WDModelingModelReference >> buildModelingElementMainPropertyPageWith: builder [
 		stringPropertyNamed: 'Collision Element Name' selector: #collisionElementName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> collisionElementName [
 
 	^ collisionElementName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> collisionElementName: anObject [
 
 	collisionElementName := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> elementName [
 
 	^ elementName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> elementName: anObject [
 	elementName := anObject.
 	solvedSceneNode := nil.
 	self invalidateScenePresentations
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingModelReference >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#path. path.
@@ -65,19 +67,19 @@ WDModelingModelReference >> encodeJsonKeyValuesWithContext: serializationContext
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> hasCollisions [
 
 	^ hasCollisions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> hasCollisions: anObject [
 
 	hasCollisions := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingModelReference >> initialize [
 	super initialize.
 	path := ''.
@@ -87,19 +89,19 @@ WDModelingModelReference >> initialize [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> invalidateModelPresentation [
 	solvedModel := nil.
 	solvedSceneNode := nil.
 	self invalidateScenePresentations
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingModelReference >> isPointPlacedElement [
 	^ true
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingModelReference >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	path := (jsonData at: #path ifAbsent: [ nil ]) ifNil: [ path ].
@@ -109,7 +111,7 @@ WDModelingModelReference >> loadFromJson: jsonData withContext: level [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> localBoundingBox [
 	self validSolvedSceneNode ifNotNil: [ :validSolvedSceneNode |
 		| sceneNodeBoundingBox |
@@ -122,24 +124,24 @@ WDModelingModelReference >> localBoundingBox [
 	^ WDModelingCommonMeshes uniqueInstance pointObjectBoundingBox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> objectTypeName [
 	^ 'ModelReference'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> path [
 
 	^ path
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingModelReference >> path: aModelPath [
 	path := aModelPath.
 	self invalidateModelPresentation
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 WDModelingModelReference >> postCopy [
 	super postCopy.
 	solvedModel := nil.
@@ -147,7 +149,7 @@ WDModelingModelReference >> postCopy [
 	
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingModelReference >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	
@@ -168,7 +170,7 @@ WDModelingModelReference >> updateScenePresentationHandle: aHandle [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingModelReference >> validSolvedModel [
 	^ solvedModel ifNil: [
 		solvedModel := self findModelResolver ifNotNil: [:resolver |
@@ -177,7 +179,7 @@ WDModelingModelReference >> validSolvedModel [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingModelReference >> validSolvedSceneNode [
 	^ solvedSceneNode ifNil: [
 		solvedSceneNode := self validSolvedModel ifNotNil: [ :validSolvedModel |

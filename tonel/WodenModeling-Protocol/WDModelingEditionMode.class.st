@@ -2,42 +2,44 @@
 I represent a specific edition mode in the modeling protocol.
 "
 Class {
-	#name : #WDModelingEditionMode,
-	#superclass : #WDAbstractEnumClass,
-	#category : #'WodenModeling-Protocol-EditionMode'
+	#name : 'WDModelingEditionMode',
+	#superclass : 'WDAbstractEnumClass',
+	#category : 'WodenModeling-Protocol-EditionMode',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'EditionMode'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 WDModelingEditionMode class >> asModelingEditionMode [
 	^ self uniqueInstance
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingEditionMode class >> isAbstract [
 	^ self == WDModelingEditionMode
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 WDModelingEditionMode >> asModelingEditionMode [
 	^ self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingEditionMode >> isFaceTexturingMode [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingEditionMode >> isObjectEditionMode [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingEditionMode >> isSculptEditionMode [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingEditionMode >> isTopologyEditionMode [
 	^ false
 ]

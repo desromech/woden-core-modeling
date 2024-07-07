@@ -1,6 +1,6 @@
-Extension { #name : #WDUnlitMaterial }
+Extension { #name : 'WDUnlitMaterial' }
 
-{ #category : #'*WodenModeling-Protocol' }
+{ #category : '*WodenModeling-Protocol' }
 WDUnlitMaterial >> withHighlightedStatus: highlightedStatus selectedStatus: selectedStatus [
 	selectedStatus ifTrue: [
 		^ self copy

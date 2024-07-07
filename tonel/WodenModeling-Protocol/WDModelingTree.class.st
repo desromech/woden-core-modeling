@@ -2,8 +2,8 @@
 I am a modeling tree where all of its elements respect the Woden modeling protocol.
 "
 Class {
-	#name : #WDModelingTree,
-	#superclass : #WDModelingElement,
+	#name : 'WDModelingTree',
+	#superclass : 'WDModelingElement',
 	#traits : 'TWDMModelingElementWithChildren',
 	#classTraits : 'TWDMModelingElementWithChildren classTrait',
 	#instVars : [
@@ -23,54 +23,56 @@ Class {
 		'ambientLighting',
 		'modelResolver'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree class >> loadFromJson: jsonData [
 	^ self new loadFromJson: jsonData
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree class >> loadFromJsonString: jsonString [
 	^ self loadFromJson: (STONJSON fromString: jsonString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> ambientLighting [
 
 	^ ambientLighting
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> ambientLighting: anAmbientLightColor [
 	ambientLighting := anAmbientLightColor asVector3.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> assetResolver [
 	^ assetResolver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> assetResolver: anAssetResolver [
 	assetResolver := anAssetResolver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> backgroundColor [
 
 	^ backgroundColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> backgroundColor: aColor [
 	backgroundColor := aColor asVector4.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingTree >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
@@ -85,17 +87,17 @@ WDModelingTree >> buildModelingElementMainPropertyPageWith: builder [
 		booleanPropertyNamed: 'Use HDRI as Sky Box' selector: #useHDRIAsSkybox
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree >> encodeAsJSONString [
 	^ (STONJSON toStringPretty: self encodeForJSON) withUnixLineEndings
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree >> encodeForJSON [
 	^ OrderedDictionary newFromPairs: self encodeJsonKeyValues
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree >> encodeJsonKeyValues [
 	| context |
 	context := WDModelingSerializationContext new.
@@ -103,7 +105,7 @@ WDModelingTree >> encodeJsonKeyValues [
 	^ self encodeJsonKeyValuesWithContext: context
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ {
 		#materials . serializationContext materialInfos collect: [ :each | each encodeForJSON ] as: Array
@@ -122,82 +124,82 @@ WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogColor [
 
 	^ fogColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogColor: anObject [
 	fogColor := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogDensity [
 
 	^ fogDensity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogDensity: anObject [
 
 	fogDensity := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogEndDistance [
 
 	^ fogEndDistance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogEndDistance: anObject [
 
 	fogEndDistance := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogMode [
 
 	^ fogMode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogMode: aFogModeName [
 	fogMode := aFogModeName asSymbol.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogStartDistance [
 
 	^ fogStartDistance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> fogStartDistance: anObject [
 
 	fogStartDistance := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> hdri [
 
 	^ hdri
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> hdri: anObject [
 	hdri := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingTree >> initialize [
 	super initialize.
 	backgroundColor := Color veryDarkGray asVector4.
@@ -211,7 +213,7 @@ WDModelingTree >> initialize [
 	
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingTree >> loadFromJson: jsonData [
 	| context |
 	context := WDModelingDeserializationContext new.
@@ -246,48 +248,48 @@ WDModelingTree >> loadFromJson: jsonData [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> materialResolver [
 	^ materialResolver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> materialResolver: aMaterialResolver [
 	materialResolver := aMaterialResolver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> modelResolver [
 	^ modelResolver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> modelResolver: aModelResolver [
 	modelResolver := aModelResolver
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> objectTypeName [
 	^ 'Modeling Tree'
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 WDModelingTree >> postCopy [
 	super postCopy.
 	hdriLightProbe := nil.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> treeTopologyChangeListeners [
 	^ treeTopologyChangeListeners ifNil: [treeTopologyChangeListeners := Set new]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 WDModelingTree >> treeTopologyChanged [
 	self treeTopologyChangeListeners do: [ :each | each value ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingTree >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	self validateHdriLightProbe.
@@ -325,20 +327,20 @@ WDModelingTree >> updateScenePresentationHandle: aHandle [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> useHDRIAsSkybox [
 
 	^ useHDRIAsSkybox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingTree >> useHDRIAsSkybox: anObject [
 
 	useHDRIAsSkybox := anObject.
 	self invalidateScenePresentations.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingTree >> validateHdriLightProbe [
 	| resolvedHdriLocation |
 	hdri = hdriLightProbePath ifTrue: [ ^ hdriLightProbe ].
@@ -352,7 +354,7 @@ WDModelingTree >> validateHdriLightProbe [
 	hdriLightProbe
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 WDModelingTree >> whenAddedOrRemovedElementDo: aBlock [
 	self treeTopologyChangeListeners add: aBlock
 ]

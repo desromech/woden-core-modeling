@@ -2,27 +2,29 @@
 I am a null scene object.
 "
 Class {
-	#name : #WDModelingNullObject,
-	#superclass : #WDModelingSceneObject,
-	#category : #'WodenModeling-Protocol-Model'
+	#name : 'WDModelingNullObject',
+	#superclass : 'WDModelingSceneObject',
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingNullObject class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDModeling'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingNullObject >> isPointModelingElement [
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingNullObject >> isPointPlacedElement [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingNullObject >> objectTypeName [
 	^ 'Null'
 ]

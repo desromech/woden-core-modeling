@@ -2,17 +2,19 @@
 I am a modeling directional light source.
 "
 Class {
-	#name : #WDModelingDirectionalLightSource,
-	#superclass : #WDModelingLightSource,
-	#category : #'WodenModeling-Protocol-Model'
+	#name : 'WDModelingDirectionalLightSource',
+	#superclass : 'WDModelingLightSource',
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingDirectionalLightSource >> objectTypeName [
 	^ 'DirectionalLightSource'
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingDirectionalLightSource >> presentationLightSource [
 	^ WDDirectionalLightSource new
 		intensity: self intensityWithColor;
@@ -20,7 +22,7 @@ WDModelingDirectionalLightSource >> presentationLightSource [
 		yourself
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingDirectionalLightSource >> presentationMesh [
 	^ WDModelingCommonMeshes uniqueInstance lightSourceWithDirection
 ]

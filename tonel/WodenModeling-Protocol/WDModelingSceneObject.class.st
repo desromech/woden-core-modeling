@@ -2,18 +2,20 @@
 I am a generic modeling scene object that can be selected and has a transform that can be manipulated.
 "
 Class {
-	#name : #WDModelingSceneObject,
-	#superclass : #WDModelingElement,
+	#name : 'WDModelingSceneObject',
+	#superclass : 'WDModelingElement',
 	#traits : 'TWDMModelingSceneObject + TWDMModelingElementWithEditionViewColor',
 	#classTraits : 'TWDMModelingSceneObject classTrait + TWDMModelingElementWithEditionViewColor classTrait',
 	#instVars : [
 		'transform',
 		'localBoundingBox'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingSceneObject >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
@@ -22,7 +24,7 @@ WDModelingSceneObject >> buildModelingElementMainPropertyPageWith: builder [
 		vector3PropertyNamed: 'Position' selector: #position
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingSceneObject >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#transform . self transform encodeForJSON.
@@ -30,14 +32,14 @@ WDModelingSceneObject >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingSceneObject >> initialize [
 	super initialize.
 	transform := TRSTransform3D identity.
 	localBoundingBox := AABox new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingSceneObject >> instantiateForPlacingIn: owner box: placementBox [
 	| instance |
 	instance := self copy setupForNewInstance.
@@ -46,7 +48,7 @@ WDModelingSceneObject >> instantiateForPlacingIn: owner box: placementBox [
 	^ instance
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingSceneObject >> instantiateForPlacingIn: owner point: placementPoint [
 	| instance |
 	instance := self copy setupForNewInstance.
@@ -55,7 +57,7 @@ WDModelingSceneObject >> instantiateForPlacingIn: owner point: placementPoint [
 	^ instance
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingSceneObject >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.
 	(jsonData at: #transform ifAbsent: [ nil ]) ifNotNil: [ :t |
@@ -66,12 +68,12 @@ WDModelingSceneObject >> loadFromJson: jsonData withContext: deserializationCont
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSceneObject >> localBoundingBox [
 	^ localBoundingBox
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 WDModelingSceneObject >> postCopy [
 	super postCopy.
 	
@@ -81,29 +83,29 @@ WDModelingSceneObject >> postCopy [
 	editionViewColorMaterial := nil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingSceneObject >> setupForNewInstance [
 	self generateEditionViewColor
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingSceneObject >> transform [
 	^ transform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSceneObject >> transform: aTransform [
 	transform := aTransform asTRSTransform3D copy.
 	self transformChanged.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingSceneObject >> transformChanged [
 	self invalidateScenePresentations.
 	self parent ifNotNil: [ :p | p childrenChanged ]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDModelingSceneObject >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	aHandle sceneNode transform: transform.

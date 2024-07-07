@@ -2,8 +2,8 @@
 I hold a set of meshes that are commonly used by the modeling tools.
 "
 Class {
-	#name : #WDModelingCommonMeshes,
-	#superclass : #Object,
+	#name : 'WDModelingCommonMeshes',
+	#superclass : 'Object',
 	#instVars : [
 		'lightSourceWithoutDirectionMesh',
 		'lightSourceMaterial',
@@ -16,21 +16,23 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes class >> reset [
 	<script>
 	uniqueInstance := nil.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes class >> uniqueInstance [
 	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> greenPointObjectDisplayMaterial [
 	^ greenPointObjectDisplayMaterial ifNil: [ greenPointObjectDisplayMaterial := WDUnlitMaterial new
 		colorFactor: (Vector4 x: 0.3 y: 0.8 z: 0.3 w: 1.0);
@@ -38,17 +40,17 @@ WDModelingCommonMeshes >> greenPointObjectDisplayMaterial [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> lightSourceDisplayRadius [
 	^ 0.1
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> lightSourceMaterial [
 	^ lightSourceMaterial ifNil: [ lightSourceMaterial := WDUnlitMaterial new doubleSided: true]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> lightSourceWithDirection [
 	^ lightSourceWithDirectionMesh ifNil: [ lightSourceWithDirectionMesh := WDMeshBuilder new
 		currentMaterial: self lightSourceMaterial;
@@ -58,7 +60,7 @@ WDModelingCommonMeshes >> lightSourceWithDirection [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> lightSourceWithoutDirection [
 	^ lightSourceWithoutDirectionMesh ifNil: [ lightSourceWithoutDirectionMesh := WDMeshBuilder new
 		currentMaterial: self lightSourceMaterial;
@@ -68,7 +70,7 @@ WDModelingCommonMeshes >> lightSourceWithoutDirection [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> orangePointObjectDisplayMaterial [
 	^ orangePointObjectDisplayMaterial ifNil: [ orangePointObjectDisplayMaterial := WDUnlitMaterial new
 		colorFactor: (Vector4 x: 0.8 y: 0.4 z: 0.01 w: 1.0);
@@ -76,12 +78,12 @@ WDModelingCommonMeshes >> orangePointObjectDisplayMaterial [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> pointObjectBoundingBox [
 	^ pointObjectBoundingBox ifNil: [ pointObjectBoundingBox := AABox halfExtent: self pointObjectDisplayRadius asVector3 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> pointObjectDisplayBox [
 	^ pointObjectDisplayBox ifNil: [ pointObjectDisplayBox := WDMeshBuilder new
 		addCubeWithWidth: self pointObjectDisplayRadius*2 height: self pointObjectDisplayRadius*2 depth: self pointObjectDisplayRadius*2;
@@ -90,7 +92,7 @@ WDModelingCommonMeshes >> pointObjectDisplayBox [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingCommonMeshes >> pointObjectDisplayRadius [
 	^ 0.1
 ]

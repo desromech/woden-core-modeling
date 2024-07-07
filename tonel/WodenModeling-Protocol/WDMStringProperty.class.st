@@ -2,27 +2,29 @@
 I am a string property.
 "
 Class {
-	#name : #WDMStringProperty,
-	#superclass : #WDMProperty,
-	#category : #'WodenModeling-Protocol-Properties'
+	#name : 'WDMStringProperty',
+	#superclass : 'WDMProperty',
+	#category : 'WodenModeling-Protocol-Properties',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Properties'
 }
 
-{ #category : #conversions }
+{ #category : 'conversions' }
 WDMStringProperty >> formatValue: value [
 	^ value asString
 ]
 
-{ #category : #conversions }
+{ #category : 'conversions' }
 WDMStringProperty >> getFormattedValue [
 	^ self formatValue: self getValue
 ]
 
-{ #category : #conversions }
+{ #category : 'conversions' }
 WDMStringProperty >> parseText: text [
 	^ text
 ]
 
-{ #category : #conversions }
+{ #category : 'conversions' }
 WDMStringProperty >> parseTextAndSetValue: text [
 	| parsedValue |
 	parsedValue :=  [

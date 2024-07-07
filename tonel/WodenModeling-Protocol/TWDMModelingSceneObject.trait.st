@@ -2,21 +2,23 @@
 I provide the protocol that is required to be implemented by a modeling tree element that is displayed as a scene object.
 "
 Trait {
-	#name : #TWDMModelingSceneObject,
-	#category : #'WodenModeling-Protocol-Model'
+	#name : 'TWDMModelingSceneObject',
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> boundingBox [
 	^ self localBoundingBox transformedWith: self transform
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingSceneObject >> canBeDuplicatedAndPlaced [
 	^ true
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 TWDMModelingSceneObject >> findVolumeElementsThatIntersectFrustum: frustumToTest into: result [
 	self visible ifFalse: [ ^ self ].
 	
@@ -26,52 +28,52 @@ TWDMModelingSceneObject >> findVolumeElementsThatIntersectFrustum: frustumToTest
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> globalBoundingBox [
 	^ self localBoundingBox transformedWith: self globalTransform
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 TWDMModelingSceneObject >> hasIntersectionWithFrustum: frustumToTest [
 	^ frustumToTest intersectsOrContainsBox: self globalBoundingBox
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TWDMModelingSceneObject >> isSceneSelectableObject [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> localBoundingBox [
 	^ AABox new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> orientation [
 	^ self transform rotation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> orientation: anOrientation [
 	self transform: (self transform copy rotation: anOrientation)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> position [
 	^ self transform translation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> position: aPosition [
 	self transform: (self transform copy translation: aPosition)
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingSceneObject >> positionStateMemento [
 	^ self position
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 TWDMModelingSceneObject >> rayPickElements: picker [
 	| distance |
 	self visible ifFalse: [ ^ self ].
@@ -82,56 +84,56 @@ TWDMModelingSceneObject >> rayPickElements: picker [
 	].
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingSceneObject >> restorePositionStateMemento: aMemento [
 	self position: aMemento
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingSceneObject >> restoreTransformStateMemento: aMemento [
 	self transform: aMemento
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> scale [
 	^ self transform scale
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> scale: newScale [
 	self transform: (self transform copy scale: newScale)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> selectableGlobalBoundingBox [
 	^ self globalBoundingBox
 ]
 
-{ #category : #'constructive solid geometry' }
+{ #category : 'constructive solid geometry' }
 TWDMModelingSceneObject >> subtract: otherElement withTransform: otherElementTransform [
 	^ { self }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TWDMModelingSceneObject >> supportsModelingEditionMode: aMode [
 	^ aMode asModelingEditionMode isObjectEditionMode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TWDMModelingSceneObject >> transform: aTransform [
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 TWDMModelingSceneObject >> transformStateMemento [
 	^ self transform copy
 ]
 
-{ #category : #transforming }
+{ #category : 'transforming' }
 TWDMModelingSceneObject >> transformWith: aTransform [
 	^ self transform: (aTransform transformTransform: self transform)
 ]
 
-{ #category : #transforming }
+{ #category : 'transforming' }
 TWDMModelingSceneObject >> translateBy: aTranslation [
 	self position: self position + aTranslation
 ]

@@ -1,6 +1,6 @@
-Extension { #name : #UndefinedObject }
+Extension { #name : 'UndefinedObject' }
 
-{ #category : #'*WodenModeling-Protocol' }
+{ #category : '*WodenModeling-Protocol' }
 UndefinedObject >> asWDModelingMaterialInfo [
 	^ self
 ]

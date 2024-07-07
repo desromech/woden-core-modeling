@@ -1,6 +1,6 @@
-Extension { #name : #WDMetallicRoughnessMaterial }
+Extension { #name : 'WDMetallicRoughnessMaterial' }
 
-{ #category : #'*WodenModeling-Protocol' }
+{ #category : '*WodenModeling-Protocol' }
 WDMetallicRoughnessMaterial >> withHighlightedStatus: highlightedStatus selectedStatus: selectedStatus [
 	selectedStatus ifTrue: [
 		^ self copy

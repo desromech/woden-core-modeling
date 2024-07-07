@@ -2,52 +2,54 @@
 I am a control point that is used for modifying the topology of a specific object.
 "
 Class {
-	#name : #WDMTopologyControlPoint,
-	#superclass : #Object,
+	#name : 'WDMTopologyControlPoint',
+	#superclass : 'Object',
 	#instVars : [
 		'position'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTopologyControlPoint >> initialize [
 	super initialize.
 	position := Vector3 zeros asValueHolder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTopologyControlPoint >> position [
 
 	^ position value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTopologyControlPoint >> position: newPosition [
 	position value: newPosition
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTopologyControlPoint >> transform [
 	^ TRSTransform3D translation: self position
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTopologyControlPoint >> transform: newTransform [
 	^ self position: newTransform
 ]
 
-{ #category : #transforming }
+{ #category : 'transforming' }
 WDMTopologyControlPoint >> transformWith: aTransform [
 	self position: (aTransform transformPosition: self position)
 ]
 
-{ #category : #transforming }
+{ #category : 'transforming' }
 WDMTopologyControlPoint >> translateBy: aTranslation [
 	self position: (self position + aTranslation)
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 WDMTopologyControlPoint >> whenChangedDo: aBlock [
 	position whenChangedDo: aBlock
 ]

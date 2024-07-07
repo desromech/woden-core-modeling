@@ -2,35 +2,37 @@
 I am a group of modeling scene objects.
 "
 Class {
-	#name : #WDModelingGroup,
-	#superclass : #WDModelingSceneObject,
+	#name : 'WDModelingGroup',
+	#superclass : 'WDModelingSceneObject',
 	#traits : 'TWDMModelingElementWithChildren',
 	#classTraits : 'TWDMModelingElementWithChildren classTrait',
 	#instVars : [
 		'lockedGroup'
 	],
-	#category : #'WodenModeling-Protocol-Model'
+	#category : 'WodenModeling-Protocol-Model',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Model'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingGroup class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDModeling'
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDModelingGroup >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
 		booleanPropertyNamed: 'Locked Group' selector: #lockedGroup
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingGroup >> childrenChanged [
 	self invalidateLocalBoundingBox.
 	super childrenChanged.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingGroup >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#lockedGroup . lockedGroup.
@@ -38,24 +40,24 @@ WDModelingGroup >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDModelingGroup >> initialize [
 	super initialize.
 	lockedGroup := false.
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDModelingGroup >> invalidateLocalBoundingBox [
 	localBoundingBox := nil.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDModelingGroup >> isGroup [
 	^ true
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDModelingGroup >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.
 	lockedGroup := (jsonData at: #lockedGroup ifAbsent: [ nil ]) ifNil: [ lockedGroup ].
@@ -66,7 +68,7 @@ WDModelingGroup >> loadFromJson: jsonData withContext: deserializationContext [
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingGroup >> localBoundingBox [
 	localBoundingBox ifNil: [ 
 		localBoundingBox := AABox empty.
@@ -77,24 +79,24 @@ WDModelingGroup >> localBoundingBox [
 	^ localBoundingBox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingGroup >> lockedGroup [
 
 	^ lockedGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingGroup >> lockedGroup: anObject [
 
 	lockedGroup := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDModelingGroup >> objectTypeName [
 	^ 'Group'
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 WDModelingGroup >> rayPickElements: picker [
 	self visible ifFalse: [ ^ self ].
 	(self boundingBox intersectionWithRay: picker ray) ifNil: [ ^ self ].

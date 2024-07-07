@@ -2,16 +2,18 @@
 I am a ray picker that only selects the first intersection element.
 "
 Class {
-	#name : #WDMFirstRayPicker,
-	#superclass : #WDMAbstractRayPicker,
+	#name : 'WDMFirstRayPicker',
+	#superclass : 'WDMAbstractRayPicker',
 	#instVars : [
 		'result',
 		'resultDistance'
 	],
-	#category : #'WodenModeling-Protocol-Selection'
+	#category : 'WodenModeling-Protocol-Selection',
+	#package : 'WodenModeling-Protocol',
+	#tag : 'Selection'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 WDMFirstRayPicker >> addResult: newResult withDistance: newResultDistance [
 	(result isNil or: [newResultDistance < resultDistance]) ifTrue: [
 		result := newResult.
@@ -19,17 +21,17 @@ WDMFirstRayPicker >> addResult: newResult withDistance: newResultDistance [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMFirstRayPicker >> result [
 	^ result
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMFirstRayPicker >> resultDistance [
 	^ resultDistance
 ]
 
-{ #category : #transformation }
+{ #category : 'transformation' }
 WDMFirstRayPicker >> withTransform: aTransform do: aBlock [
 	| oldResult oldResultDistance oldRay newResult newResultDistance newRay |
 	aTransform isIdentity ifTrue: [ ^ aBlock value ].
