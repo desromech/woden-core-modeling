@@ -2,8 +2,8 @@
 I am a patch in a height field based terrains.
 "
 Class {
-	#name : #WDMTerrainPatch,
-	#superclass : #WDModelingElement,
+	#name : 'WDMTerrainPatch',
+	#superclass : 'WDModelingElement',
 	#traits : 'TWDMModelingElementWithEditionViewColor + TWDMModelingElementWithTextureMappingSettings',
 	#classTraits : 'TWDMModelingElementWithEditionViewColor classTrait + TWDMModelingElementWithTextureMappingSettings classTrait',
 	#instVars : [
@@ -24,25 +24,26 @@ Class {
 	#classVars : [
 		'FloatArrayClass'
 	],
-	#category : #'WodenModeling-Terrain'
+	#category : 'WodenModeling-Terrain',
+	#package : 'WodenModeling-Terrain'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch class >> floatArrayClass [
 	^ FloatArrayClass ifNil: [FloatArrayClass := Smalltalk at: #Float32Array ifAbsent: [ Smalltalk at: #FloatArray ] ]
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrainPatch class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDM'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> boundingBox [
 	^ self localBoundingBox translatedBy: self position
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> buildPatchSolidWith: builder [
 	| vx sourceIndex vz |
 	builder
@@ -79,7 +80,7 @@ WDMTerrainPatch >> buildPatchSolidWith: builder [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> buildPatchTexturedWith: builder [
 	| vx sourceIndex vz textureMatrix terrainScale |
 	builder
@@ -122,7 +123,7 @@ WDMTerrainPatch >> buildPatchTexturedWith: builder [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> buildPatchWireframeWith: builder [
 	| vx sourceIndex vz |
 	builder
@@ -153,29 +154,29 @@ WDMTerrainPatch >> buildPatchWireframeWith: builder [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> column [
 
 	^ column
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> column: anObject [
 
 	column := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> columns [
 	^ parent ifNil: [ 1 ] ifNotNil: [ parent columns ]
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 WDMTerrainPatch >> commitSculptingChanges [
 	self invalidateMeshes
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> computeNormalWithDx: dx dz: dz [
 	| tangent bitangent |
 	tangent := Vector3 x: 1 y: dx z: 0.
@@ -183,7 +184,7 @@ WDMTerrainPatch >> computeNormalWithDx: dx dz: dz [
 	^ (tangent cross: bitangent) normalized
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
 	| heightBytes encodedHeights |
 	heightBytes := heights shallowCopy.
@@ -199,7 +200,7 @@ WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> generateLocalHeightWith: aBlock [
 	| newHeights destIndex columnOffset rowOffset |
 	newHeights := self class floatArrayClass new: patchSize * patchSize.
@@ -216,20 +217,20 @@ WDMTerrainPatch >> generateLocalHeightWith: aBlock [
 	self heights: newHeights
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> heights [
 
 	^ heights
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> heights: newHeight [
 	heights := newHeight.
 	self heightsChanged
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> heightsChanged [
 	self invalidateMeshes.
 	localBoundingBox := nil.
@@ -237,7 +238,7 @@ WDMTerrainPatch >> heightsChanged [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrainPatch >> initialize [
 	super initialize.
 	patchSize := 32.
@@ -249,27 +250,27 @@ WDMTerrainPatch >> initialize [
 	textureRotation := 0.0
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDMTerrainPatch >> initializeScenePresentationHandle: aHandle [
 	super initializeScenePresentationHandle: aHandle.
 	aHandle sceneNode transform: self transform
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMTerrainPatch >> invalidateMeshes [
 	wireframeMesh := nil.
 	solidMesh := nil.
 	self invalidateTexturedMeshes
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMTerrainPatch >> invalidateTexturedMeshes [
 	texturedMesh := nil.
 	meshWithAlternatives := nil.
 	self invalidateScenePresentations
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrainPatch >> loadFromJson: jsonData withContext: deserializationContext [
 	| encodedHeights |
 	super loadFromJson: jsonData withContext: deserializationContext.
@@ -294,7 +295,7 @@ WDMTerrainPatch >> loadFromJson: jsonData withContext: deserializationContext [
 	textureRotation := (jsonData at: #textureRotation ifAbsent: [nil]) ifNil: [textureRotation].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> localBoundingBox [
 	localBoundingBox ifNil: [ 
 		localBoundingBox := AABox min: (Vector3 x: 0 y: heights min z: 0) max: (Vector3 x: 1 y: heights max z: 1)
@@ -302,12 +303,12 @@ WDMTerrainPatch >> localBoundingBox [
 	^ localBoundingBox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> material [
 	^ material
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> material: aMaterial [
 	| changed newMaterial |
 	newMaterial := aMaterial asWDModelingMaterialInfo.
@@ -316,23 +317,23 @@ WDMTerrainPatch >> material: aMaterial [
 	changed ifTrue: [ self textureMappingChanged ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> objectTypeName [
 	^ 'Terrain Patch'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> patchSize: newPatchSize [
 	patchSize := newPatchSize.
 	heights := self class floatArrayClass new: patchSize*patchSize
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> position [
 	^ Vector3 x: column - (self columns / 2) y: 0 z: row - (self rows / 2)
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 WDMTerrainPatch >> postCopy [
 	super postCopy.
 	meshWithAlternatives := nil.
@@ -342,13 +343,13 @@ WDMTerrainPatch >> postCopy [
 	editionViewColorMaterial := nil.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrainPatch >> prepareForSerializationWithContext: serializationContext [
 	super prepareForSerializationWithContext: serializationContext.
 	serializationContext recordMaterialInfo: material
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> rayCast: ray [
 	| position bbox boxHit entryPoint exitPoint previousPointHeight previousHeightSample |
 	position := self position.
@@ -384,24 +385,24 @@ WDMTerrainPatch >> rayCast: ray [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> row [
 
 	^ row
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> row: anObject [
 
 	row := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> rows [
 	^ parent ifNil: [ 1 ] ifNotNil: [ parent rows ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> sampleHeightAtX: x z: z [
 	| sampleColumn sampleRow |
 	sampleColumn := (x * patchSize) floor min: patchSize - 1 max: 0.
@@ -409,7 +410,7 @@ WDMTerrainPatch >> sampleHeightAtX: x z: z [
 	^ heights at: sampleRow*patchSize + sampleColumn + 1
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 WDMTerrainPatch >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius [
 	| hitDistance hitPoint hu hv affectedIndices |
 	hitDistance := self rayCast: ray.
@@ -454,22 +455,22 @@ WDMTerrainPatch >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadi
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrainPatch >> setMaterialInfoRecursively: newMaterial [
 	self material: newMaterial
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrainPatch >> textureMappingChanged [
 	self invalidateTexturedMeshes
 ]
 
-{ #category : #transforming }
+{ #category : 'transforming' }
 WDMTerrainPatch >> transform [
 	^ TRSTransform3D translation: self position
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> updateMesh: mesh heightIndices: heightIndicesToUpdate [
 	| positionsAccessor buffer bufferData offset |
 	positionsAccessor := mesh primitives first vertexBinding attributes first accessor.
@@ -487,12 +488,12 @@ WDMTerrainPatch >> updateMesh: mesh heightIndices: heightIndicesToUpdate [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> updateMeshesHeightIndex: heightIndexToUpdate [
 	self updateMeshesHeightIndices: { heightIndexToUpdate }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> updateMeshesHeightIndices: heightIndicesToUpdate [
 	wireframeMesh ifNotNil: [ 
 		self updateMesh: wireframeMesh heightIndices: heightIndicesToUpdate
@@ -505,13 +506,13 @@ WDMTerrainPatch >> updateMeshesHeightIndices: heightIndicesToUpdate [
 	].
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDMTerrainPatch >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	aHandle sceneNode renderables: { self validMeshWithAlternatives }
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMTerrainPatch >> validMeshWithAlternatives [
 	^ meshWithAlternatives ifNil: [ meshWithAlternatives := WDRenderableWithViewModeAlternatives new
 		wireframe: self validWireframeMesh;
@@ -523,7 +524,7 @@ WDMTerrainPatch >> validMeshWithAlternatives [
 	]
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMTerrainPatch >> validSolidMesh [
 	| builder |
 	solidMesh ifNotNil: [ ^ solidMesh ].
@@ -535,7 +536,7 @@ WDMTerrainPatch >> validSolidMesh [
 	^ solidMesh := builder mesh
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMTerrainPatch >> validTexturedMesh [
 	| builder |
 	texturedMesh ifNotNil: [ ^ texturedMesh ].
@@ -548,7 +549,7 @@ WDMTerrainPatch >> validTexturedMesh [
 	^ texturedMesh := builder mesh
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMTerrainPatch >> validWireframeMesh [
 	| builder |
 	wireframeMesh ifNotNil: [ ^ wireframeMesh ].

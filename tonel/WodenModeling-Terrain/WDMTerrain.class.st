@@ -2,49 +2,55 @@
 I am terrain composed by a grid of equally sized height field patches.
 "
 Class {
-	#name : #WDMTerrain,
-	#superclass : #WDModelingSceneObject,
+	#name : 'WDMTerrain',
+	#superclass : 'WDModelingSceneObject',
 	#instVars : [
 		'patchSize',
 		'patches',
 		'columns',
 		'rows'
 	],
-	#category : #'WodenModeling-Terrain'
+	#category : 'WodenModeling-Terrain',
+	#package : 'WodenModeling-Terrain'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrain class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDM'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrain class >> patchSize: patchSize gridExtent: gridExtent [
 	^ self new patchSize: patchSize gridExtent: gridExtent; yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'testing' }
+WDMTerrain >> canBeDuplicatedAndPlaced [
+	^ true
+]
+
+{ #category : 'accessing' }
 WDMTerrain >> children [
 	^ patches
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrain >> collectElementsWithTextureMappingSettingsOnto: result [
 	result addAll: self patches
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> columns [
 	^ columns
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 WDMTerrain >> commitSculptingChanges [
 	patches do: [ :each | each commitSculptingChanges ].
 	localBoundingBox := nil.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrain >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#patchSize . patchSize.
@@ -54,30 +60,35 @@ WDMTerrain >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrain >> generateLocalHeightWith: aBlock [
 	patches do: [ :each | each generateLocalHeightWith: aBlock ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrain >> initialize [
 	super initialize.
 	patches := #().
 	self patchSize: 32 gridExtent: 1@1
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrain >> initializeScenePresentationHandle: aPresentationHandle [
 	self addChildrenOntoScenePresentationHandle: aPresentationHandle
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrain >> invalidateLocalBoundingBox [
 	localBoundingBox := nil.
 ]
 
-{ #category : #serialization }
+{ #category : 'testing' }
+WDMTerrain >> isSceneSelectableObject [
+	^ true
+]
+
+{ #category : 'serialization' }
 WDMTerrain >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.
 	patchSize := (jsonData at: #patchSize ifAbsent: [ nil ]) ifNil: [ patchSize ].
@@ -95,7 +106,7 @@ WDMTerrain >> loadFromJson: jsonData withContext: deserializationContext [
 	localBoundingBox := nil.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> localBoundingBox [
 	localBoundingBox ifNil: [ 
 		localBoundingBox := AABox empty.
@@ -106,7 +117,7 @@ WDMTerrain >> localBoundingBox [
 	^ localBoundingBox
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 WDMTerrain >> localRayPick: picker [
 	| bestDistance localRay |
 	bestDistance := nil.
@@ -126,12 +137,12 @@ WDMTerrain >> localRayPick: picker [
 	picker addResult: self withDistance: bestDistance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> objectTypeName [
 	^ 'Terrain'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrain >> patchSize: newPatchSize gridExtent: gridExtent [
 	| newPatches |
 	patchSize := newPatchSize.
@@ -150,13 +161,13 @@ WDMTerrain >> patchSize: newPatchSize gridExtent: gridExtent [
 	self privateSetPatches: newPatches
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> patches [
 
 	^ patches
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> postCopy [
 	| oldPatches |
 	super postCopy.
@@ -165,13 +176,13 @@ WDMTerrain >> postCopy [
 	self privateSetPatches: (oldPatches collect: [ :each | each copy ]).
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMTerrain >> prepareForSerializationWithContext: serializationContext [
 	super prepareForSerializationWithContext: serializationContext.
 	patches do: [ :each | each prepareForSerializationWithContext: serializationContext ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> privateSetPatches: newPatches [
 	patches do: [ :each | each removedFromModelTree ].
 
@@ -181,7 +192,7 @@ WDMTerrain >> privateSetPatches: newPatches [
 	self addChildrenOntoScenePresentations.
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 WDMTerrain >> rayPickElements: picker [
 	self visible ifFalse: [ ^ self ].
 	
@@ -191,24 +202,24 @@ WDMTerrain >> rayPickElements: picker [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMTerrain >> rows [
 	^ rows
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 WDMTerrain >> sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius [
 	patches do: [ :each |
 		each sculptWithLocalRay: ray drawIntensity: drawIntensity drawRadius: drawRadius
 	]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMTerrain >> setMaterialInfoRecursively: newMaterial [
 	self patches do: [ :each | each setMaterialInfoRecursively: newMaterial ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMTerrain >> supportsModelingEditionMode: aMode [
 	aMode asModelingEditionMode isSculptEditionMode ifTrue: [ ^ true ].
 	^ super supportsModelingEditionMode: aMode
