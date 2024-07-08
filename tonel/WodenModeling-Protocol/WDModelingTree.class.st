@@ -23,10 +23,23 @@ Class {
 		'ambientLighting',
 		'modelResolver'
 	],
+	#classVars : [
+		'FogModeObjectTable'
+	],
 	#category : 'WodenModeling-Protocol-Model',
 	#package : 'WodenModeling-Protocol',
 	#tag : 'Model'
 }
+
+{ #category : 'initialization' }
+WDModelingTree class >> initialize [
+	FogModeObjectTable := Dictionary newFromPairs: {
+		#NONE . WDFogNoneMode.
+		#LINEAR . WDFogLinearMode.
+		#EXP . WDFogExpMode.
+		#EXP2 . WDFogExp2Mode.
+	}
+]
 
 { #category : 'serialization' }
 WDModelingTree class >> loadFromJson: jsonData [
@@ -172,6 +185,11 @@ WDModelingTree >> fogMode [
 WDModelingTree >> fogMode: aFogModeName [
 	fogMode := aFogModeName asSymbol.
 	self invalidateScenePresentations.
+]
+
+{ #category : 'as yet unclassified' }
+WDModelingTree >> fogModeObject [
+	^ FogModeObjectTable at: fogMode ifAbsent:[ WDFogNoneMode ]
 ]
 
 { #category : 'accessing' }
