@@ -1,1 +1,1 @@
-Package { #name : #'WodenModeling-BSPStyleCSG' }
+Package { #name : 'WodenModeling-BSPStyleCSG' }

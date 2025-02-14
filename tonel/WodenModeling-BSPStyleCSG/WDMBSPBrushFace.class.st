@@ -2,8 +2,8 @@
 I represent a single face in a old-school bsp brush.
 "
 Class {
-	#name : #WDMBSPBrushFace,
-	#superclass : #WDModelingElement,
+	#name : 'WDMBSPBrushFace',
+	#superclass : 'WDModelingElement',
 	#traits : 'TWDMModelingElementWithTextureMappingSettings',
 	#classTraits : 'TWDMModelingElementWithTextureMappingSettings classTrait',
 	#instVars : [
@@ -18,10 +18,11 @@ Class {
 		'NormalAxis',
 		'TangentAxis'
 	],
-	#category : #'WodenModeling-BSPStyleCSG'
+	#category : 'WodenModeling-BSPStyleCSG',
+	#package : 'WodenModeling-BSPStyleCSG'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrushFace class >> findAxisForNormal: normal [
 	| bestAmount best |
 	bestAmount := Float infinity negated.
@@ -38,17 +39,17 @@ WDMBSPBrushFace class >> findAxisForNormal: normal [
 	^ best
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrushFace class >> getBitangentForNormalAxis: axis [
 	^ BitangentAxis at: axis
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrushFace class >> getTangentForNormalAxis: axis [
 	^ TangentAxis at: axis
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMBSPBrushFace class >> initialize [
 	NormalAxis := { 
 		Vector3 x: 1.
@@ -78,24 +79,24 @@ WDMBSPBrushFace class >> initialize [
 	}.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrushFace class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDM'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace class >> plane: aPlane [
 	^ self new plane: aPlane; yourself
 ]
 
-{ #category : #'mesh building' }
+{ #category : 'mesh building' }
 WDMBSPBrushFace >> addIndex: index [
 	indices add: index.
 	vertices := nil.
 	texcoords := nil.
 ]
 
-{ #category : #'mesh building' }
+{ #category : 'mesh building' }
 WDMBSPBrushFace >> buildSolidFaceMeshWith: builder [
 	| normal brushVertices |
 	builder
@@ -113,7 +114,7 @@ WDMBSPBrushFace >> buildSolidFaceMeshWith: builder [
 	].
 ]
 
-{ #category : #'mesh building' }
+{ #category : 'mesh building' }
 WDMBSPBrushFace >> buildTexturedFaceMeshWith: builder transform: globalTransform [
 	| normal brushVertices textureMatrix normalAxis tangent bitangent solvedMaterial |
 	solvedMaterial := (material ifNotNil: [ material validMaterialWithResolver: self findMaterialResolver ])
@@ -144,7 +145,7 @@ WDMBSPBrushFace >> buildTexturedFaceMeshWith: builder transform: globalTransform
 	].
 ]
 
-{ #category : #'mesh building' }
+{ #category : 'mesh building' }
 WDMBSPBrushFace >> buildWireframeFaceMeshWith: builder [
 	| normal brushVertices |
 	builder
@@ -161,14 +162,14 @@ WDMBSPBrushFace >> buildWireframeFaceMeshWith: builder [
 	].
 ]
 
-{ #category : #'mesh building' }
+{ #category : 'mesh building' }
 WDMBSPBrushFace >> clearIndices [
 	indices := OrderedCollection new.
 	vertices := nil.
 	texcoords := nil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrushFace >> computePlaneFromVertices [
 	| parentVertices v1 v2 v3 |
 	parentVertices := parent vertices.
@@ -179,7 +180,7 @@ WDMBSPBrushFace >> computePlaneFromVertices [
 	plane := Plane point: v1 point: v2 point: v3
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#plane . plane encodeForJSON.
@@ -192,18 +193,18 @@ WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrushFace >> highlightingOrSelectionStatusChanged [
 	super highlightingOrSelectionStatusChanged.
 	parent ifNotNil: [ :p | p invalidateMeshes ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> indices [
 	^ indices
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMBSPBrushFace >> initialize [
 	super initialize.
 	textureScale := Vector2 withAll: 0.25.
@@ -211,7 +212,7 @@ WDMBSPBrushFace >> initialize [
 	textureRotation := 0.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrushFace >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.
 	plane := Plane loadFromJson: (jsonData at: #plane).
@@ -224,12 +225,12 @@ WDMBSPBrushFace >> loadFromJson: jsonData withContext: deserializationContext [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> material [
 	^ material
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> material: aMaterial [
 	| changed newMaterial |
 	newMaterial := aMaterial asWDModelingMaterialInfo.
@@ -238,35 +239,35 @@ WDMBSPBrushFace >> material: aMaterial [
 	(changed and: [parent notNil]) ifTrue: [ parent faceTexturesChanged ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> objectTypeName [
 	^ 'Face'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> plane [
 
 	^ plane
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> plane: anObject [
 
 	plane := anObject
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrushFace >> prepareForSerializationWithContext: serializationContext [
 	super prepareForSerializationWithContext: serializationContext.
 	serializationContext recordMaterialInfo: material
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMBSPBrushFace >> setMaterialInfoRecursively: newMaterial [
 	self material: newMaterial
 ]
 
-{ #category : #'mesh building' }
+{ #category : 'mesh building' }
 WDMBSPBrushFace >> sortIndices [
 	| centroid n brushVertices |
 	brushVertices := parent vertices.
@@ -285,7 +286,7 @@ WDMBSPBrushFace >> sortIndices [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> texcoords [
 	^ texcoords ifNil: [
 		| brushVertices textureMatrix normal normalAxis tangent bitangent globalTransform |
@@ -309,12 +310,12 @@ WDMBSPBrushFace >> texcoords [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> textureMappingChanged [
 	parent ifNotNil: [ parent faceTexturesChanged ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrushFace >> vertices [
 	^ vertices ifNil: [
 		| brushVertices |

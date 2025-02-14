@@ -5,8 +5,8 @@ I come from old-school 3D video game editors such as Quake and family.
 
 "
 Class {
-	#name : #WDMBSPBrush,
-	#superclass : #WDModelingSceneObject,
+	#name : 'WDMBSPBrush',
+	#superclass : 'WDModelingSceneObject',
 	#instVars : [
 		'faces',
 		'hasValidTopology',
@@ -18,10 +18,11 @@ Class {
 		'editionColorMaterial',
 		'verticesAreManipulated'
 	],
-	#category : #'WodenModeling-BSPStyleCSG'
+	#category : 'WodenModeling-BSPStyleCSG',
+	#package : 'WodenModeling-BSPStyleCSG'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrush class >> forBox: aBox [
 	^ self withFaces: { 
 		WDMBSPBrushFace plane: (Plane nx: -1 ny: 0 nz: 0 distance: aBox min x abs).
@@ -33,32 +34,32 @@ WDMBSPBrush class >> forBox: aBox [
 	}
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrush class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDM'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush class >> unitBox [
 	^ self forBox: AABox unit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrush class >> withFaces: aCollectionOfFaces [
 	^ self new faces: aCollectionOfFaces; yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDMBSPBrush >> canBeSubtracted [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> children [
 	^ faces
 ]
 
-{ #category : #'constructive solid geometry' }
+{ #category : 'constructive solid geometry' }
 WDMBSPBrush >> clipAgainstPlane: plane [
 	| classification frontFaces backFaces planeInFront planeInBack frontPolyhedron backPolyhedron |
 	self validateTopology.
@@ -121,17 +122,17 @@ WDMBSPBrush >> clipAgainstPlane: plane [
 	^ { frontPolyhedron . backPolyhedron }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrush >> collectElementsWithTextureMappingSettingsOnto: result [
 	result addAll: self faces
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 WDMBSPBrush >> commitTopologyChanges [
 	self invalidateTopology
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 	self validateTopology.
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
@@ -140,24 +141,24 @@ WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDMBSPBrush >> faceTexturesChanged [
 	self invalidateTexturedMeshes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> faces [
 	^ faces
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> faces: aListOfFaces [
 	faces := aListOfFaces.
 	faces do: [ :each | each parent: self ].
 	self invalidateTopology
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 WDMBSPBrush >> findVolumeElementsThatIntersectElements: elementsToTest into: result [
 	self visible ifFalse: [ ^ self ].
 	
@@ -168,7 +169,7 @@ WDMBSPBrush >> findVolumeElementsThatIntersectElements: elementsToTest into: res
 	]
 ]
 
-{ #category : #'intersection testing' }
+{ #category : 'intersection testing' }
 WDMBSPBrush >> hasIntersectionWithBrush: otherElement withTransform: otherElementTransform [
 	| otherSupportFunction |
 	self class == otherElement class ifFalse: [ ^ false ].
@@ -182,17 +183,17 @@ WDMBSPBrush >> hasIntersectionWithBrush: otherElement withTransform: otherElemen
 	^ GeometricFunctions gjkIntersectionTest: self localSupportFunction with: otherSupportFunction
 ]
 
-{ #category : #'intersection testing' }
+{ #category : 'intersection testing' }
 WDMBSPBrush >> hasIntersectionWithConvexSupportFunction: otherSupportFunction [
 	^ GeometricFunctions gjkIntersectionTest: self supportFunction with: otherSupportFunction
 ]
 
-{ #category : #'intersection testing' }
+{ #category : 'intersection testing' }
 WDMBSPBrush >> hasIntersectionWithFrustum: frustumToTest [
 	^ GeometricFunctions gjkIntersectionTest: self supportFunction with: frustumToTest supportFunction
 ]
 
-{ #category : #'intersection testing' }
+{ #category : 'intersection testing' }
 WDMBSPBrush >> hasIntersectionWithVolume: volumeToTest [
 	volumeToTest class == self class ifTrue: [
 		^ self hasIntersectionWithBrush: volumeToTest withTransform: (self globalTransform inverseTransformTransform: volumeToTest globalTransform)
@@ -201,40 +202,40 @@ WDMBSPBrush >> hasIntersectionWithVolume: volumeToTest [
 	^ volumeToTest hasIntersectionWithConvexSupportFunction: self supportFunction
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 WDMBSPBrush >> highlightingOrSelectionStatusChanged [
 	super highlightingOrSelectionStatusChanged.
 	self invalidateMeshes
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMBSPBrush >> initialize [
 	super initialize.
 	hasValidTopology := false.
 	verticesAreManipulated := false.
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> invalidateMeshes [
 	wireframeMesh := nil.
 	solidMesh := nil.
 	self invalidateTexturedMeshes
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> invalidateTexturedMeshes [
 	texturedMesh := nil.
 	meshWithAlternatives := nil.
 	self invalidateScenePresentations
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> invalidateTopology [
 	hasValidTopology := false.
 	self invalidateMeshes
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrush >> loadFromJson: jsonData withContext: deserializationContext [
 	super loadFromJson: jsonData withContext: deserializationContext.
 	self faces: ((jsonData at: #faces ifAbsent: [ #() ]) collect: [ :each |
@@ -243,13 +244,13 @@ WDMBSPBrush >> loadFromJson: jsonData withContext: deserializationContext [
 	])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> localBoundingBox [
 	self validateTopology.
 	^ localBoundingBox
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 WDMBSPBrush >> localRayPick: picker [
 	| bestDistance localRay isFaceTexturingMode |
 	bestDistance := nil.
@@ -280,7 +281,7 @@ WDMBSPBrush >> localRayPick: picker [
 	picker addResult: self withDistance: bestDistance
 ]
 
-{ #category : #'intersection testing' }
+{ #category : 'intersection testing' }
 WDMBSPBrush >> localSupportFunction [
 	self validateTopology.
 	^ [ :d |
@@ -300,12 +301,12 @@ WDMBSPBrush >> localSupportFunction [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> objectTypeName [
 	^ 'BSP Brush'
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 WDMBSPBrush >> postCopy [
 	super postCopy.
 	parent := nil.
@@ -317,13 +318,13 @@ WDMBSPBrush >> postCopy [
 	texturedMesh := nil.
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDMBSPBrush >> prepareForSerializationWithContext: serializationContext [
 	super prepareForSerializationWithContext: serializationContext.
 	faces do: [ :each | each prepareForSerializationWithContext: serializationContext ]
 ]
 
-{ #category : #selection }
+{ #category : 'selection' }
 WDMBSPBrush >> rayPickElements: picker [
 	self visible ifFalse: [ ^ self ].
 
@@ -335,12 +336,12 @@ WDMBSPBrush >> rayPickElements: picker [
 	]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDMBSPBrush >> setMaterialInfoRecursively: newMaterial [
 	self faces do: [ :each | each setMaterialInfoRecursively: newMaterial ].
 ]
 
-{ #category : #'constructive solid geometry' }
+{ #category : 'constructive solid geometry' }
 WDMBSPBrush >> subtract: otherBrush [
 	| otherBrushTransform myTransform |
 	otherBrush class == self class ifFalse: [ ^ { self } ].
@@ -350,7 +351,7 @@ WDMBSPBrush >> subtract: otherBrush [
 	^ self subtract: otherBrush withTransform: (myTransform inverseTransformTransform: otherBrushTransform)
 ]
 
-{ #category : #'constructive solid geometry' }
+{ #category : 'constructive solid geometry' }
 WDMBSPBrush >> subtract: otherBrush withTransform: otherBrushTransform [
 	| otherPlanes otherPlaneClassifications clippingPlanes result remaining |
 	self validateTopology.
@@ -395,18 +396,18 @@ WDMBSPBrush >> subtract: otherBrush withTransform: otherBrushTransform [
 	^ result
 ]
 
-{ #category : #'intersection testing' }
+{ #category : 'intersection testing' }
 WDMBSPBrush >> supportFunction [
 	^ GeometricFunctions transformSupportFunction: self localSupportFunction with: self globalTransform
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 WDMBSPBrush >> supportsModelingEditionMode: aMode [
 	aMode asModelingEditionMode isTopologyEditionMode ifTrue: [ ^ true ].
 	^ super supportsModelingEditionMode: aMode
 ]
 
-{ #category : #'topology edition mode' }
+{ #category : 'topology edition mode' }
 WDMBSPBrush >> topologyControlPoints [
 	^ vertices collectWithIndex: [ :eachVertex :eachVertexIndex |
 		WDMTopologyControlPoint new
@@ -421,13 +422,13 @@ WDMBSPBrush >> topologyControlPoints [
 	]
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDMBSPBrush >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	aHandle sceneNode renderables: { self validMeshWithAlternatives }
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> validMeshWithAlternatives [
 	^ meshWithAlternatives ifNil: [ meshWithAlternatives := WDRenderableWithViewModeAlternatives new
 		wireframe: self validWireframeMesh;
@@ -439,7 +440,7 @@ WDMBSPBrush >> validMeshWithAlternatives [
 	]
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> validSolidMesh [
 	| builder |
 	solidMesh ifNotNil: [ ^ solidMesh ].
@@ -453,7 +454,7 @@ WDMBSPBrush >> validSolidMesh [
 	^ solidMesh := builder mesh
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> validTexturedMesh [
 	| builder |
 	texturedMesh ifNotNil: [ ^ texturedMesh ].
@@ -467,7 +468,7 @@ WDMBSPBrush >> validTexturedMesh [
 	^ texturedMesh := builder mesh
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> validWireframeMesh [
 	| builder |
 	wireframeMesh ifNotNil: [ ^ wireframeMesh ].
@@ -481,7 +482,7 @@ WDMBSPBrush >> validWireframeMesh [
 	^ wireframeMesh := builder mesh
 ]
 
-{ #category : #caching }
+{ #category : 'caching' }
 WDMBSPBrush >> validateTopology [
 	| faceCount |
 	hasValidTopology ifTrue: [ ^ self ].
@@ -536,7 +537,7 @@ WDMBSPBrush >> validateTopology [
 	hasValidTopology := true.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDMBSPBrush >> vertices [
 	^ vertices
 ]
