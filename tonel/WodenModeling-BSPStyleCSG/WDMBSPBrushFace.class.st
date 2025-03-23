@@ -194,6 +194,14 @@ WDMBSPBrushFace >> encodeJsonKeyValuesWithContext: serializationContext [
 ]
 
 { #category : 'as yet unclassified' }
+WDMBSPBrushFace >> exportToGltfWith: gltfBuilder [
+	| primitive |
+	primitive := gltfBuilder newPrimitive.
+	
+	^ primitive
+]
+
+{ #category : 'as yet unclassified' }
 WDMBSPBrushFace >> highlightingOrSelectionStatusChanged [
 	super highlightingOrSelectionStatusChanged.
 	parent ifNotNil: [ :p | p invalidateMeshes ]

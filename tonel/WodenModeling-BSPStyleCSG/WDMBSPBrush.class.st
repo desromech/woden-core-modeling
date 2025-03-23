@@ -142,6 +142,15 @@ WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 ]
 
 { #category : 'as yet unclassified' }
+WDMBSPBrush >> exportToGltfWith: gltfBuilder [
+	| meshNode mesh|
+	meshNode := gltfBuilder newNode: self name.
+	mesh := self validTexturedMesh exportToGltfWith: gltfBuilder.
+	meshNode meshes: { mesh }.
+	^ meshNode
+]
+
+{ #category : 'as yet unclassified' }
 WDMBSPBrush >> faceTexturesChanged [
 	self invalidateTexturedMeshes
 ]

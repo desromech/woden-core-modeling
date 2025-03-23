@@ -40,6 +40,14 @@ WDModelingGroup >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingGroup >> exportToGltfWith: builder [
+	| node |
+	node := builder newNode: self name.
+	node children: (children collect: [ :each | each exportToGltfWith: builder ]).
+	^ node
+]
+
 { #category : 'initialization' }
 WDModelingGroup >> initialize [
 	super initialize.

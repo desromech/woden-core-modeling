@@ -137,6 +137,14 @@ WDModelingTree >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingTree >> exportToGltfWith: builder [
+	| node |
+	node := builder newNode: self name.
+	node children: (children collect: [ :each | each exportToGltfWith: builder ]).
+	^ node
+]
+
 { #category : 'accessing' }
 WDModelingTree >> fogColor [
 
