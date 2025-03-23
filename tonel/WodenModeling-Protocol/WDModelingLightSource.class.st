@@ -66,6 +66,14 @@ WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingLightSource >> exportToGltfWith: builder [
+	| node |
+	node := builder newNode: name.
+	node transform: transform.
+	^ node
+]
+
 { #category : 'initialization' }
 WDModelingLightSource >> initialize [
 	super initialize.

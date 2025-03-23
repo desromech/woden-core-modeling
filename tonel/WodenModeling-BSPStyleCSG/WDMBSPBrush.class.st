@@ -145,8 +145,9 @@ WDMBSPBrush >> encodeJsonKeyValuesWithContext: serializationContext [
 WDMBSPBrush >> exportToGltfWith: gltfBuilder [
 	| meshNode mesh|
 	meshNode := gltfBuilder newNode: self name.
+	meshNode transform: transform.
 	mesh := self validTexturedMesh exportToGltfWith: gltfBuilder.
-	meshNode meshes: { mesh }.
+	meshNode mesh: mesh.
 	^ meshNode
 ]
 

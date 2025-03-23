@@ -61,6 +61,17 @@ WDMTerrain >> encodeJsonKeyValuesWithContext: serializationContext [
 ]
 
 { #category : 'as yet unclassified' }
+WDMTerrain >> exportToGltfWith: gltfBuilder [
+	| terrainNode |
+	terrainNode := gltfBuilder newNode: self name.
+	terrainNode transform: transform.
+	terrainNode children: (patches collect: [ :eachPatch |
+		eachPatch exportToGltfWith: gltfBuilder
+	]).
+	^ terrainNode
+]
+
+{ #category : 'as yet unclassified' }
 WDMTerrain >> generateLocalHeightWith: aBlock [
 	patches do: [ :each | each generateLocalHeightWith: aBlock ]
 ]

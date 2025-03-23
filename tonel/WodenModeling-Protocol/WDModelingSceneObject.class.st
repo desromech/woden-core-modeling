@@ -32,6 +32,14 @@ WDModelingSceneObject >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingSceneObject >> exportToGltfWith: builder [
+	| node |
+	node := builder newNode: name.
+	node transform: transform.
+	^ node
+]
+
 { #category : 'initialization' }
 WDModelingSceneObject >> initialize [
 	super initialize.

@@ -169,6 +169,16 @@ WDMTerrainPatch >> encodeJsonKeyValuesWithContext: serializationContext [
 ]
 
 { #category : 'as yet unclassified' }
+WDMTerrainPatch >> exportToGltfWith: gltfBuilder [
+	| patchNode mesh|
+	patchNode := gltfBuilder newNode: self name.
+	patchNode transform: self transform.
+	mesh := self validTexturedMesh exportToGltfWith: gltfBuilder.
+	patchNode mesh: mesh.
+	^ patchNode
+]
+
+{ #category : 'as yet unclassified' }
 WDMTerrainPatch >> generateLocalHeightWith: aBlock [
 	| newHeights destIndex columnOffset rowOffset |
 	newHeights := self class floatArrayClass new: patchSize * patchSize.
