@@ -9,6 +9,13 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'as yet unclassified' }
+WDModelingDirectionalLightSource >> exportToGltfLightWith: builder [
+	^ (super exportToGltfLightWith: builder)
+		type: 'directional';
+		yourself
+]
+
 { #category : 'accessing' }
 WDModelingDirectionalLightSource >> objectTypeName [
 	^ 'DirectionalLightSource'

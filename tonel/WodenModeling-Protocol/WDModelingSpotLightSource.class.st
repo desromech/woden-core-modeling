@@ -32,6 +32,16 @@ WDModelingSpotLightSource >> encodeJsonKeyValuesWithContext: serializationContex
 	}
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingSpotLightSource >> exportToGltfLightWith: builder [
+	^ (super exportToGltfLightWith: builder)
+		type: 'spot';
+		range: influenceRadius;
+		innerConeAngle: innerCutoff degreesToRadians;
+		outerConeAngle: outerCutoff degreesToRadians;
+		yourself
+]
+
 { #category : 'accessing' }
 WDModelingSpotLightSource >> influenceRadius [
 

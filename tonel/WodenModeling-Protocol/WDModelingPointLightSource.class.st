@@ -26,6 +26,14 @@ WDModelingPointLightSource >> encodeJsonKeyValuesWithContext: serializationConte
 	}
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingPointLightSource >> exportToGltfLightWith: builder [
+	^ (super exportToGltfLightWith: builder)
+		type: 'point';
+		range: influenceRadius;
+		yourself
+]
+
 { #category : 'accessing' }
 WDModelingPointLightSource >> influenceRadius [
 

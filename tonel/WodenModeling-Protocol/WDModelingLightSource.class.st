@@ -67,10 +67,21 @@ WDModelingLightSource >> encodeJsonKeyValuesWithContext: serializationContext [
 ]
 
 { #category : 'as yet unclassified' }
+WDModelingLightSource >> exportToGltfLightWith: builder [
+	| lightSource |
+	lightSource := builder newLight.
+	lightSource
+		color: {color x . color y. color z};
+		intensity: intensity.
+	^ lightSource
+]
+
+{ #category : 'as yet unclassified' }
 WDModelingLightSource >> exportToGltfWith: builder [
 	| node |
 	node := builder newNode: name.
 	node transform: transform.
+	node light: (self exportToGltfLightWith: builder).
 	^ node
 ]
 
