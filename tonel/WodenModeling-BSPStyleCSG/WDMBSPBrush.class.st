@@ -154,8 +154,9 @@ WDMBSPBrush >> exportToGltfWith: gltfBuilder [
 { #category : 'accessing' }
 WDMBSPBrush >> exportToMap: mapStream [
 	self validateTopology.
+	mapStream nextPutAll: '// brush ';lf.
 	mapStream nextPutAll: '{'; lf.
-	faces do: [ :eachFace | eachFace exportToMap: mapStream ].
+	faces do: [ :eachFace | eachFace exportToMap: mapStream transform: transform ].
 	mapStream nextPutAll: '}'; lf.
 ]
 

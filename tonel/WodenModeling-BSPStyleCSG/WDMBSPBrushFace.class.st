@@ -202,16 +202,16 @@ WDMBSPBrushFace >> exportToGltfWith: gltfBuilder [
 ]
 
 { #category : 'accessing' }
-WDMBSPBrushFace >> exportToMap: mapStream [
+WDMBSPBrushFace >> exportToMap: mapStream transform: transform [
 	| vertex normal normalAxis tangent bitangent |
 	self assert: self vertices size >= 3.
-	vertex := (self vertices at: 1) * 32.
+	vertex := self class wodenToQuakeCoordinates: (transform transformPosition: self vertices second).
 	mapStream nextPutAll: '( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
 
-	vertex := (self vertices at: 2) * 32.
+	vertex := self class wodenToQuakeCoordinates: (transform transformPosition: self vertices first).
 	mapStream nextPutAll: ' ( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
 	
-	vertex := (self vertices at: 3) * 32.
+	vertex := self class wodenToQuakeCoordinates: (transform transformPosition: self vertices third).
 	mapStream nextPutAll: ' ( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
 	
 	mapStream  nextPutAll: ' NULL '.

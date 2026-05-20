@@ -52,6 +52,11 @@ WDModelingElement class >> named: aName [
 	^ self new name: aName; yourself
 ]
 
+{ #category : 'as yet unclassified' }
+WDModelingElement class >> wodenToQuakeCoordinates: aVector [
+	^ (Vector3 x: aVector x y: aVector z negated z: aVector y) * 32
+]
+
 { #category : 'accessing' }
 WDModelingElement >> boundingBox [
 	^ nil
