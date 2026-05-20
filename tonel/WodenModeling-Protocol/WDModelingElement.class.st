@@ -103,6 +103,11 @@ WDModelingElement >> invalidateScenePresentations [
 	scenePresentationHandles do: [ :each | each invalidate ]
 ]
 
+{ #category : 'testing' }
+WDModelingElement >> isBSPBrush [
+	^ false
+]
+
 { #category : 'serialization' }
 WDModelingElement >> loadFromJson: jsonData withContext: deserializationContext [
 	name := (jsonData at: #name ifAbsent: [ nil ]) ifNil: [ name].

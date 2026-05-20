@@ -201,6 +201,22 @@ WDMBSPBrushFace >> exportToGltfWith: gltfBuilder [
 	^ primitive
 ]
 
+{ #category : 'accessing' }
+WDMBSPBrushFace >> exportToMap: mapStream [
+	| vertex |
+	self assert: self vertices size >= 3.
+	vertex := (self vertices at: 1) * 32.
+	mapStream nextPutAll: '( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
+
+	vertex := (self vertices at: 2) * 32.
+	mapStream nextPutAll: ' ( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
+
+	vertex := (self vertices at: 3) * 32.
+	mapStream nextPutAll: ' ( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
+
+	mapStream lf.
+]
+
 { #category : 'as yet unclassified' }
 WDMBSPBrushFace >> highlightingOrSelectionStatusChanged [
 	super highlightingOrSelectionStatusChanged.

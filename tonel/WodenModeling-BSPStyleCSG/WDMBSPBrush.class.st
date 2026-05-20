@@ -151,6 +151,14 @@ WDMBSPBrush >> exportToGltfWith: gltfBuilder [
 	^ meshNode
 ]
 
+{ #category : 'accessing' }
+WDMBSPBrush >> exportToMap: mapStream [
+	self validateTopology.
+	mapStream nextPutAll: '{'; lf.
+	faces do: [ :eachFace | eachFace exportToMap: mapStream ].
+	mapStream nextPutAll: '}'; lf.
+]
+
 { #category : 'as yet unclassified' }
 WDMBSPBrush >> faceTexturesChanged [
 	self invalidateTexturedMeshes
@@ -243,6 +251,11 @@ WDMBSPBrush >> invalidateTexturedMeshes [
 WDMBSPBrush >> invalidateTopology [
 	hasValidTopology := false.
 	self invalidateMeshes
+]
+
+{ #category : 'testing' }
+WDMBSPBrush >> isBSPBrush [
+	^ true
 ]
 
 { #category : 'serialization' }
