@@ -203,16 +203,29 @@ WDMBSPBrushFace >> exportToGltfWith: gltfBuilder [
 
 { #category : 'accessing' }
 WDMBSPBrushFace >> exportToMap: mapStream [
-	| vertex |
+	| vertex normal normalAxis tangent bitangent |
 	self assert: self vertices size >= 3.
 	vertex := (self vertices at: 1) * 32.
 	mapStream nextPutAll: '( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
 
 	vertex := (self vertices at: 2) * 32.
 	mapStream nextPutAll: ' ( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
-
+	
 	vertex := (self vertices at: 3) * 32.
 	mapStream nextPutAll: ' ( '; print: vertex x rounded; space; print: vertex y rounded; space; print: vertex z rounded; nextPutAll: ' )'.
+	
+	mapStream  nextPutAll: ' NULL '.
+
+	normal := plane normal.
+	normalAxis := self class findAxisForNormal: normal.
+	tangent := self class getTangentForNormalAxis: normalAxis.
+	bitangent := self class getBitangentForNormalAxis: normalAxis.
+
+	mapStream nextPutAll: ' [ '; print: tangent x; space; print: tangent y; space; print: tangent z; space; print: textureOffset x; nextPutAll: ' ]'.
+	mapStream nextPutAll: ' [ '; print: bitangent x; space; print: bitangent y; space; print: bitangent z; space; print: textureOffset y; nextPutAll: ' ]'.
+
+	mapStream nextPutAll: ' '; print: textureRotation; space; print: textureScale x; space; print: textureScale y.
+
 
 	mapStream lf.
 ]
